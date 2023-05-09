@@ -1,0 +1,24 @@
+#pragma once
+#include "EnumLikeValue.h"
+
+/**
+ * A enum-like type implementation that is more in line with the parameters system
+ */
+class EnumLike
+{
+	TMap<FString, EnumLikeValue*> Values;
+	TArray<FString> Ids;
+	TArray<FString> Names;
+	
+public:
+	static EnumLike BURST_SHAPE;
+	static EnumLike TRAIL_TYPE;
+	
+	explicit EnumLike(std::initializer_list<EnumLikeValue*> Vals);
+
+	TArray<FString>* GetNames();
+
+	EnumLikeValue* GetDefaultValue();
+
+	EnumLikeValue* Get(FString& Name);
+};
