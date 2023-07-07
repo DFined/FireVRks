@@ -12,7 +12,10 @@ class EnumLike
 	
 public:
 	static EnumLike BURST_SHAPE;
-	static EnumLike TRAIL_TYPE;
+	static EnumLike COLOR_EFFECT;
+	static EnumLike SOS_SHAPE;
+	static EnumLike EFFECT_ROTATION_SETTING;
+	static EnumLike SOS_DELAY_TYPE;
 	
 	explicit EnumLike(std::initializer_list<EnumLikeValue*> Vals);
 

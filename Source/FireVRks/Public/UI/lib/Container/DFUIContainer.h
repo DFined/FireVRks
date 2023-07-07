@@ -1,6 +1,8 @@
 #pragma once
 #include "DFUIBase.h"
 #include "Blueprint/UserWidget.h"
+#include "Components/PanelWidget.h"
+#include "UI/ParameterIntegration/DFUIParameterBindingWidgetBase.h"
 #include "DFUIContainer.generated.h"
 
 /**
@@ -10,9 +12,6 @@ UCLASS(Abstract)
 class UDFUIContainer : public UDFUIBase
 {
 	GENERATED_BODY()
-	
-protected:
-	virtual void RebuildWidgetInternal() override;
 	
 public:
 	
@@ -26,6 +25,14 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual UPanelWidget* GetMountingPoint() PURE_VIRTUAL("GetMountingPoint", return nullptr;);
-	
-	virtual void BaseInit() override;
+
+	void CleanUpBindingWidgets()
+	{
+		for (UWidget* AllChild : this->GetMountingPoint()->GetAllChildren()) 
+		{
+			auto PBW = static_cast<UDFUIParameterBindingWidgetBase*>(AllChild);
+			PBW->CleanUp();
+			PBW->RemoveFromParent();
+		}
+	}
 };

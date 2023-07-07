@@ -1,5 +1,6 @@
 #pragma once
 #include "FX/Niagara/SystemSettings/FormalParameter/ParameterPredicate.h"
+#include "FX/Niagara/SystemSettings/InstanceParameter/ParameterValueContext.h"
 
 class TruePredicate : public ParameterPredicate
 {

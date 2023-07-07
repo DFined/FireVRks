@@ -11,7 +11,7 @@ protected:
 	Type DefaultValue;
 
 public:
-	FormalParameter(const FString& GUID, FString Name, DFType ValueType, bool IsRequired, Type DefValue, bool bManaged)
+	FormalParameter(const FGuid& GUID, FString Name, DFType ValueType, bool IsRequired, Type DefValue, bool bManaged)
 		: AbstractFormalParameter(GUID, Name, ValueType, IsRequired, bManaged)
 	{
 		DefaultValue =  DefValue;
@@ -19,7 +19,7 @@ public:
 	}
 
 	explicit FormalParameter(DFType ValueType, FString Name, bool IsRequired, Type DefValue, bool bManaged)
-		: AbstractFormalParameter(FGuid::NewGuid().ToString(), Name, ValueType, IsRequired, bManaged)
+		: AbstractFormalParameter(FGuid::NewGuid(), Name, ValueType, IsRequired, bManaged)
 	{
 		DefaultValue = DefValue;
 		AbstractValue = new ParameterValue<Type>(DefaultValue, ValueType, true);

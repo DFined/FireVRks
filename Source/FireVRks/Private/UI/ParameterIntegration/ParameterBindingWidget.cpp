@@ -5,3 +5,9 @@ void ParameterBindingWidget::SubscribeToChanges(WidgetCallbackWithValue* Callbac
 {
 	Callbacks.Add(Callback);
 }
+
+void ParameterBindingWidget::CleanUp()
+{
+	Callbacks.Empty();
+	Parameter = nullptr;
+}

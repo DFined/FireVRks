@@ -7,7 +7,7 @@ DFType AbstractFormalParameter::GetType()
 
 AbstractParameterValue* AbstractFormalParameter::GetDefault()
 {
-	return __nullptr;
+	return nullptr;
 }
 
 AbstractFormalParameter::~AbstractFormalParameter()

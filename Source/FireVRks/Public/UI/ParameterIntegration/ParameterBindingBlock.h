@@ -1,10 +1,12 @@
 #pragma once
 #include "DFUIParameterBindingWidgetBase.h"
 #include "ParameterBindingWidget.h"
-#include "Components/Border.h"
 #include "Components/ExpandableArea.h"
+#include "Components/HorizontalBox.h"
 #include "UI/lib/Container/DFUIStack.h"
 #include "ParameterBindingBlock.generated.h"
+
+class UParameterBindingList;
 
 UCLASS()
 class  UParameterBindingBlock : public UDFUIParameterBindingWidgetBase
@@ -26,6 +28,12 @@ class  UParameterBindingBlock : public UDFUIParameterBindingWidgetBase
 	UPROPERTY()
 	UExpandableArea* BaseTab;
 
+	UPROPERTY()
+	UHorizontalBox* HeaderBox;
+
+	UPROPERTY()
+	UParameterBindingList* ParentList = nullptr;
+
 	
 public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
@@ -35,4 +43,11 @@ public:
 	virtual void SetValueInContext(MapParameterValueContext* Context) override;
 
 	virtual void SubscribeToChanges(WidgetCallbackWithValue* Callback) override;
+
+	void MakeListItem(UParameterBindingList* PList);
+
+	UFUNCTION()
+	void OnDelete();
+
+	virtual void CleanUp() override;
 };

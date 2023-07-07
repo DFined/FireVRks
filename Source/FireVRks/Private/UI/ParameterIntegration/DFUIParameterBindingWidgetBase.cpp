@@ -23,3 +23,8 @@ void UDFUIParameterBindingWidgetBase::SubscribeToChanges(WidgetCallbackWithValue
 {
 	ParameterBindingWidget::SubscribeToChanges(Callback);
 }
+
+void UDFUIParameterBindingWidgetBase::CleanUp()
+{
+	ParameterBindingWidget::CleanUp();
+}

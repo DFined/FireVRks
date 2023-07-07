@@ -10,10 +10,11 @@ public:
 
 private:
 	EnumLike* Parent;
+	int Ordinal;
 
 public:
 
-	EnumLikeValue(const FString Id, const FString Name);
+	EnumLikeValue(const FString Id, const FString Name, int bOrdinal);
 	
 	friend bool operator==(const EnumLikeValue& Lhs, const EnumLikeValue& RHS);
 
@@ -27,15 +28,31 @@ public:
 	/**EFFECT SHAPES*/
 	static EnumLikeValue PEONY;
 	static EnumLikeValue BURST;
-	static EnumLikeValue DISK;
 	static EnumLikeValue RING;
 	static EnumLikeValue CONE;
-	static EnumLikeValue QUASAR;
-	static EnumLikeValue MULTI_CONE;
 
-	/**TRAIL TYPES*/
-	static EnumLikeValue SMOKE;
-	static EnumLikeValue SPARK;
-	static EnumLikeValue CRACKLE;
-	static EnumLikeValue GLITTER;
+	/**COLOR EFFECT TYPES*/
+	static EnumLikeValue NO_EFFECT;
+	static EnumLikeValue SIMPLE_COLOR_CHANGE;
+	static EnumLikeValue FLARE;
+	static EnumLikeValue COLOR_WAVE;
+	static EnumLikeValue FLICKER;
+	static EnumLikeValue ADVANCED_COLOR_LERP;
+
+	/**SOS DISTRIBUTION TYPES*/
+	static EnumLikeValue SOS_FROM_PARENT_PARTICLES;
+	static EnumLikeValue SOS_SPHERE;
+	static EnumLikeValue SOS_RING;
+
+	/**EFFECT ROTATION SETTINGS*/
+	static EnumLikeValue FIXED;
+	static EnumLikeValue FROM_SHELL;
+	static EnumLikeValue RANDOM;
+
+	static EnumLikeValue SOS_DELAY_FROM_START;
+	static EnumLikeValue SOS_DELAY_FROM_END;
+	static EnumLikeValue SOS_DELAY_AT_REGULAR_INTERVAL;
+	
+	
+	int GetOrdinal() const;
 };

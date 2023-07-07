@@ -14,7 +14,7 @@ private:
 	TArray<AbstractFormalParameter*> ChildParameters;
 	BlockUIStateParameterValue Default;
 public:
-	BlockCompoundParameter(const FString& GUID, FString& Name,
+	BlockCompoundParameter(const FGuid GUID, FString& Name,
 	const TArray<AbstractFormalParameter*>& ChildParameters, bool Required, bool bManaged, bool expanded)
 	: AbstractFormalParameter(GUID, Name, DFType::COMPOUND_BLOCK_PARAMETER, Required, bManaged), ChildParameters(ChildParameters),
 	Default(BlockUIStateParameterValue(expanded, true))
@@ -22,7 +22,7 @@ public:
 	}
 
 	explicit BlockCompoundParameter(FString Name, bool Required, bool bManaged, bool expanded)
-	: AbstractFormalParameter(FGuid::NewGuid().ToString(), Name, DFType::COMPOUND_BLOCK_PARAMETER, Required, bManaged),
+	: AbstractFormalParameter(FGuid::NewGuid(), Name, DFType::COMPOUND_BLOCK_PARAMETER, Required, bManaged),
 	Default(BlockUIStateParameterValue(expanded, true))
 	{
 	}

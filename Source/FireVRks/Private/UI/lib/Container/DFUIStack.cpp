@@ -4,6 +4,7 @@
 #include "Components/Border.h"
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
+#include "Unsafe/DFStyleUtil.h"
 
 
 UPanelWidget* UDFUIStack::MakeRootWidget(UWidgetTree* Tree)
@@ -13,7 +14,7 @@ UPanelWidget* UDFUIStack::MakeRootWidget(UWidgetTree* Tree)
 	FSlateBrush Brush = FSlateBrush();
 	Brush.Margin = FMargin(0.3f, 0.0f, 0.0f, 0.0f);
 	Brush.DrawAs = ESlateBrushDrawType::Box;
-	auto Texture = LoadObject<UTexture2D>(GetTransientPackage(), TEXT("/Game/FireVRks/UI/Icons/LeftOffsetBorder.LeftOffsetBorder"));
+	auto Texture = DFStyleUtil::LoadCachedTexture("LeftOffsetBorder", TEXT("/Game/FireVRks/UI/Icons/LeftOffsetBorder.LeftOffsetBorder"));
 	Brush.SetResourceObject(Texture);
 	Brush.Tiling = ESlateBrushTileType::NoTile;
 	Brush.ImageType = ESlateBrushImageType::Linear;

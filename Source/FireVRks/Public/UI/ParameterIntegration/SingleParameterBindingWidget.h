@@ -20,4 +20,6 @@ public:
 	virtual AbstractParameterValue* GetValue() override;
 
 	virtual void SubscribeToChanges(WidgetCallbackWithValue* Callback) override;
+
+	virtual void CleanUp() override;
 };

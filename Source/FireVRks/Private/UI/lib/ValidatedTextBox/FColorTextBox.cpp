@@ -2,18 +2,32 @@
 
 #include "FX/Niagara/SystemSettings/FormalParameter/FormalParameter.h"
 
+FRegexPattern UFColorTextBox::PATTERN = FRegexPattern(TEXT("[1-2]?[0-9]?[0-9]?"));
+
 bool UFColorTextBox::ValidateColor(FString Value)
 {
-	FRegexMatcher IntMatched = FRegexMatcher(
-		FRegexPattern(
-			TEXT("([0-9]|[1-9][0-9]|[1-2][0-9][0-9]),([0-9]|[1-9][0-9]|[1-2][0-9][0-9]),([0-9]|[1-9][0-9]|[1-2][0-9][0-9])")
-		),
-		Value
-	);
-	IntMatched.FindNext();
-	int start = IntMatched.GetMatchBeginning();
-	int end = IntMatched.GetMatchEnding();
-	return (end - start) == Value.Len();
+	TArray<FString> Parts = TArray<FString>();
+	FString delim = ",";
+	Value.ParseIntoArray(Parts, *delim);
+	if(Parts.Num() != 3)
+	{
+		return false;
+	}
+	for(FString Part : Parts)
+	{
+		FRegexMatcher IntMatched = FRegexMatcher(
+				PATTERN,
+				Part
+			);
+		IntMatched.FindNext();
+		int start = IntMatched.GetMatchBeginning();
+		int end = IntMatched.GetMatchEnding();
+		if((end - start) != Part.Len())
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 AbstractParameterValue* UFColorTextBox::GetValue()

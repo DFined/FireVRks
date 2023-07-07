@@ -22,3 +22,8 @@ AbstractParameterValue* ParameterValueContext::GetById(FGuid ParameterId, DFType
 	return SetValue(ParameterId, Default);
 }
 
+DFType ParameterValueContext::GetType()
+{
+	return DFType::NONE;
+}
+

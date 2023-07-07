@@ -15,8 +15,8 @@ protected:
 	ParameterPredicate* DisplayPredicate = new TruePredicate();
 
 public:
-	AbstractFormalParameter(const FString& GUID, FString& Name, DFType ValueType, bool IsRequired, bool bManaged)
-		: GUID(GUID), Name(Name), ValueType(ValueType), Required(IsRequired), DFTyped(bManaged)
+	AbstractFormalParameter(const FGuid GUID, FString& Name, DFType ValueType, bool IsRequired, bool bManaged)
+		: DFTyped(bManaged), GUID(GUID), Name(Name), ValueType(ValueType), Required(IsRequired) 
 	{
 	}
 

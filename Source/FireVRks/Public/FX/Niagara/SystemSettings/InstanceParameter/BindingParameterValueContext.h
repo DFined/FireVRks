@@ -14,8 +14,8 @@ private:
 	ParameterValueContext& PrimaryContext; 
 public:
 	
-	explicit BindingParameterValueContext(ParameterValueContext& PrimaryContext)
-		: PrimaryContext(PrimaryContext)
+	explicit BindingParameterValueContext(ParameterValueContext& PrimaryContext, bool Managed)
+		: PrimaryContext(PrimaryContext), ParameterValueContext(Managed)
 	{
 	}
 };

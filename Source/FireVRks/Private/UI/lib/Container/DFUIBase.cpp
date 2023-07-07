@@ -23,3 +23,13 @@ UPanelWidget* UDFUIBase::GetOrCreateRoot() {
 	}
 	return nullptr;
 }
+
+void UDFUIBase::RebuildWidgetInternal()
+{
+	GetOrCreateRoot();
+}
+
+void UDFUIBase::BaseInit()
+{
+	GetOrCreateRoot();
+}

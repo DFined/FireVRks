@@ -2,37 +2,71 @@
 
 #include "FX/Niagara/SystemSettings/Enums/EnumLikeValue.h"
 
-EnumLikeValue EnumLikeValue::PEONY = EnumLikeValue("PEONY", "Peony");
-EnumLikeValue EnumLikeValue::BURST = EnumLikeValue("BURST", "Burst");
-EnumLikeValue EnumLikeValue::RING = EnumLikeValue("RING", "Ring");
-EnumLikeValue EnumLikeValue::DISK = EnumLikeValue("DISK", "Disk");
-EnumLikeValue EnumLikeValue::CONE = EnumLikeValue("CONE", "Cone");
-EnumLikeValue EnumLikeValue::QUASAR = EnumLikeValue("QUASAR", "Quasar");
-EnumLikeValue EnumLikeValue::MULTI_CONE = EnumLikeValue("MULTI_CONE", "Multi cone");
+EnumLikeValue EnumLikeValue::PEONY = EnumLikeValue("PEONY", "Peony", 0);
+EnumLikeValue EnumLikeValue::BURST = EnumLikeValue("BURST", "Burst", 1);
+EnumLikeValue EnumLikeValue::RING = EnumLikeValue("RING", "Ring", 2);
+EnumLikeValue EnumLikeValue::CONE = EnumLikeValue("CONE", "Cone", 3);
 
-EnumLikeValue EnumLikeValue::CRACKLE = EnumLikeValue("CRACKLE", "Crackle");
-EnumLikeValue EnumLikeValue::GLITTER = EnumLikeValue("GLITTER", "Glitter");
-EnumLikeValue EnumLikeValue::SMOKE = EnumLikeValue("SMOKE", "Smoke");
-EnumLikeValue EnumLikeValue::SPARK = EnumLikeValue("SPARK", "Spark");
+EnumLikeValue EnumLikeValue::NO_EFFECT = EnumLikeValue("NO_EFFECT", "No effect", 0);
+EnumLikeValue EnumLikeValue::SIMPLE_COLOR_CHANGE = EnumLikeValue("SIMPLE_COLOR_CHANGE", "Simple color change", 1);
+EnumLikeValue EnumLikeValue::FLARE = EnumLikeValue("FLARE", "Color flare", 2);
+EnumLikeValue EnumLikeValue::FLICKER = EnumLikeValue("FLARE", "Color flicker", 3);
+EnumLikeValue EnumLikeValue::COLOR_WAVE = EnumLikeValue("COLOR_WAVE", "Color wave", 4);
+EnumLikeValue EnumLikeValue::ADVANCED_COLOR_LERP = EnumLikeValue("COLOR_WAVE", "Advanced color lerp", 5);
+
+EnumLikeValue EnumLikeValue::SOS_FROM_PARENT_PARTICLES = EnumLikeValue("SOS_FROM_PARENT", "From parent effect", 0);
+EnumLikeValue EnumLikeValue::SOS_SPHERE = EnumLikeValue("SOS_UNIFORM_SPHERE", "Sphere", 1);
+EnumLikeValue EnumLikeValue::SOS_RING = EnumLikeValue("SOS_RING", "Ring", 2);
+
+EnumLikeValue EnumLikeValue::FIXED = EnumLikeValue("FIXED", "Fixed", 0);
+EnumLikeValue EnumLikeValue::FROM_SHELL = EnumLikeValue("FROM_SHELL", "From shell", 1);
+EnumLikeValue EnumLikeValue::RANDOM = EnumLikeValue("RANDOM", "Randomized", 2);
+
+EnumLikeValue EnumLikeValue::SOS_DELAY_FROM_START = EnumLikeValue("SOS_DELAY_FROM_START", "From start", 0);
+EnumLikeValue EnumLikeValue::SOS_DELAY_FROM_END = EnumLikeValue("SOS_DELAY_FROM_END", "From end", 0);
+EnumLikeValue EnumLikeValue::SOS_DELAY_AT_REGULAR_INTERVAL = EnumLikeValue("SOS_DELAY_AT_REGULAR_INTERVAL", "At regular interval", 0);
 
 EnumLike EnumLike::BURST_SHAPE = EnumLike(
 	{
 		&EnumLikeValue::PEONY,
 		&EnumLikeValue::BURST,
 		&EnumLikeValue::RING,
-		&EnumLikeValue::DISK,
-		&EnumLikeValue::CONE,
-		&EnumLikeValue::QUASAR,
-		&EnumLikeValue::MULTI_CONE
+		&EnumLikeValue::CONE
 	}
 );
 
-EnumLike EnumLike::TRAIL_TYPE = EnumLike(
+EnumLike EnumLike::COLOR_EFFECT = EnumLike(
 	{
-		&EnumLikeValue::CRACKLE,
-		&EnumLikeValue::GLITTER,
-		&EnumLikeValue::SMOKE,
-		&EnumLikeValue::SPARK
+		&EnumLikeValue::NO_EFFECT,
+		&EnumLikeValue::SIMPLE_COLOR_CHANGE,
+		&EnumLikeValue::FLARE,
+		&EnumLikeValue::FLICKER,
+		&EnumLikeValue::COLOR_WAVE,
+		&EnumLikeValue::ADVANCED_COLOR_LERP
+	}
+);
+
+EnumLike EnumLike::SOS_SHAPE = EnumLike(
+	{
+		&EnumLikeValue::SOS_FROM_PARENT_PARTICLES,
+		&EnumLikeValue::SOS_SPHERE,
+		&EnumLikeValue::SOS_RING
+	}
+);
+
+EnumLike EnumLike::EFFECT_ROTATION_SETTING = EnumLike(
+	{
+		&EnumLikeValue::FIXED,
+		&EnumLikeValue::FROM_SHELL,
+		&EnumLikeValue::RANDOM
+	}
+);
+
+EnumLike EnumLike::SOS_DELAY_TYPE = EnumLike(
+	{
+		&EnumLikeValue::SOS_DELAY_FROM_START,
+		&EnumLikeValue::SOS_DELAY_FROM_END,
+		&EnumLikeValue::SOS_DELAY_AT_REGULAR_INTERVAL,
 	}
 );
 

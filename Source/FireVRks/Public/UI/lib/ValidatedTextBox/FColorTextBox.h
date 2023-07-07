@@ -8,6 +8,9 @@ class UFColorTextBox : public UValidatedTextBox
 	GENERATED_BODY()
 public:
 	static bool ValidateColor(FString Value);
+
+	static FRegexPattern PATTERN;
+	
 	UFColorTextBox(const FObjectInitializer& Initializer) : UValidatedTextBox(Initializer, ValidateColor)
 	{
 	};

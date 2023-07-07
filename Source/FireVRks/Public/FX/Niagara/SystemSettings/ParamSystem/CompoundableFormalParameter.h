@@ -15,6 +15,7 @@ class CompoundableFormalParameter
 	FormalParameter<bool> SelectorParam;
 public:
 	CompoundableFormalParameter(FString ValueName, DFType Type, bool Required, ValueType DefaultValue);
+	CompoundableFormalParameter(FString ValueName, DFType Type, bool Required, ValueType DefaultValueMin, ValueType DefaultValueMax);
 
 	BlockCompoundParameter* GetBlockParam();
 

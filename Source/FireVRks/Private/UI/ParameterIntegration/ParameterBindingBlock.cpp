@@ -2,11 +2,16 @@
 
 #include "UI/ParameterIntegration/ParameterRenderer.h"
 #include "Components/Border.h"
+#include "Components/Button.h"
+#include "Components/HorizontalBoxSlot.h"
 #include "FX/Niagara/SystemSettings/FormalParameter/BlockCompoundParameter.h"
 #include "FX/Niagara/SystemSettings/InstanceParameter/MapParameterValueContext.h"
 #include "UI/DFUIUtil.h"
 #include "UI/lib/Container/DFUIStack.h"
+#include "UI/ParameterIntegration/ParameterBindingList.h"
 #include "Unsafe/ParameterIntegration/DFParameterUtil.h"
+
+class UButton;
 
 UPanelWidget* UParameterBindingBlock::MakeRootWidget(UWidgetTree* Tree)
 {
@@ -26,12 +31,17 @@ void UParameterBindingBlock::Initialize(ParameterValueContext* Context, Abstract
 	DFStyleUtil::SetPadding<UVerticalBoxSlot>(OuterBorder, FMargin(10, 0, 0, 0));
 	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_1);
 
-	auto BlockName = DFUIUtil::MakeLabel(WidgetTree, ParamsBlock->GetName());
+	HeaderBox = DFUIUtil::MakeWidget<UHorizontalBox>(WidgetTree);
+	auto BlockName = DFUIUtil::AddLabel(WidgetTree, HeaderBox, ParamsBlock->GetName());
+	if(auto SlotT = Cast<UHorizontalBoxSlot>(BlockName->Slot))
+	{
+		SlotT->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
+	}
 	DFStyleUtil::TextBlockStyle(BlockName);
 
 	UVerticalBox* ListWrapper = DFUIUtil::MakeWidget<UVerticalBox>(WidgetTree);
 
-	BaseTab = DFUIUtil::MakeExpandableTab(WidgetTree, OuterBorder, BlockName, ListWrapper, State->IsBlockExpanded());
+	BaseTab = DFUIUtil::MakeExpandableTab(WidgetTree, OuterBorder, HeaderBox, ListWrapper, State->IsBlockExpanded());
 
 	RequiredParamsStack = DFUIUtil::AddUserWidget<UDFUIStack>(ListWrapper);
 	DFStyleUtil::SetPadding<UVerticalBoxSlot>(RequiredParamsStack, FMargin(6, 0, 0, 0));
@@ -92,4 +102,33 @@ void UParameterBindingBlock::SubscribeToChanges(WidgetCallbackWithValue* Callbac
 			PBW->SubscribeToChanges(Callback);
 		}
 	}
+}
+
+void UParameterBindingBlock::MakeListItem(UParameterBindingList* PList)
+{
+	ParentList = PList;
+	auto DeleteButton = DFUIUtil::AddWidget<UButton>(WidgetTree, HeaderBox);
+	DFStyleUtil::ImgButtonStyle(DeleteButton, "DeleteButton", "/Game/FireVRks/UI/Icons/DeleteIcon.DeleteIcon", 20);
+	DeleteButton->OnPressed.AddUniqueDynamic(this, &UParameterBindingBlock::OnDelete);
+}
+
+void UParameterBindingBlock::OnDelete()
+{
+	ParentList->RemoveItem(this);
+}
+
+void UParameterBindingBlock::CleanUp()
+{
+	Super::CleanUp();
+	OuterBorder->RemoveFromParent();
+    OverridesTab->RemoveFromParent();
+    BaseTab->RemoveFromParent();
+	HeaderBox->RemoveFromParent();
+	ParentList = nullptr;
+	
+	RequiredParamsStack->CleanUpBindingWidgets();
+	OverrideParamsStack->CleanUpBindingWidgets();
+	
+	RequiredParamsStack->RemoveFromParent();
+	OverrideParamsStack->RemoveFromParent();
 }

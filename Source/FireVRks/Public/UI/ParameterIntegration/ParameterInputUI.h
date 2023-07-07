@@ -2,7 +2,9 @@
 #include "ParameterBindingWidget.h"
 #include "ParameterRenderer.h"
 #include "Components/VerticalBox.h"
+#include "FX/Niagara/System/EffectSystem.h"
 #include "FX/Niagara/SystemSettings/InstanceParameter/MapParameterValueContext.h"
+#include "FX/Niagara/SystemSettings/InstanceParameter/SimplePVCProvider.h"
 #include "UI/lib/Container/DFUIContainer.h"
 #include "ParameterInputUI.generated.h"
 
@@ -14,8 +16,11 @@ class UParameterInputUI : public UDFUIContainer
 	UPROPERTY()
 	UVerticalBox* VerticalBox;
 
-	TArray<AbstractFormalParameter*> Parameters;
-	MapParameterValueContext* Context = __nullptr;
+	MapParameterValueContext* Context = nullptr;
+
+	UPROPERTY()
+	UEffectSystem* System;
+	
 public:
 	UParameterInputUI();
 
@@ -26,16 +31,25 @@ public:
 
 	void WriteParamsToContext(MapParameterValueContext* bContext);
 
-	void AddParameter(AbstractFormalParameter* Parameter);
-	void AddParameters(TArray<AbstractFormalParameter*> Parameter);
-
 	void DumpToContext();
 
 	void Draw(ParameterValueContext* Context);
 
 	void OnChildWidgetValueChange(ParameterBindingWidget* Widget, AbstractParameterValue* Value);
 
+	void SetSystem(UEffectSystem* FSystem)
+	{
+		this->System = FSystem;
+	}
+
 	UFUNCTION(BlueprintCallable)
-	UDefaultParameterSystem* GetSystem();
+	void SpawnSystem(AActor* Target);
+
+	void SubscribeToChanges(WidgetCallbackWithValue* Callback);
+
+	
+
+	UParameterValueContextProvider* GetContextProvider();
+	void CleanUp();
 };
 

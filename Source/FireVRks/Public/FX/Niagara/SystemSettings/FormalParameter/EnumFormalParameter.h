@@ -7,7 +7,7 @@ class EnumFormalParameter : public FormalParameter<EnumLikeValue*>
 	EnumLike* EnumType;
 	
 public:
-	EnumFormalParameter(const FString& GUID, const FString& Name, bool IsRequired, EnumLike* EType, bool bManaged)
+	EnumFormalParameter(const FGuid GUID, const FString& Name, bool IsRequired, EnumLike* EType, bool bManaged)
 		: FormalParameter(GUID, Name, DFType::TYPED_ENUM_PARAMETER, IsRequired, EType->GetDefaultValue(), bManaged), EnumType(EType)
 	{
 	}

@@ -2,6 +2,8 @@
 
 #include "Components/HorizontalBoxSlot.h"
 #include "UI/DFUIUtil.h"
+#include "UI/lib/Container/DFUILine.h"
+#include "Components/PanelWidget.h"
 #include "Unsafe/ParameterIntegration/ParameterTypingUtil.h"
 
 UPanelWidget* USingleParameterBindingWidget::MakeRootWidget(UWidgetTree* Tree)
@@ -31,13 +33,7 @@ void USingleParameterBindingWidget::Initialize(ParameterValueContext* Value, Abs
 
 		auto Widget = ChildWidget->AsWidget();
 		Line->Append(Widget);
-		auto BoxSlot = Cast<UHorizontalBoxSlot>(Widget->Slot);
-		if (BoxSlot)
-		{
-			BoxSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
-			BoxSlot->SetHorizontalAlignment(HAlign_Fill);
-			BoxSlot->SetVerticalAlignment(VAlign_Fill);
-		}
+		DFStyleUtil::SafeSetHBoxSlotWidth(Widget->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 		ChildWidget->DefaultStyle();
 		ChildWidget->Initialize(Value, Param);
 	}
@@ -51,4 +47,12 @@ AbstractParameterValue* USingleParameterBindingWidget::GetValue()
 void USingleParameterBindingWidget::SubscribeToChanges(WidgetCallbackWithValue* Callback)
 {
 	ChildWidget->SubscribeToChanges(Callback);
+}
+
+void USingleParameterBindingWidget::CleanUp()
+{
+	Super::CleanUp();
+	ChildWidget->CleanUp();
+	ChildWidget->AsWidget()->RemoveFromParent();
+	Border->RemoveFromParent();
 }

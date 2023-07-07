@@ -1,6 +1,7 @@
 #include "Unsafe/DFStyleUtil.h"
 
-#include "Components/HorizontalBoxSlot.h"
+#include "Components/ButtonSlot.h"
+#include "Components/VerticalBoxSlot.h"
 #include "Engine/Font.h"
 
 FLinearColor DFStyleUtil::GREY_LVL_N0 = FLinearColor(0.011833f, 0.011833f, 0.011833f);
@@ -12,7 +13,12 @@ FLinearColor DFStyleUtil::GREY_LVL_4 = FLinearColor(0.140000f, 0.140000f, 0.1400
 FLinearColor DFStyleUtil::GREY_OUTLINE_LVL_0 = FLinearColor(0.015f, 0.015f, 0.015f);
 
 FLinearColor DFStyleUtil::LIGHT_TEXT_1 = FLinearColor(200, 200, 200);
-FSlateFontInfo DFStyleUtil::DEFAULT_FONT = FSlateFontInfo(Cast<UObject>(LoadObject<UFont>(NULL, TEXT("/Game/FireVRks/UI/Font/DefaultFont.DefaultFont"))), 12, "Roboto");
+FSlateFontInfo DFStyleUtil::DEFAULT_FONT = FSlateFontInfo(Cast<UObject>(LoadObject<UFont>(NULL, TEXT("/Game/FireVRks/UI/Font/DefaultFont.DefaultFont"))), 12,
+                                                          "Roboto");
+
+UTexture2D* DFStyleUtil::DEFAULT_TEXTURE = LoadObject<UTexture2D>(GetTransientPackage(), TEXT("/Game/FireVRks/UI/Icons/UnknownTexture.UnknownTexture"));
+
+TMap<FString, UTexture2D*> DFStyleUtil::CachedTextures = TMap<FString, UTexture2D*>();
 
 void DFStyleUtil::LineBorderStyle(UBorder* Border)
 {
@@ -20,7 +26,7 @@ void DFStyleUtil::LineBorderStyle(UBorder* Border)
 	Brush.DrawAs = ESlateBrushDrawType::RoundedBox;
 
 	auto Outline = FSlateBrushOutlineSettings(
-		FVector4(0.f, 0.f, 0.f, 1.f), FSlateColor(DFStyleUtil::GREY_OUTLINE_LVL_0), 1.0
+		FVector4(0.f, 0.f, 0.f, 1.f), FSlateColor(GREY_OUTLINE_LVL_0), 1.0
 	);
 	Outline.RoundingType = ESlateBrushRoundingType::HalfHeightRadius;
 	Brush.OutlineSettings = Outline;
@@ -75,7 +81,7 @@ void DFStyleUtil::CheckBoxStyle(UCheckBox* TextBlock)
 	auto Brush = Style.BackgroundImage;
 	Brush.DrawAs = ESlateBrushDrawType::RoundedBox;
 	Brush.OutlineSettings.RoundingType = ESlateBrushRoundingType::FixedRadius;
-	Brush.OutlineSettings.CornerRadii = FVector4(4,4,4,4);
+	Brush.OutlineSettings.CornerRadii = FVector4(4, 4, 4, 4);
 	Brush.OutlineSettings.Color = GREY_LVL_3;
 	Brush.OutlineSettings.Width = 1;
 	Brush.TintColor = GREY_LVL_4;
@@ -86,11 +92,83 @@ void DFStyleUtil::CheckBoxStyle(UCheckBox* TextBlock)
 	TextBlock->SetWidgetStyle(Style);
 }
 
+void DFStyleUtil::TextButtonStyle(UButton* Button, FLinearColor Color)
+{
+	Button->SetBackgroundColor(Color);
+	Button->WidgetStyle.Normal.OutlineSettings.Color = GREY_LVL_3;
+
+	auto Child = Cast<UTextBlock>(Button->GetChildAt(0));
+	if (Child)
+	{
+		UButtonSlot* Slot = Cast<UButtonSlot>(Child->Slot);
+		TextBlockStyle(Child);
+		if (Slot)
+		{
+			Slot->SetPadding(FMargin(5, 0));
+		}
+	}
+}
+
+void DFStyleUtil::ImgButtonStyle(UButton* Button, FString Id, FString Path, float size)
+{
+	auto Img = LoadCachedTexture(Id, Path);
+	auto Style = FButtonStyle();
+	auto Brush = SetupImageBrush(Img, size);
+	Style.SetNormal(Brush);
+	Style.SetPressed(Brush);
+	Style.SetHovered(Brush);
+	Button->SetStyle(Style);
+}
+
+FSlateBrush DFStyleUtil::SetupImageBrush(UTexture2D* Icon, float size)
+{
+	auto Brush = FSlateBrush();
+	Brush.DrawAs = ESlateBrushDrawType::Image;
+	Brush.SetResourceObject(Icon);
+	Brush.SetImageSize(UE::Slate::FDeprecateVector2DParameter(size, size));
+	return Brush;
+}
+
+UTexture2D* DFStyleUtil::LoadCachedTexture(FString Identifier, FString Path)
+{
+	auto Texture = CachedTextures.Find(Identifier);
+	if (Texture)
+	{
+		return *Texture;
+	}
+	auto NewTexture = LoadObject<UTexture2D>(GetTransientPackage(), *Path);
+	if (NewTexture)
+	{
+		CachedTextures.Add(Identifier, NewTexture);
+		return NewTexture;
+	}
+	return DEFAULT_TEXTURE;
+}
+
+void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size)
+{
+	if (auto BoxSlot = Cast<UHorizontalBoxSlot>(Slot))
+	{
+		BoxSlot->SetSize(Size);
+		BoxSlot->SetHorizontalAlignment(HAlign_Fill);
+		BoxSlot->SetVerticalAlignment(VAlign_Center);
+	}
+}
+
+void DFStyleUtil::SafeSetVBoxSlotAlignment(UPanelSlot* Slot, EHorizontalAlignment Alignment)
+{
+	if (auto BoxSlot = Cast<UVerticalBoxSlot>(Slot))
+	{
+		BoxSlot->SetHorizontalAlignment(Alignment);
+		BoxSlot->SetVerticalAlignment(VAlign_Center);
+	}
+}
+
 template <class SlotType>
 void DFStyleUtil::SetPadding(UWidget* Widget, FMargin Margin)
 {
 	auto Slot = Cast<SlotType>(Widget->Slot);
-	if(Slot)
+	if (Slot)
 	{
 		Slot->SetPadding(Margin);
 	}

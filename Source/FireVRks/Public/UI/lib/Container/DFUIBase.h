@@ -9,14 +9,13 @@ UCLASS(Abstract, Blueprintable)
 class UDFUIBase : public UUserWidget
 {
 	GENERATED_BODY()
+	
 
 protected:
 	UPROPERTY()
 	UPanelWidget* RootContainer;
 
 	virtual TSharedRef<SWidget> RebuildWidget() override;
-
-	virtual void RebuildWidgetInternal() PURE_VIRTUAL("RebuildWidgetInternal",);
 
 
 public:
@@ -32,6 +31,7 @@ public:
 	*/
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) PURE_VIRTUAL("MakeRootWidget", return nullptr;);
 	
-	virtual void BaseInit() PURE_VIRTUAL("BaseInit",);
+	virtual void RebuildWidgetInternal();
 
+	virtual void BaseInit();
 };

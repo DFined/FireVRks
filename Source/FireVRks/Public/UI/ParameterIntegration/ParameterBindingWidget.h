@@ -50,4 +50,11 @@ public:
 	}
 	
 	virtual void SubscribeToChanges(WidgetCallbackWithValue* Callback);
+
+	AbstractFormalParameter* GetParameter() const
+	{
+		return Parameter;
+	}
+
+	virtual void CleanUp();
 };

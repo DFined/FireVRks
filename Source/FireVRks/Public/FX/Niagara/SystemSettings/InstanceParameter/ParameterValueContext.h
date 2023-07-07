@@ -1,14 +1,22 @@
 #pragma once
+#include "FX/Niagara/SystemSettings/FormalParameter/AbstractFormalParameter.h"
 #include "FX/Niagara/SystemSettings/ParameterValues/AbstractParameterValue.h"
 
 class AbstractFormalParameter;
 /**
  * An object that supplies values for formal parameters
  */
-class ParameterValueContext
+class ParameterValueContext : public DFTyped
 {
 public:
-	virtual ~ParameterValueContext() = default;
+	explicit ParameterValueContext(bool bManaged)
+		: DFTyped(bManaged)
+	{
+	}
+
+	virtual ~ParameterValueContext() override = default;
+
+	
 	/**
 	 * Get the value for the specified parameter in this context or nullptr if it is absent
 	 */
@@ -17,5 +25,18 @@ public:
 	virtual AbstractParameterValue* GetById(FGuid ParameterId, DFType Type, AbstractParameterValue* Default);
 
 	virtual AbstractParameterValue* SetValue(FGuid ParameterId, AbstractParameterValue*) = 0;
-	
+
+	virtual DFType GetType() override;
+
+
+	template <class Type>
+	Type* GetValue(AbstractFormalParameter* Parameter)
+	{
+		auto Value = this->Get(Parameter);
+		if (!Value)
+		{
+			Value = Parameter->GetDefault();
+		}
+		return static_cast<Type*>(Value);
+	}
 };

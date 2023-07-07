@@ -2,7 +2,7 @@
 
 
 
-EnumLikeValue::EnumLikeValue(FString Id, FString Name): Parent(nullptr), Id(Id), Name(Name)
+EnumLikeValue::EnumLikeValue(FString Id, FString Name, int bOrdinal): Id(Id), Name(Name), Parent(nullptr), Ordinal(bOrdinal)
 {
 }
 
@@ -14,6 +14,11 @@ EnumLike* EnumLikeValue::GetParent() const
 void EnumLikeValue::SetParent(EnumLike* Prnt)
 {
 	this->Parent = Prnt;
+}
+
+int EnumLikeValue::GetOrdinal() const
+{
+	return Ordinal;
 }
 
 bool operator==(const EnumLikeValue& Lhs, const EnumLikeValue& RHS)
