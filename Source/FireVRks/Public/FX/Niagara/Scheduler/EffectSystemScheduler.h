@@ -21,10 +21,9 @@ class UEffectSystemScheduler : public UObject
 	
 
 	UEffectSystemScheduler();
-	
-	static UEffectSystemScheduler* MakeInstance();
+
 public:
-	static UEffectSystemScheduler* const INSTANCE;
+	static UEffectSystemScheduler* MakeInstance();
 
 	UFUNCTION(BlueprintCallable)
 	void EnableTicking();
@@ -40,9 +39,6 @@ public:
 	void SpawnNow(EffectSpawnData* Data);
 
 	void SpawnNow(UEffectSystem* System, AActor* SpawnTarget, FVector Offset, FVector UpwardVector, ParameterValueContext* Context);
-
-	UFUNCTION(BlueprintCallable)
-	static UEffectSystemScheduler* GetInstance();
 
 	UFUNCTION(BlueprintCallable)
 	AActor* GetPlayerRef() const;

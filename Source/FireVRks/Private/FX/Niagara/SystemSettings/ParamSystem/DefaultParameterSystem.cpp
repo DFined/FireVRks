@@ -9,6 +9,7 @@
 #include "FX/Niagara/SystemSettings/FormalParameter/ValueEqualsPredicate.h"
 #include "FX/Niagara/SystemSettings/ParameterValues/SystemInstantiationParameterValue.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Util/DFStatics.h"
 
 void UDefaultParameterSystem::Initialize()
 {
@@ -131,6 +132,54 @@ void UDefaultParameterSystem::Initialize()
 				}
 			}
 		}
+		//MOTION
+		MAIN_SETTINGS_BLOCK.AddChild(&MOTION_SETTINGS_BLOCK);
+		MOTION_SETTINGS_BLOCK.AddChild(&MOTION_START_DELAY);
+		MOTION_SETTINGS_BLOCK.AddChild(&MOTION_TYPE);
+
+		MOTION_SETTINGS_BLOCK.AddChild(&FISH_MOTION_BLOCK);
+		{
+			FISH_MOTION_BLOCK.SetDisplayPredicate(ValueEqualsPredicate<EnumLikeValue*>::Of(&MOTION_TYPE, &EnumLikeValue::FISH));
+			FISH_MOTION_BLOCK.AddChild(&MOTION_FISH_FREQUENCY);
+			FISH_MOTION_BLOCK.AddChild(&MOTION_FISH_AMPLITUDE);
+		}
+
+		MOTION_SETTINGS_BLOCK.AddChild(&BEES_MOTION_BLOCK);
+		{
+			BEES_MOTION_BLOCK.SetDisplayPredicate(ValueEqualsPredicate<EnumLikeValue*>::Of(&MOTION_TYPE, &EnumLikeValue::BEES));
+			BEES_MOTION_BLOCK.AddChild(&MOTION_BEES_ROTATION);
+			BEES_MOTION_BLOCK.AddChild(&MOTION_BEES_SPEED);
+		}
+
+		MOTION_SETTINGS_BLOCK.AddChild(&WHEELS_MOTION_BLOCK);
+		{
+			WHEELS_MOTION_BLOCK.SetDisplayPredicate(ValueEqualsPredicate<EnumLikeValue*>::Of(&MOTION_TYPE, &EnumLikeValue::WHEELS));
+			WHEELS_MOTION_BLOCK.AddChild(&MOTION_WHEELS_ROTATION);
+			WHEELS_MOTION_BLOCK.AddChild(&MOTION_WHEELS_SPEED);
+			WHEELS_MOTION_BLOCK.AddChild(&MOTION_WHEELS_EJECTION_SPEED);
+		}
+
+		MOTION_SETTINGS_BLOCK.AddChild(&SPIRAL_MOTION_BLOCK);
+		{
+			SPIRAL_MOTION_BLOCK.SetDisplayPredicate(ValueEqualsPredicate<EnumLikeValue*>::Of(&MOTION_TYPE, &EnumLikeValue::SPIRALS));
+			SPIRAL_MOTION_BLOCK.AddChild(&MOTION_SPIRALS_ROTATION);
+			SPIRAL_MOTION_BLOCK.AddChild(&MOTION_SPIRALS_EJECTION_SPEED);
+		}
+
+		MOTION_SETTINGS_BLOCK.AddChild(&ADVANCED_MOTION_BLOCK);
+		{
+			ADVANCED_MOTION_BLOCK.SetDisplayPredicate(ValueEqualsPredicate<EnumLikeValue*>::Of(&MOTION_TYPE, &EnumLikeValue::ADVANCED));
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_ROLL_MIN_ROTATION);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_ROLL_MAX_ROTATION);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_PITCH_MIN_ROTATION);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_PITCH_MAX_ROTATION);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_YAW_ROTATION);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_FORWARD_THRUST);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_NORMAL_THRUST);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_NORMAL_FREQUENCY);
+			ADVANCED_MOTION_BLOCK.AddChild(&MOTION_FORWARD_THRUST);
+		}
+
 
 		/**
 		 * Compound effect setup
@@ -158,12 +207,11 @@ void UDefaultParameterSystem::Initialize()
 		SOS_CONFIG_BLOCK.AddChild(&SOS_EFFECT_PICKER);
 
 
-		DEFAULT_SYSTEM = LoadObject<UNiagaraSystem>(GetTransientPackage(), TEXT("/Game/FireVRks/Effects/Systems/FibonacciSphere.FibonacciSphere"));
 
 		//TECHNICAL PARAMETERS
-		MAIN_SETTINGS_BLOCK.AddChild(&USE_DISTANCE_CORRECTION);
 		MAIN_SETTINGS_BLOCK.AddChild(&DISTANCE_CORRECTION_SETTINGS);
 		DISTANCE_CORRECTION_SETTINGS.SetDisplayPredicate(ValueEqualsPredicate<bool>::Of(&USE_DISTANCE_CORRECTION, true));
+		DISTANCE_CORRECTION_SETTINGS.AddChild(&USE_DISTANCE_CORRECTION);
 		DISTANCE_CORRECTION_SETTINGS.AddChild(&DISTANCE_CORRECTION_SCALE);
 		DISTANCE_CORRECTION_SETTINGS.AddChild(&DISTANCE_CORRECTION_EXPONENT);
 
@@ -211,10 +259,10 @@ void UDefaultParameterSystem::SpawnSystem(EffectSpawnData* Data, AActor* PlayerR
 	auto Distance = 20000;
 	if (PlayerRef)
 	{
-		Location.Distance(Location, PlayerRef->GetActorLocation());
+		Distance = Location.Distance(Location, PlayerRef->GetActorLocation());
 	}
 
-	auto Effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(Data->GetSpawnTarget(), DEFAULT_SYSTEM, Location);
+	auto Effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(Data->GetSpawnTarget(), UDFStatics::DEFAULT_SYSTEM, Location);
 
 	auto RotationType = EFFECT_ROTATION_TYPE.GetValue(Context);
 
@@ -341,7 +389,6 @@ void UDefaultParameterSystem::SpawnSystem(EffectSpawnData* Data, AActor* PlayerR
 	Effect->SetBoolParameter("UseDistanceCorrection", USE_DISTANCE_CORRECTION.GetValue(Context));
 	Effect->SetFloatParameter("DistanceCorrectionExponent", DISTANCE_CORRECTION_EXPONENT.GetValue(Context));
 	Effect->SetFloatParameter("DistanceCorrectionLinearScale", DISTANCE_CORRECTION_SCALE.GetValue(Context));
-	Effect->SetFloatParameter("Distance", 20000);
 
 	Effect->SetFloatParameter("DragExponent", DRAG_EXPONENT.GetValue(Context));
 	Effect->SetFloatParameter("LowSpeedDragScale", DRAG_LOW_SPEED_SCALE.GetValue(Context));
@@ -422,7 +469,7 @@ void UDefaultParameterSystem::SpawnSystem(EffectSpawnData* Data, AActor* PlayerR
 						default: break;
 					}
 
-					UEffectSystemScheduler::INSTANCE->ScheduleSpawn(
+					UDFStatics::EFFECT_SYSTEM_SCHEDULER->ScheduleSpawn(
 						new EffectSpawnData(
 							SystemInstanceParams->GetSystem(), SystemInstanceParams->GetContext(), Data->GetSpawnTarget(), SpawnDelay, Offset)
 					);
@@ -432,6 +479,81 @@ void UDefaultParameterSystem::SpawnSystem(EffectSpawnData* Data, AActor* PlayerR
 		if (Handler != nullptr)
 		{
 			Handler->Finalize();
+			//TODO Fix memory leak here
 		}
 	}
+
+
+	//MOTION BLOCK
+	Effect->SetFloatParameter("ThrustStartDelay", MOTION_START_DELAY.GetValue(Context));
+	float MinRoll = 0.0;
+	float MaxRoll = 0.0;
+	float MinPitch = 0.0;
+	float MaxPitch = 0.0;
+	float Yaw = 0.0;
+	float NormalThrust = 0;
+	float NormalFrequency = 0;
+	float ForwardThrust = 0;
+
+	switch (MOTION_TYPE.GetValue(Context)->GetOrdinal())
+	{
+		case 1: //FISH
+			{
+				NormalFrequency = MOTION_FISH_FREQUENCY.GetValue(Context);
+				NormalThrust = MOTION_FISH_AMPLITUDE.GetValue(Context) * 100;
+				break;
+			}
+		case 2: //BEES
+			{
+				auto omega = MOTION_BEES_ROTATION.GetValue(Context);
+				MinRoll = 0.5 * omega;
+				MaxRoll = omega;
+				MinPitch = MinRoll;
+				MaxPitch = MaxRoll;
+				Yaw = MinRoll;
+				ForwardThrust = MOTION_BEES_SPEED.GetValue(Context);
+				break;
+			}
+		case 3: //WHEELS
+			{
+				auto omega = MOTION_BEES_ROTATION.GetValue(Context);
+				MinRoll = 0.5 * omega;
+				MaxRoll = omega;
+				MinPitch = MinRoll;
+				MaxPitch = MaxRoll;
+				Yaw = MinRoll;
+				ForwardThrust = MOTION_BEES_SPEED.GetValue(Context);
+				Effect->SetFloatParameter("WillowTrailEjectionSpeed", MOTION_WHEELS_EJECTION_SPEED.GetValue(Context));
+				Effect->SetFloatParameter("CrackleTrailEjectionSpeed", MOTION_WHEELS_EJECTION_SPEED.GetValue(Context));
+				break;
+			}
+		case 4: //SPIRALS
+			{
+				Yaw = MOTION_SPIRALS_ROTATION.GetValue(Context);
+				Effect->SetFloatParameter("WillowTrailEjectionSpeed", MOTION_SPIRALS_EJECTION_SPEED.GetValue(Context));
+				Effect->SetFloatParameter("CrackleTrailEjectionSpeed", MOTION_SPIRALS_EJECTION_SPEED.GetValue(Context));
+				break;
+			}
+		case 5: //ADVANCED
+			{
+				MinRoll = MOTION_ROLL_MIN_ROTATION.GetValue(Context);
+				MaxRoll = MOTION_ROLL_MAX_ROTATION.GetValue(Context);
+				MinPitch = MOTION_PITCH_MIN_ROTATION.GetValue(Context);
+				MaxPitch = MOTION_PITCH_MAX_ROTATION.GetValue(Context);
+				Yaw = MOTION_YAW_ROTATION.GetValue(Context);
+				NormalThrust = MOTION_NORMAL_THRUST.GetValue(Context);
+				NormalFrequency = MOTION_NORMAL_FREQUENCY.GetValue(Context);
+				ForwardThrust = MOTION_FORWARD_THRUST.GetValue(Context);
+			}
+	}
+
+	Effect->SetFloatParameter("RollMinRotationRate", MinRoll);
+	Effect->SetFloatParameter("RollMaxRotationRate", MaxRoll);
+	Effect->SetFloatParameter("PitchMinRotationRate", MinPitch);
+	Effect->SetFloatParameter("PitchMaxRotationRate", MaxPitch);
+	Effect->SetFloatParameter("YawRotationRate", Yaw);
+	Effect->SetFloatParameter("NormalThrust", NormalThrust);
+	Effect->SetFloatParameter("NormalMotionFrequency", NormalFrequency);
+	Effect->SetFloatParameter("StarsThrust", ForwardThrust);
+	
 }

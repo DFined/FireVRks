@@ -1,6 +1,6 @@
 #pragma once
 #include "UI/lib/Container/DFUIContainer.h"
-#include "UI/ParameterIntegration/ParameterInputUI.h"
+#include "UI/ParameterIntegration/EffectParameterInputUI.h"
 #include "DFTesting.generated.h"
 
 UCLASS(Abstract)
@@ -10,6 +10,6 @@ public:
 	GENERATED_BODY()
 	
 	UFUNCTION(BlueprintCallable)
-	static UParameterInputUI* MockParameters(UPanelWidget* Outer);
+	static UEffectParameterInputUI* MockParameters(UPanelWidget* Outer);
 
 };

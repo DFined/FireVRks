@@ -1,7 +1,7 @@
-#include "SystemInstantiationBindingWidget.h"
+#include "UI/ParameterIntegration/SystemInstantiationBindingWidget.h"
 
-#include "ParameterInputUI.h"
-#include "SystemDisplayTile.h"
+#include "UI/ParameterIntegration/EffectParameterInputUI.h"
+#include "UI/ParameterIntegration/SystemDisplayTile.h"
 #include "FX/Niagara/SystemSettings/ParameterValues/SystemInstantiationParameterValue.h"
 #include "UI/DFUIUtil.h"
 #include "Unsafe/DFStyleUtil.h"
@@ -30,7 +30,7 @@ void USystemInstantiationBindingWidget::Initialize(ParameterValueContext* Contex
 	DFStyleUtil::SafeSetHBoxSlotWidth(SysSelector->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	SysSelector->SetSystem(System, 96);
 
-	InstanceParamUI = DFUIUtil::AddWidget<UParameterInputUI>(WidgetTree, VBox);
+	InstanceParamUI = DFUIUtil::AddWidget<UEffectParameterInputUI>(WidgetTree, VBox);
 	InstanceParamUI->SetSystem(System);
 	InstanceParamUI->Draw(Value->GetContext());
 }

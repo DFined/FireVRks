@@ -1,4 +1,4 @@
-#include "EffectSystemManager.h"
+#include "FX/Niagara/System/EffectSystemManager.h"
 
 
 TMap<FString, UEffectSystem*> EffectSystemManager::Effects = TMap<FString, UEffectSystem*>();

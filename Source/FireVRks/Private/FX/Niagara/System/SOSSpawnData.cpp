@@ -1,4 +1,4 @@
-#include "SOSSpawnData.h"
+#include "FX/Niagara/System/SOSSpawnData.h"
 
 SOSSpawnData::~SOSSpawnData()
 {

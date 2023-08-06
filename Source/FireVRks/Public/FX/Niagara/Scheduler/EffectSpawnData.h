@@ -66,6 +66,8 @@ public:
 		return System && SpawnTarget && Context;
 	}
 
+	
+
 	FVector GetOffset() const
 	{
 		return Offset;

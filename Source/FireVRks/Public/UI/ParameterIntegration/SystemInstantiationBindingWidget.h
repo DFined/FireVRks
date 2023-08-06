@@ -1,6 +1,6 @@
 #pragma once
 #include "DFUIParameterBindingWidgetBase.h"
-#include "ParameterInputUI.h"
+#include "EffectParameterInputUI.h"
 #include "FX/Niagara/System/EffectSystem.h"
 #include "SystemInstantiationBindingWidget.generated.h"
 
@@ -16,7 +16,7 @@ class USystemInstantiationBindingWidget : public UDFUIParameterBindingWidgetBase
 	UBorder* OuterBorder;
 
 	UPROPERTY()
-	UParameterInputUI* InstanceParamUI;
+	UEffectParameterInputUI* InstanceParamUI;
 	
 public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;

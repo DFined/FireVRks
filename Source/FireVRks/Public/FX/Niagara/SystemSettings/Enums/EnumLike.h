@@ -16,6 +16,9 @@ public:
 	static EnumLike SOS_SHAPE;
 	static EnumLike EFFECT_ROTATION_SETTING;
 	static EnumLike SOS_DELAY_TYPE;
+	static EnumLike MOTION_TYPE;
+
+	static EnumLike ARRAY_TRAVERSAL_MODE;
 	
 	explicit EnumLike(std::initializer_list<EnumLikeValue*> Vals);
 

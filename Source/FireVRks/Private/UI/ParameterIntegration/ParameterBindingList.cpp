@@ -1,6 +1,6 @@
-#include "ParameterBindingList.h"
+#include "UI/ParameterIntegration/ParameterBindingList.h"
 
-#include "ParameterBindingBlock.h"
+#include "UI/ParameterIntegration/ParameterBindingBlock.h"
 #include "Components/Button.h"
 #include "Components/HorizontalBoxSlot.h"
 #include "FX/Niagara/SystemSettings/FormalParameter/ListFormalParameter.h"

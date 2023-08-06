@@ -1,12 +1,12 @@
 #pragma once
+#include "ParameterProvider.h"
 #include "FX/Niagara/Scheduler/EffectSpawnData.h"
-#include "FX/Niagara/SystemSettings/InstanceParameter/ParameterValueContext.h"
 #include "FX/Niagara/SystemSettings/InstanceParameter/ParameterValueContextProvider.h"
 #include "Unsafe/DFStyleUtil.h"
 #include "EffectSystem.generated.h"
 
 UCLASS(Abstract)
-class UEffectSystem : public UObject
+class UEffectSystem : public UObject, public ParameterProvider
 {
 	GENERATED_BODY()
 
@@ -23,7 +23,7 @@ public:
 
 	virtual FString GetName() PURE_VIRTUAL("GetName", return "";);
 
-	virtual TArray<AbstractFormalParameter*> GetOuterParameters() {return TArray<AbstractFormalParameter*>();}
+	virtual TArray<AbstractFormalParameter*> GetOuterParameters() override;
 
 	virtual UParameterValueContextProvider* GetContextProvider() PURE_VIRTUAL("GetContextProvider", return nullptr;);
 };

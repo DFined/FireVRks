@@ -1,17 +1,9 @@
 #include "UI/ParameterIntegration/ParameterInputUI.h"
 
-#include "Blueprint/WidgetTree.h"
-#include "Components/Border.h"
-#include "Components/ScrollBox.h"
-#include "Components/VerticalBox.h"
-#include "FX/Niagara/Scheduler/EffectSystemScheduler.h"
-#include "FX/Niagara/System/DefaultParameterSystem.h"
-#include "UI/DFUIUtil.h"
-#include "UI/ParameterIntegration/DFUIParameterBindingWidgetBase.h"
 #include "UI/ParameterIntegration/ParamUIInputWidgetCallback.h"
-#include "Unsafe/DFStyleUtil.h"
+#include "FX/Niagara/SystemSettings/InstanceParameter/MapParameterValueContext.h"
+#include "UI/DFUIUtil.h"
 #include "Unsafe/ParameterIntegration/DFParameterUtil.h"
-
 
 UParameterInputUI::UParameterInputUI()
 {
@@ -55,7 +47,7 @@ void UParameterInputUI::DumpToContext()
 
 void UParameterInputUI::Draw(ParameterValueContext* InitialContext)
 {
-	for (AbstractFormalParameter* Parameter : System->GetOuterParameters())
+	for (AbstractFormalParameter* Parameter : ParamProvider->GetOuterParameters())
 	{
 		if(Parameter->GetDisplayPredicate()->Check(InitialContext))
 		{
@@ -66,16 +58,11 @@ void UParameterInputUI::Draw(ParameterValueContext* InitialContext)
 	}
 }
 
-void UParameterInputUI::OnChildWidgetValueChange(ParameterBindingWidget* PBW, AbstractParameterValue* Value)
+void UParameterInputUI::OnChildWidgetValueChange(ParameterBindingWidget* Widget, AbstractParameterValue* Value)
 {
 	DumpToContext();
 	this->GetMountingPoint()->ClearChildren();
 	this->Draw(Context);
-}
-
-void UParameterInputUI::SpawnSystem(AActor* Target)
-{
-	UEffectSystemScheduler::INSTANCE->SpawnNow(System, Target, FVector::Zero(), FVector(0,0,1), Context);
 }
 
 void UParameterInputUI::SubscribeToChanges(WidgetCallbackWithValue* Callback)
@@ -99,5 +86,3 @@ void UParameterInputUI::CleanUp()
 	this->CleanUpBindingWidgets();
 	VerticalBox->RemoveFromParent();
 }
-
-

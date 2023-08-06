@@ -1,5 +1,5 @@
 #pragma once
-#include "ParameterInputUI.h"
+#include "EffectParameterInputUI.h"
 #include "WidgetCallbackWithValue.h"
 
 class ParamUIInputWidgetCallback : public WidgetCallbackWithValue

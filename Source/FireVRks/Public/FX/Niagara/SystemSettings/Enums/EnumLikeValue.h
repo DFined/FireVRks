@@ -52,6 +52,23 @@ public:
 	static EnumLikeValue SOS_DELAY_FROM_START;
 	static EnumLikeValue SOS_DELAY_FROM_END;
 	static EnumLikeValue SOS_DELAY_AT_REGULAR_INTERVAL;
+
+	/**
+	 * MOTION_TYPES
+	 */
+	static EnumLikeValue NO_MOTION;
+	static EnumLikeValue FISH;
+	static EnumLikeValue BEES;
+	static EnumLikeValue WHEELS;
+	static EnumLikeValue SPIRALS;
+	static EnumLikeValue ADVANCED;
+
+	/**
+	 * LAUNCH ARRAY TRAVERSAL MODES
+	 */
+	static EnumLikeValue END_TO_END;
+	static EnumLikeValue FROM_BOTH_ENDS;
+	static EnumLikeValue FROM_CENTER;
 	
 	
 	int GetOrdinal() const;

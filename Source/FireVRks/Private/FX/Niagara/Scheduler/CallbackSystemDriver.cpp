@@ -1,9 +1,11 @@
-#include "CallbackSystemDriver.h"
+#include "FX/Niagara/Scheduler/CallbackSystemDriver.h"
+#include "FX/Niagara/Scheduler/CallbackSystemDriver.h"
 
-#include "EffectSystemScheduler.h"
+#include "FX/Niagara/Scheduler/EffectSystemScheduler.h"
 #include "NiagaraComponent.h"
 #include "NiagaraDataInterfaceArrayFunctionLibrary.h"
 #include "FX/Niagara/System/EffectSystemManager.h"
+#include "Util/DFStatics.h"
 
 
 void ACallbackSystemDriver::GetTimingsArray(TArray<float>& Array, bool backwards)
@@ -35,7 +37,7 @@ void ACallbackSystemDriver::ReceiveParticleData_Implementation(const TArray<FBas
 		Velocity.Normalize();
 		for (int j = 0; j < SpawnData->SpawnCount; ++j)
 		{
-			UEffectSystemScheduler::GetInstance()->SpawnNow(
+			UDFStatics::EFFECT_SYSTEM_SCHEDULER->SpawnNow(
 				SpawnData->SpawnData->GetSystem(), this, BasicParticleData.Position, Velocity, SpawnData->SpawnData->GetContext()
 			);
 		}

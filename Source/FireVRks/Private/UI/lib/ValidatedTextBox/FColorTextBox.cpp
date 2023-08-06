@@ -2,7 +2,7 @@
 
 #include "FX/Niagara/SystemSettings/FormalParameter/FormalParameter.h"
 
-FRegexPattern UFColorTextBox::PATTERN = FRegexPattern(TEXT("[1-2]?[0-9]?[0-9]?"));
+FRegexPattern UFColorTextBox::PATTERN = FRegexPattern(TEXT("-?[1-2]?[0-9]?[0-9]?"));
 
 bool UFColorTextBox::ValidateColor(FString Value)
 {

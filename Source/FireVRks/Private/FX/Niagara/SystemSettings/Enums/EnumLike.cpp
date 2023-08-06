@@ -26,6 +26,17 @@ EnumLikeValue EnumLikeValue::SOS_DELAY_FROM_START = EnumLikeValue("SOS_DELAY_FRO
 EnumLikeValue EnumLikeValue::SOS_DELAY_FROM_END = EnumLikeValue("SOS_DELAY_FROM_END", "From end", 0);
 EnumLikeValue EnumLikeValue::SOS_DELAY_AT_REGULAR_INTERVAL = EnumLikeValue("SOS_DELAY_AT_REGULAR_INTERVAL", "At regular interval", 0);
 
+EnumLikeValue EnumLikeValue::NO_MOTION = EnumLikeValue("NO_MOTION", "No motion", 0);
+EnumLikeValue EnumLikeValue::FISH = EnumLikeValue("FISH", "Fish", 1);
+EnumLikeValue EnumLikeValue::BEES = EnumLikeValue("BEES", "Bees", 2);
+EnumLikeValue EnumLikeValue::WHEELS = EnumLikeValue("WHEELS", "Wheels", 3);
+EnumLikeValue EnumLikeValue::SPIRALS = EnumLikeValue("SPIRALS", "Spirals", 4);
+EnumLikeValue EnumLikeValue::ADVANCED = EnumLikeValue("ADVANCED", "Advanced", 5);
+
+EnumLikeValue EnumLikeValue::END_TO_END = EnumLikeValue("END_TO_END", "End to end", 0);
+EnumLikeValue EnumLikeValue::FROM_CENTER = EnumLikeValue("FROM_CENTER", "From center", 1);
+EnumLikeValue EnumLikeValue::FROM_BOTH_ENDS = EnumLikeValue("FROM_BOTH_ENDS", "From both ends", 2);
+
 EnumLike EnumLike::BURST_SHAPE = EnumLike(
 	{
 		&EnumLikeValue::PEONY,
@@ -67,6 +78,25 @@ EnumLike EnumLike::SOS_DELAY_TYPE = EnumLike(
 		&EnumLikeValue::SOS_DELAY_FROM_START,
 		&EnumLikeValue::SOS_DELAY_FROM_END,
 		&EnumLikeValue::SOS_DELAY_AT_REGULAR_INTERVAL,
+	}
+);
+
+EnumLike EnumLike::MOTION_TYPE = EnumLike(
+	{
+		&EnumLikeValue::NO_MOTION,
+		&EnumLikeValue::FISH,
+		&EnumLikeValue::BEES,
+		&EnumLikeValue::WHEELS,
+		&EnumLikeValue::SPIRALS,
+		&EnumLikeValue::ADVANCED,
+	}
+);
+
+EnumLike EnumLike::ARRAY_TRAVERSAL_MODE = EnumLike(
+	{
+		&EnumLikeValue::END_TO_END,
+		&EnumLikeValue::FROM_BOTH_ENDS,
+		&EnumLikeValue::FROM_CENTER
 	}
 );
 

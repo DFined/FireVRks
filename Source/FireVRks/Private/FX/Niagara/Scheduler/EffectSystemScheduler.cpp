@@ -2,8 +2,6 @@
 
 #include "FX/Niagara/System/EffectSystem.h"
 
-UEffectSystemScheduler* const UEffectSystemScheduler::INSTANCE = MakeInstance();
-
 UEffectSystemScheduler* UEffectSystemScheduler::MakeInstance()
 {
 	auto Instance = NewObject<UEffectSystemScheduler>(GetTransientPackage());
@@ -70,10 +68,6 @@ void UEffectSystemScheduler::SpawnNow(UEffectSystem* System, AActor* SpawnTarget
 	delete(Data);
 }
 
-UEffectSystemScheduler* UEffectSystemScheduler::GetInstance()
-{
-	return INSTANCE;
-}
 
 AActor* UEffectSystemScheduler::GetPlayerRef() const
 {
