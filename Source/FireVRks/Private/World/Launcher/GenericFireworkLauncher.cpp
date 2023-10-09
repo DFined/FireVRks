@@ -14,19 +14,18 @@ AGenericFireworkLauncher::AGenericFireworkLauncher()
 	UDFStatics::LAUNCHER_MANAGER->AddLauncher(this);
 }
 
-AFireworkShellBase* AGenericFireworkLauncher::Fire(USystemAndContext* SystemAndContext, float Delay, float Lifetime, float Velocity)
+void AGenericFireworkLauncher::Fire(ULaunchSettings* LaunchSettings)
 {
-	FVector Vector =  this->GetActorLocation();
+	FVector Vector = this->GetActorLocation();
 	FRotator Rotator = this->GetActorRotation();
-	return AFireworkShellBase::MakeShell(
+	AFireworkShellBase::MakeShell(
 		this,
 		&Vector,
 		&Rotator,
-		SystemAndContext->GetSystem(),
-		SystemAndContext->GetContext(),
-		Delay,
-		Lifetime,
-		Velocity
+		LaunchSettings->GetSystem(),
+		LaunchSettings->GetContext(),
+		LaunchSettings->GetShellLifetime(),
+		LaunchSettings->GetShellVelocity()
 	);
 }
 

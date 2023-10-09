@@ -1,6 +1,9 @@
 #include "UI/lib/ValidatedTextBox/FloatTextBox.h"
 
-#include "FX/Niagara/SystemSettings/FormalParameter/FormalParameter.h"
+#include "FX/Niagara/v2/ParameterValueContext.h"
+#include "FX/Niagara/v2/ParamUtil.h"
+#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
+#include "FX/Niagara/v2/ParameterValue/FloatParameterValue.h"
 
 bool UFloatTextBox::ValidateFloat(FString Value) {
 	FRegexMatcher IntMatched = FRegexMatcher(FRegexPattern(TEXT("(0|[1-9][0-9]*)(\\.[0-9]*)?")), Value);
@@ -10,8 +13,13 @@ bool UFloatTextBox::ValidateFloat(FString Value) {
 	return (end - start) == Value.Len();
 }
 
-AbstractParameterValue* UFloatTextBox::GetValue()
+UAbstractParameterValue* UFloatTextBox::GetValue(UParameterValueContext* Context)
 {
 	FString str = this->GetText().ToString();
-	return new ParameterValue(FCString::Atof(*str), DFType::TYPED_FLOAT_PARAMETER, false);
+	return UFloatParameterValue::New(Context, FCString::Atof(*str));
+}
+
+FString UFloatTextBox::ValueToString(UAbstractParameterValue* Value)
+{
+	return FString::SanitizeFloat(UParamUtil::GetTypedValue<UFloatParameterValue, float>(Value));
 }

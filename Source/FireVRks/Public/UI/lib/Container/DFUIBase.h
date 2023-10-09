@@ -6,7 +6,7 @@
  */
 
 UCLASS(Abstract, Blueprintable)
-class UDFUIBase : public UUserWidget
+class FIREVRKS_API UDFUIBase : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -19,8 +19,6 @@ protected:
 
 
 public:
-
-	
 	/**
 	 * Either get an existing root panel-widget or setup a new one
 	*/

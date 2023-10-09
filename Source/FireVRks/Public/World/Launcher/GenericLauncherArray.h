@@ -3,7 +3,7 @@
 #include "GenericLauncherArray.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
-class UGenericLauncherArray : public UObject
+class FIREVRKS_API UGenericLauncherArray : public UObject
 {
 	GENERATED_BODY()
 	FString ArrayName;

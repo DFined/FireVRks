@@ -4,7 +4,7 @@
 #include "LauncherManager.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
-class ULauncherManager : public UObject
+class FIREVRKS_API ULauncherManager : public UObject
 {
 	GENERATED_BODY()
 
@@ -28,6 +28,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void AddLauncher(AGenericFireworkLauncher* Launcher);
+
+	UFUNCTION(BlueprintCallable)
+	UGenericLauncherArray* FindLauncherArray(FString Name);
 
 	// This is necessary due to statics not being reset on PIE restart, only on editor restart
 	UFUNCTION(BlueprintCallable)

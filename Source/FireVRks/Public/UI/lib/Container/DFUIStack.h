@@ -4,7 +4,7 @@
 #include "DFUIStack.generated.h"
 
 UCLASS(Blueprintable)
-class UDFUIStack : public UDFUIContainer
+class FIREVRKS_API UDFUIStack : public UDFUIContainer
 {
 	GENERATED_BODY()
 

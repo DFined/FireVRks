@@ -2,7 +2,7 @@
 #include "DFSelectable.generated.h"
 
 UCLASS()
-class ADFSelectable : public AActor
+class FIREVRKS_API ADFSelectable : public AActor
 {
 public:
 	GENERATED_BODY()

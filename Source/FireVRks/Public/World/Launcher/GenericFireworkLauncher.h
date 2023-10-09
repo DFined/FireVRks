@@ -1,12 +1,11 @@
 #pragma once
-#include "FX/Niagara/System/SystemAndContext.h"
+#include "LaunchSettings.h"
 #include "World/DFUIAble.h"
-#include "World/UFireworkShellBase.h"
 
 #include "GenericFireworkLauncher.generated.h"
 
 UCLASS(BlueprintType, Blueprintable)
-class AGenericFireworkLauncher : public ADFUIAble
+class FIREVRKS_API AGenericFireworkLauncher : public ADFUIAble
 {
 	GENERATED_BODY()
 
@@ -20,5 +19,5 @@ public:
 
 
 	UFUNCTION(BlueprintCallable)
-	AFireworkShellBase* Fire(USystemAndContext* SystemAndContext, float Delay, float Lifetime, float Velocity);
+	void Fire(ULaunchSettings* Settings);
 };

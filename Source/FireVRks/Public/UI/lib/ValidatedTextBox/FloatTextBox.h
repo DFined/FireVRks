@@ -1,9 +1,11 @@
 #pragma once
 #include "ValidatedTextBox.h"
+#include "FX/Niagara/v2/ParameterValueContext.h"
+#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
 #include "FloatTextBox.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
-class UFloatTextBox : public UValidatedTextBox
+class FIREVRKS_API UFloatTextBox : public UValidatedTextBox
 {
 	GENERATED_BODY()
 public:
@@ -13,6 +15,7 @@ public:
 	};
 
 	
-	virtual AbstractParameterValue* GetValue() override;
+	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override;
 
+	virtual FString ValueToString(UAbstractParameterValue* Value) override;
 };

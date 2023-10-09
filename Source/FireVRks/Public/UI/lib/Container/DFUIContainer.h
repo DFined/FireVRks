@@ -2,14 +2,13 @@
 #include "DFUIBase.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/PanelWidget.h"
-#include "UI/ParameterIntegration/DFUIParameterBindingWidgetBase.h"
 #include "DFUIContainer.generated.h"
 
 /**
  * Base polymorphic wrapper for simple DF-UI containers
  */
 UCLASS(Abstract)
-class UDFUIContainer : public UDFUIBase
+class FIREVRKS_API UDFUIContainer : public UDFUIBase
 {
 	GENERATED_BODY()
 	
@@ -26,13 +25,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual UPanelWidget* GetMountingPoint() PURE_VIRTUAL("GetMountingPoint", return nullptr;);
 
-	void CleanUpBindingWidgets()
-	{
-		for (UWidget* AllChild : this->GetMountingPoint()->GetAllChildren()) 
-		{
-			auto PBW = static_cast<UDFUIParameterBindingWidgetBase*>(AllChild);
-			PBW->CleanUp();
-			PBW->RemoveFromParent();
-		}
-	}
+	virtual void OnChange() PURE_VIRTUAL("OnChange",);
 };

@@ -3,11 +3,12 @@
 #include "UFireworkShellBase.generated.h"
 
 UCLASS()
-class AFireworkShellBase : public AActor
+class FIREVRKS_API AFireworkShellBase : public AActor
 {
 	GENERATED_BODY()
 
-	EffectSpawnData* SpawnData;
+	UPROPERTY()
+	UEffectSpawnData* SpawnData;
 
 	float Lifetime;
 
@@ -19,7 +20,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	static AFireworkShellBase* MakeShell(
-		UObject* ContextObject, FVector* Location, FRotator* Rotation, UEffectSystem* System, ParameterValueContext* Context, float Delay, float Lifetime, float Velocity
+		UObject* ContextObject, FVector* Location, FRotator* Rotation, UEffectSystem* System, UParameterValueContext* Context, float Lifetime, float Velocity
 	);
 
 	virtual void BeginDestroy() override;

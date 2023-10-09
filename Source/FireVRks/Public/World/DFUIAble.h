@@ -3,7 +3,7 @@
 #include "DFUIAble.generated.h"
 
 UCLASS()
-class ADFUIAble : public ADFSelectable
+class FIREVRKS_API ADFUIAble : public ADFSelectable
 {
 public:
 	GENERATED_BODY()

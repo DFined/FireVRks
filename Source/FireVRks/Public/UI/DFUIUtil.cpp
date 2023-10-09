@@ -18,10 +18,65 @@ T* DFUIUtil::MakeWidget(UDFUIContainer* Container)
 template <class T>
 T* DFUIUtil::AddUserWidget(UPanelWidget* Parent)
 {
-	auto Widget = MakeUserWidget<T, UPanelWidget>(Parent);
+	auto ParentWidgetTree = AttemptFindWidgetTree(Parent);
+	auto Widget = MakeUserWidget<T, UWidgetTree>(ParentWidgetTree);
 	Parent->AddChild(Widget);
 	return Widget;
 }
+
+template <class T>
+T* DFUIUtil::AttemptFindWidgetByType(UWidget* Widget)
+{
+	auto OuterRes = AttemptFindWidgetByOuterChain<T>(Widget);
+	if (OuterRes)
+	{
+		return OuterRes;
+	}
+	return AttemptFindWidgetByParentChain<T>(Widget);
+}
+
+template <class T>
+T* DFUIUtil::AttemptFindWidgetByOuterChain(UWidget* Widget)
+{
+	if (auto SelfAsTarget = Cast<T>(Widget))
+	{
+		return SelfAsTarget;
+	}
+	auto Outer = Widget->GetOuter();
+	auto OuterAsWidget = Cast<UWidget>(Outer);
+	auto OuterAsTarget = Cast<T>(Outer);
+	if (OuterAsTarget)
+	{
+		return OuterAsTarget;
+	}
+	if (OuterAsWidget)
+	{
+		AttemptFindWidgetTree(OuterAsWidget);
+	}
+	return nullptr;
+}
+
+template <class T>
+T* DFUIUtil::AttemptFindWidgetByParentChain(UWidget* Widget)
+{
+	if (auto SelfAsTarget = Cast<T>(Widget))
+	{
+		return SelfAsTarget;
+	}
+	auto Parent = Widget->GetParent();
+	auto ParentAsWidget = Cast<UWidget>(Parent);
+	auto ParentAsTarget = Cast<T>(Parent);
+	if (ParentAsTarget)
+	{
+		return ParentAsTarget;
+	}
+	if (ParentAsWidget)
+	{
+		AttemptFindWidgetTree(ParentAsWidget);
+	}
+	return nullptr;
+}
+
 
 template <class T>
 T* DFUIUtil::AddUserWidget(UDFUIContainer* Parent)
@@ -64,12 +119,33 @@ T* DFUIUtil::AddWidget(UWidgetTree* Tree, UPanelWidget* Parent)
 }
 
 
+UWidgetTree* DFUIUtil::AttemptFindWidgetTree(UWidget* Widget)
+{
+	auto Outer = Widget->GetOuter();
+	auto AutoWidget = Cast<UWidget>(Outer);
+	auto AutoUserWidget = Cast<UUserWidget>(Outer);
+	auto WidgetTree = Cast<UWidgetTree>(Outer);
+	if (WidgetTree)
+	{
+		return WidgetTree;
+	}
+	if (AutoUserWidget)
+	{
+		return AutoUserWidget->WidgetTree;
+	}
+	if (AutoWidget)
+	{
+		AttemptFindWidgetTree(AutoWidget);
+	}
+	return nullptr;
+}
+
 UExpandableArea* DFUIUtil::MakeExpandableTab(UWidgetTree* Tree, UPanelWidget* Parent, UWidget* Header, UWidget* Body, bool Expanded)
 {
 	auto Area = MakeWidget<UExpandableArea>(Tree);
 	Area->SetContentForSlot("Header", Header);
 	Area->SetContentForSlot("Body", Body);
 	Area->SetIsExpanded(Expanded);
-	Wrap(Area,Parent);
+	Wrap(Area, Parent);
 	return Area;
 }

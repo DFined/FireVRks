@@ -1,16 +1,18 @@
 #pragma once
 #include "Blueprint/WidgetTree.h"
+#include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ExpandableArea.h"
+#include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "lib/Container/DFUILine.h"
-#include "Unsafe/DFStyleUtil.h"
+#include "UI/lib/DFStyleUtil.h"
+
 #define NDEBUG 1
 
 class DFUIUtil
 {
 public:
-
 	/**
 	 * Util compact widget constructors
 	 */
@@ -31,7 +33,18 @@ public:
 	*/
 	template <class T>
 	static T* AddUserWidget(UPanelWidget* Parent);
+
+	template<class T>
+	static T* AttemptFindWidgetByType(UWidget* Widget);
 	
+	template<class T>
+	static T* AttemptFindWidgetByOuterChain(UWidget* Widget);
+	
+	template<class T>
+	static T* AttemptFindWidgetByParentChain(UWidget* Widget);
+	
+	static UWidgetTree* AttemptFindWidgetTree(UWidget* Widget);
+
 	template <class T>
 	static T* AddUserWidget(UDFUIContainer* Parent);
 
@@ -74,4 +87,12 @@ public:
 	}
 
 	static UExpandableArea* MakeExpandableTab(UWidgetTree* Tree, UPanelWidget* Parent, UWidget* Header, UWidget* Body, bool Expanded);
+	
+	static UButton* MakeImageButton(UWidgetTree* Tree, UPanelWidget* Parent, Icon* Icon, int Size)
+	{
+		auto Button = AddWidget<UButton>(Tree, Parent);
+		DFStyleUtil::ImgButtonStyle(Button, Icon, Size);
+		
+		return Button;
+	}
 };

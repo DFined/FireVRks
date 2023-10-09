@@ -1,9 +1,11 @@
 #pragma once
 #include "ValidatedTextBox.h"
+#include "FX/Niagara/v2/ParameterValueContext.h"
+#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
 #include "FColorTextBox.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)
-class UFColorTextBox : public UValidatedTextBox
+class FIREVRKS_API UFColorTextBox : public UValidatedTextBox
 {
 	GENERATED_BODY()
 public:
@@ -16,6 +18,7 @@ public:
 	};
 
 	
-	virtual AbstractParameterValue* GetValue() override;
+	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override;
 
+	virtual FString ValueToString(UAbstractParameterValue* Value) override;
 };

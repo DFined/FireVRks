@@ -1,47 +1,34 @@
 #pragma once
-#include "FX/Niagara/SystemSettings/InstanceParameter/ParameterValueContext.h"
-#include "Util/DFManaged.h"
+#include "FX/Niagara/v2/ParameterValueContext.h"
+#include "EffectSpawnData.generated.h"
 
 class UEffectSystem;
 /**
  * Data class with all the info needed by the scheduler to spawn/drive the effect
  */
-class EffectSpawnData : public DFManaged
+UCLASS()
+class FIREVRKS_API UEffectSpawnData : public UObject 
 {
+	GENERATED_BODY()
+	
+	UPROPERTY()
 	UEffectSystem* System;
-	ParameterValueContext* Context;
+	UPROPERTY()
+	UParameterValueContext* Context;
+	UPROPERTY()
 	AActor* SpawnTarget;
+	
 	float SpawnIn;
 	FVector Offset;
 	FVector UpwardsVector;
 
 public:
-	EffectSpawnData(
-		UEffectSystem* System,
-		ParameterValueContext* Context,
-		AActor* SpawnTarget,
-		float SpawnIn,
-		FVector FOffset,
-		FVector Velocity = FVector(0),
-		bool Managed = false
-	)
-		: DFManaged(Managed),
-		  System(System),
-		  Context(Context),
-		  SpawnTarget(SpawnTarget),
-		  SpawnIn(SpawnIn),
-		  Offset(FOffset),
-		  UpwardsVector(Velocity)
-	{
-		Context->Depend();
-	}
-
 	UEffectSystem* GetSystem() const
 	{
 		return System;
 	}
 
-	ParameterValueContext* GetContext() const
+	UParameterValueContext* GetContext() const
 	{
 		return Context;
 	}
@@ -78,15 +65,16 @@ public:
 		return UpwardsVector;
 	}
 
-	friend bool operator<(EffectSpawnData& Lhs, EffectSpawnData& RHS)
+	friend bool operator<(UEffectSpawnData& Lhs, UEffectSpawnData& RHS)
 	{
 		return Lhs.SpawnIn < RHS.SpawnIn;
 	}
 
-	friend bool operator>(EffectSpawnData& Lhs, EffectSpawnData& RHS)
+	friend bool operator>(UEffectSpawnData& Lhs, UEffectSpawnData& RHS)
 	{
 		return Lhs.SpawnIn > RHS.SpawnIn;
 	}
 
-	~EffectSpawnData();
+	static UEffectSpawnData* New(
+		UObject* Outer, UEffectSystem* System, UParameterValueContext* Context, AActor* Target, float SpawnDelay, FVector Offset, FVector UpwardsDirection);
 };

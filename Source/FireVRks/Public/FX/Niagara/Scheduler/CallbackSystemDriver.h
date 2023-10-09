@@ -7,7 +7,7 @@
 #include "CallbackSystemDriver.generated.h"
 
 UCLASS()
-class ACallbackSystemDriver : public AActor, public INiagaraParticleCallbackHandler
+class FIREVRKS_API ACallbackSystemDriver : public AActor, public INiagaraParticleCallbackHandler
 {
 	GENERATED_BODY()
 
@@ -30,7 +30,7 @@ public:
 
 	void Init(int ParentParticleCount, float maxLifetime, UNiagaraComponent* BSystem);
 
-	void AddSpawnInfo(EffectSpawnData* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects);
+	void AddSpawnInfo(UEffectSpawnData* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects);
 
 	void Finalize();
 

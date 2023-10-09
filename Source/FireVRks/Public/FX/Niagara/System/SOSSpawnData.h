@@ -1,10 +1,10 @@
 #pragma once
 #include "FX/Niagara/Scheduler/EffectSpawnData.h"
 
-class SOSSpawnData : public DFManaged
+class SOSSpawnData
 {
 public:
-	EffectSpawnData* SpawnData;
+	UEffectSpawnData* SpawnData;
 
 	float SpawnIn;
 	bool FromEnd;
@@ -12,35 +12,15 @@ public:
 
 	int SpawnCount;
 
-	SOSSpawnData(EffectSpawnData* SpawnData, float FSpawnIn, bool bFromEnd, bool bRecurringInterval, int SosSpawnCount) : DFManaged(false),
-		SpawnData(SpawnData),
-		FromEnd(bFromEnd),
-		RecurringInterval(bRecurringInterval),
-		SpawnIn(FSpawnIn),
-		SpawnCount(SosSpawnCount)
-	{
-		SpawnData->Depend();
-	}
+	SOSSpawnData(UEffectSpawnData* SpawnData, float FSpawnIn, bool bFromEnd, bool bRecurringInterval, int SosSpawnCount);
 
-	friend bool operator<(const SOSSpawnData& Lhs, const SOSSpawnData& RHS)
-	{
-		return Lhs.SpawnIn < RHS.SpawnIn;
-	}
+	friend bool operator<(const SOSSpawnData& Lhs, const SOSSpawnData& RHS);
 
-	friend bool operator>(SOSSpawnData& Lhs, SOSSpawnData& RHS)
-	{
-		return Lhs.SpawnIn > RHS.SpawnIn;
-	}
+	friend bool operator>(SOSSpawnData& Lhs, SOSSpawnData& RHS);
 
 	~SOSSpawnData();
 
-	float GetSpawnDelay()
-	{
-		return SpawnIn;
-	};
+	float GetSpawnDelay();
 
-	int GetSpawnCount() const
-	{
-		return SpawnCount;
-	}
+	int GetSpawnCount() const;
 };

@@ -1,10 +1,7 @@
 #include "FX/Niagara/Scheduler/CallbackSystemDriver.h"
-#include "FX/Niagara/Scheduler/CallbackSystemDriver.h"
 
-#include "FX/Niagara/Scheduler/EffectSystemScheduler.h"
 #include "NiagaraComponent.h"
 #include "NiagaraDataInterfaceArrayFunctionLibrary.h"
-#include "FX/Niagara/System/EffectSystemManager.h"
 #include "Util/DFStatics.h"
 
 
@@ -37,9 +34,7 @@ void ACallbackSystemDriver::ReceiveParticleData_Implementation(const TArray<FBas
 		Velocity.Normalize();
 		for (int j = 0; j < SpawnData->SpawnCount; ++j)
 		{
-			UDFStatics::EFFECT_SYSTEM_SCHEDULER->SpawnNow(
-				SpawnData->SpawnData->GetSystem(), this, BasicParticleData.Position, Velocity, SpawnData->SpawnData->GetContext()
-			);
+			//TODO Spawn now
 		}
 
 		if (AckNum + 1 < SpawnDataArray[Num].Num())
@@ -69,21 +64,6 @@ void ACallbackSystemDriver::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	if (!System->IsActive())
 	{
-		for (TArray<SOSSpawnData*> ForwardsSpawnTime : ForwardsSpawnTimes)
-		{
-			for (auto SpawnTime : ForwardsSpawnTime)
-			{
-				DFManaged::SafeRelease(SpawnTime);
-			}
-		}
-
-		for (TArray<SOSSpawnData*> BackwardsSpawnTime : BackwardsSpawnTimes)
-		{
-			for (SOSSpawnData* SpawnTime : BackwardsSpawnTime)
-			{
-				DFManaged::SafeRelease(SpawnTime);
-			}
-		}
 		this->Destroy();
 	}
 }
@@ -106,7 +86,7 @@ void ACallbackSystemDriver::Init(int ParentParticleCount, float maxLifetime, UNi
 	}
 }
 
-void ACallbackSystemDriver::AddSpawnInfo(EffectSpawnData* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects)
+void ACallbackSystemDriver::AddSpawnInfo(UEffectSpawnData* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects)
 {
 	for (int i = 0; i < ParticleCount; ++i)
 	{
@@ -117,7 +97,6 @@ void ACallbackSystemDriver::AddSpawnInfo(EffectSpawnData* Data, float MinSpawnIn
 			while (SpawnTime < MaxLifetime && j < MaxEffects)
 			{
 				auto SosSpawnData = new SOSSpawnData(Data, SpawnTime, false, true, EffectCount);
-				SosSpawnData->Depend();
 				AddData(ForwardsSpawnTimes, SosSpawnData, i);
 				j++;
 				SpawnTime += FMath::RandRange(MinSpawnIn, MaxSpawnIn);
@@ -139,7 +118,7 @@ void ACallbackSystemDriver::Finalize()
 		ForwardsSpawnTimes[i].Sort();
 		BackwardsSpawnTimes[i].Sort([](SOSSpawnData l, SOSSpawnData r) { return l > r; });
 	}
-	System->SetNiagaraVariableObject("CallbackHandler", this);
+	System->SetVariableObject("CallbackHandler", this);
 	TArray<float> Forwards = TArray<float>();
 	this->GetTimingsArray(Forwards, false);
 	UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayFloat(System, "ForwardsCallbackPoints", Forwards);
@@ -154,6 +133,5 @@ void ACallbackSystemDriver::Finalize()
 
 void ACallbackSystemDriver::AddData(TArray<TArray<SOSSpawnData*>>& Array, SOSSpawnData* Data, int ParticleNum)
 {
-	Data->Depend();
 	Array[ParticleNum].Add(Data);
 }

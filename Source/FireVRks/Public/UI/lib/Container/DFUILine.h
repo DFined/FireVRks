@@ -8,7 +8,7 @@ UCLASS(Blueprintable)
 /**
  * Custom wrapper around a Horizontal box intended for linear settings editors
  */
-class UDFUILine : public UDFUIContainer
+class FIREVRKS_API UDFUILine : public UDFUIContainer
 {
 	GENERATED_BODY()
 

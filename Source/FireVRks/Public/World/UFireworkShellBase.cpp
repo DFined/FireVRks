@@ -1,19 +1,18 @@
 #include "UFireworkShellBase.h"
 
 #include "NiagaraComponent.h"
-#include "FX/Niagara/Scheduler/EffectSystemScheduler.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Util/DFStatics.h"
 
-AFireworkShellBase::AFireworkShellBase()
+AFireworkShellBase::AFireworkShellBase(): SpawnData(nullptr), Lifetime(0)
 {
-	PrimaryActorTick.bCanEverTick=true;
+	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.SetTickFunctionEnable(true);
 }
 
 void AFireworkShellBase::Spawn()
 {
-	UDFStatics::EFFECT_SYSTEM_SCHEDULER->SpawnNow(SpawnData);
+	//UDFStatics::EFFECT_SYSTEM_SCHEDULER->SpawnNow(SpawnData);
 }
 
 
@@ -42,14 +41,14 @@ void AFireworkShellBase::OnConstruction(const FTransform& Transform)
 	Emitter->Activate(true);
 }
 
+
 AFireworkShellBase* AFireworkShellBase::MakeShell(UObject* ContextObject, FVector* Location, FRotator* Rotation, UEffectSystem* System,
-                                                  ParameterValueContext* Context, float Delay, float Lifetime, float Velocity)
+                                                  UParameterValueContext* Context, float Lifetime, float Velocity)
 {
 	auto World = GEngine->GetWorldFromContextObject(ContextObject, EGetWorldErrorMode::ReturnNull);
 
 	auto Shell = Cast<AFireworkShellBase>(World->SpawnActor(StaticClass(), Location, Rotation));
-	Shell->SpawnData = new EffectSpawnData(System, Context, Shell, Delay, FVector(0), Shell->GetActorForwardVector());
-	Shell->SpawnData->Depend();
+	Shell->SpawnData = UEffectSpawnData::New(Shell, System, Context, Shell, 0, FVector(0), Shell->GetActorForwardVector());
 	Shell->Lifetime = Lifetime;
 	Shell->SetActorLocation(*Location);
 	auto Component = Cast<UProjectileMovementComponent>(
@@ -62,5 +61,4 @@ AFireworkShellBase* AFireworkShellBase::MakeShell(UObject* ContextObject, FVecto
 void AFireworkShellBase::BeginDestroy()
 {
 	Super::BeginDestroy();
-	DFManaged::SafeRelease(SpawnData);
 }

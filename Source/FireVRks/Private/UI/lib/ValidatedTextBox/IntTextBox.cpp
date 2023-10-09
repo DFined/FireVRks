@@ -1,6 +1,8 @@
 #include "UI/lib/ValidatedTextBox/IntTextBox.h"
 
-#include "FX/Niagara/SystemSettings/FormalParameter/FormalParameter.h"
+#include "FX/Niagara/v2/ParameterValueContext.h"
+#include "FX/Niagara/v2/ParamUtil.h"
+#include "FX/Niagara/v2/ParameterValue/IntParameterValue.h"
 
 bool UIntTextBox::ValidateInt(FString Value) {
 	FRegexMatcher IntMatched = FRegexMatcher(FRegexPattern(TEXT("0|[1-9][0-9]*")), Value);
@@ -10,8 +12,13 @@ bool UIntTextBox::ValidateInt(FString Value) {
 	return (end - start) == Value.Len();
 }
 
-AbstractParameterValue* UIntTextBox::GetValue()
+UAbstractParameterValue* UIntTextBox::GetValue(UParameterValueContext* Context)
 {
 	FString str = this->GetText().ToString();
-	return new ParameterValue(FCString::Atoi(*str), DFType::TYPED_INT_PARAMETER, false);
+	return UIntParameterValue::New(Context, FCString::Atoi(*str));
+}
+
+FString UIntTextBox::ValueToString(UAbstractParameterValue* Value)
+{
+	return FString::FromInt(UParamUtil::GetTypedValue<UIntParameterValue, int>(Value));
 }

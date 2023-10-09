@@ -11,7 +11,7 @@ TArray<UGenericLauncherArray*> ULauncherManager::GetLaunchers(TArray<UGenericLau
 {
 	TArray<FString> Names = TArray<FString>();
 	Arrays.GetKeys(Names);
-	for(FString Key: Names)
+	for (FString Key : Names)
 	{
 		Res.Add(*Arrays.Find(Key));
 	}
@@ -20,14 +20,20 @@ TArray<UGenericLauncherArray*> ULauncherManager::GetLaunchers(TArray<UGenericLau
 
 void ULauncherManager::AddLauncher(AGenericFireworkLauncher* Launcher)
 {
-	Launchers.Add(Launcher);	
+	Launchers.Add(Launcher);
+}
+
+UGenericLauncherArray* ULauncherManager::FindLauncherArray(FString Name)
+{
+	const auto Array = Arrays.Find(Name);
+	return Array ? *Array : nullptr;
 }
 
 UGenericLauncherArray* ULauncherManager::CreateLauncherArray(FString Name)
 {
-	if(!Arrays.Contains(Name))
+	if (!Arrays.Contains(Name))
 	{
-		auto Array = NewObject<UGenericLauncherArray>();
+		auto Array = NewObject<UGenericLauncherArray>(this, UGenericLauncherArray::StaticClass());
 		Array->SetArrayName(Name);
 		Arrays.Add(Name, Array);
 		return Array;
@@ -38,7 +44,7 @@ UGenericLauncherArray* ULauncherManager::CreateLauncherArray(FString Name)
 void ULauncherManager::AddLauncherToArray(AGenericFireworkLauncher* Launcher, FString ArrayName)
 {
 	auto Arr = Arrays.Find(ArrayName);
-	if(Arr)
+	if (Arr)
 	{
 		(*Arr)->AddLauncher(Launcher);
 		Launchers.Add(Launcher);
