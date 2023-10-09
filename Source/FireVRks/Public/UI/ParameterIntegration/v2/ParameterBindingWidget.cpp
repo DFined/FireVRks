@@ -22,6 +22,8 @@ UAbstractFormalParameter* UParameterBindingWidget::GetParameter() const
 void UParameterBindingWidget::OnChange()
 {
 	auto InputUI = DFUIUtil::AttemptFindWidgetByType<UParameterInputUI>(this);
-	InputUI->OnChange();
+	if (InputUI)
+	{
+		InputUI->OnChange();
+	}
 }
-

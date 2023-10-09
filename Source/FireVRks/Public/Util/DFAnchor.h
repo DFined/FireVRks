@@ -9,11 +9,11 @@ class FIREVRKS_API UDFAnchor : public UObject
 {
 	GENERATED_BODY()
 
+	UPROPERTY()
+	TArray<UObject*> Children;
+	
 public:
-	static UDFAnchor* Instance()
-	{
-		auto Anchor = NewObject<UDFAnchor>(GetTransientPackage(), "DFStaticOuterAnchor");
-		Anchor->AddToRoot();
-		return Anchor;
-	}
+	static UDFAnchor* Instance();
+
+	void Anchor(UObject* Object);;
 };

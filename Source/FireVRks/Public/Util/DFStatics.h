@@ -35,4 +35,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static TArray<FString> GetFiles(FString FileTypes);
+
+	template <class Type>
+	static Type* New();
 };
+
+template <class Type>
+Type* UDFStatics::New()
+{
+	auto Obj = NewObject<Type>(ANCHOR, Type::StaticClass());
+	ANCHOR->Anchor(Obj);
+	return Obj;
+}

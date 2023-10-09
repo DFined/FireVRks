@@ -47,5 +47,5 @@ UAbstractParameterValue* UFColorTextBox::GetValue(UParameterValueContext* Contex
 FString UFColorTextBox::ValueToString(UAbstractParameterValue* Value)
 {
 	auto Color = UParamUtil::GetTypedValue<UColorParameterValue, FLinearColor>(Value);
-	return FString::FromInt(Color.R) + FString::FromInt(Color.G) + FString::FromInt(Color.B); 
+	return FString::FromInt(Color.R) + ',' + FString::FromInt(Color.G) + ',' + FString::FromInt(Color.B); 
 }

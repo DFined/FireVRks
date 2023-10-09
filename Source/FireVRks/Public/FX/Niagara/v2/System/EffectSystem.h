@@ -29,5 +29,6 @@ public:
 		this->Id = fId;
 	}
 
-	virtual void Initialize() PURE_VIRTUAL("Initialize",);
+	virtual void Initialize() PURE_VIRTUAL("Initialize",)
+	virtual UTexture2D* GetIcon() PURE_VIRTUAL("GetICon", return nullptr;);
 };

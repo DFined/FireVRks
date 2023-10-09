@@ -84,6 +84,11 @@ void ULaunchSegmentTile::RemoveTile(UStackableLaunchInstanceTile* StackableLaunc
 	this->GetMountingPoint()->GetAllChildren().Remove(StackableLaunchInstanceTile);
 	this->Segment->GetLaunchSettings()->Remove(StackableLaunchInstanceTile->GetContext());
 	StackableLaunchInstanceTile->RemoveFromParent();
+
+	if(Segment->GetLaunchSettings()->Num() == 0)
+	{
+		Remove();
+	}
 	
 	Parent->ForceLayoutPrepass();
 	Parent->ReTile();

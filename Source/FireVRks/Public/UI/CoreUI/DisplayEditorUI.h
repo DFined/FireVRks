@@ -42,6 +42,9 @@ public:
 
 	void Initialize(UDisplayData* Data);
 
+	UFUNCTION()
+	void NewSegment();
+	void MakePlusButton(int Offset, int i);
 	void ReTile();
 
 	void Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* Segment);

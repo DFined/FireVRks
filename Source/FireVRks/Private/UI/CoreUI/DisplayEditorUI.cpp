@@ -43,6 +43,34 @@ void UDisplayEditorUI::Initialize(UDisplayData* fData)
 	this->ReTile();
 }
 
+void UDisplayEditorUI::NewSegment()
+{
+
+	auto Segment = UDisplayLaunchSegment::New(Data);
+	Data->GetLaunchSegments()->Add(Segment);
+	
+	auto SegmentUI = DFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
+	auto bSlot = Cast<UCanvasPanelSlot>(SegmentUI->Slot);
+	SegmentUI->Initialize(Segment, this);
+	bSlot->SetAutoSize(true);
+	Children.Add(SegmentUI);
+
+	Canvas->ForceLayoutPrepass();
+	ReTile();
+}
+
+void UDisplayEditorUI::MakePlusButton(int Offset, int i)
+{
+	auto Btn = DFUIUtil::MakeImageButton(WidgetTree, Canvas, &Icons::PLUS_ICON, BUTTON_SIZE);
+	Buttons.Add(Btn);
+	if (auto bSlot = Cast<UCanvasPanelSlot>(Btn->Slot))
+	{
+		bSlot->SetPosition(FVector2D(Offset + (2 * SPACING + BUTTON_SIZE)*i + SPACING, BUTTON_SIZE));
+		bSlot->SetAutoSize(true);
+	}
+	Btn->OnPressed.AddUniqueDynamic(this, &UDisplayEditorUI::NewSegment);
+}
+
 void UDisplayEditorUI::ReTile()
 {
 	for (UButton* Button : Buttons)
@@ -62,14 +90,9 @@ void UDisplayEditorUI::ReTile()
 			Offset += Widget->GetDesiredSize().X;
 		}
 
-		auto Btn = DFUIUtil::MakeImageButton(WidgetTree, Canvas, &Icons::PLUS_ICON, BUTTON_SIZE);
-		Buttons.Add(Btn);
-		if (auto bSlot = Cast<UCanvasPanelSlot>(Btn->Slot))
-		{
-			bSlot->SetPosition(FVector2D(Offset + (2 * SPACING + BUTTON_SIZE)*i + SPACING, BUTTON_SIZE));
-			bSlot->SetAutoSize(true);
-		}
+		MakePlusButton(Offset, i);
 	}
+	MakePlusButton(SPACING, 0);
 }
 
 void UDisplayEditorUI::Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* Segment)

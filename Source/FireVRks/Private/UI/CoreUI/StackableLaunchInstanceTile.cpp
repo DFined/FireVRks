@@ -3,7 +3,6 @@
 
 #include "UI/CoreUI/StackableLaunchInstanceTile.h"
 
-#include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "UI/DFUIUtil.h"
 #include "UI/Icons.h"
 

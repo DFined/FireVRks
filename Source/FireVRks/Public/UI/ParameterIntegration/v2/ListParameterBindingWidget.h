@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "ParameterBindingWidget.h"
 #include "Components/Border.h"
+#include "FX/Niagara/v2/FormalParameter/BlockFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/ListFormalParameter.h"
 #include "UI/lib/Container/DFUIStack.h"
 #include "ListParameterBindingWidget.generated.h"
 
@@ -25,6 +27,9 @@ class FIREVRKS_API UListParameterBindingWidget : public UParameterBindingWidget
 public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
 	virtual UPanelWidget* GetMountingPoint() override;
+	UFUNCTION()
+	void NewItem();
+	void AddWidgetFromParam(UParameterValueContext* SubContext, UAbstractFormalParameter* ChildType);
 	virtual void Initialize(UAbstractFormalParameter* Parameter, UParameterValueContext* Context) override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;
 };

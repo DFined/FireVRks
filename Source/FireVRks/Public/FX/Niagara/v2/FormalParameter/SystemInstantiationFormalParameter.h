@@ -20,6 +20,7 @@ public:
 		Param->Default = USystemInstantiationParameterValue::New(
 			Param, NewObject<UMapParameterValueContext>(Outer, UMapParameterValueContext::StaticClass()), System
 		);
+		Param->Type = SYSTEM_INSTANTIATION;
 		return Param;
 	}
 };

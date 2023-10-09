@@ -17,6 +17,6 @@ void USystemDisplayTile::SetSystem(UEffectSystem* System, int Size)
 	DFStyleUtil::TextBlockStyle(Name);
 	
 	auto Icon = DFUIUtil::AddWidget<UImage>(WidgetTree, Box);
-	//Icon->SetBrush(DFStyleUtil::SetupImageBrush(System->GetIcon(), Size));
+	Icon->SetBrush(DFStyleUtil::SetupImageBrush(System->GetIcon(), Size));
 	DFStyleUtil::SafeSetVBoxSlotAlignment(Icon->Slot, HAlign_Center);
 }

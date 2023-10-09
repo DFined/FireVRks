@@ -24,7 +24,7 @@ UDefaultParameterSystem* UEffectSystemManager::GetDefaultEffect() const
 
 UEffectSystemManager* UEffectSystemManager::Instance()
 {
-	auto Manager = NewObject<UEffectSystemManager>(UDFStatics::ANCHOR, StaticClass());
+	auto Manager = UDFStatics::New<UEffectSystemManager>();
 	Manager->Initialize();
 	return Manager;
 }

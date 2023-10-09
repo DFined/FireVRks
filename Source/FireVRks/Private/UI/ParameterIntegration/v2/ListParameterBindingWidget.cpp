@@ -8,16 +8,29 @@
 #include "FX/Niagara/v2/ParameterValue/ListParameterValue.h"
 #include "UI/DFUIUtil.h"
 #include "UI/lib/Container/DFUIStack.h"
+#include "UI/ParameterIntegration/v2/ParameterRenderer.h"
 
 UPanelWidget* UListParameterBindingWidget::MakeRootWidget(UWidgetTree* Tree)
 {
 	OuterBorder = DFUIUtil::MakeWidget<UBorder>(Tree);
+	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
 	return OuterBorder;
 }
 
 UPanelWidget* UListParameterBindingWidget::GetMountingPoint()
 {
 	return ListStack->GetMountingPoint();
+}
+
+void UListParameterBindingWidget::NewItem()
+{
+	AddWidgetFromParam(UMapParameterValueContext::New(this), Cast<UListFormalParameter>(Parameter)->GetChildType());
+	this->OnChange();
+}
+
+void UListParameterBindingWidget::AddWidgetFromParam(UParameterValueContext* SubContext, UAbstractFormalParameter* ChildType)
+{
+	UParameterRenderer::RenderParam(ListStack, SubContext, ChildType);
 }
 
 void UListParameterBindingWidget::Initialize(UAbstractFormalParameter* fParameter, UParameterValueContext* Context)
@@ -34,7 +47,7 @@ void UListParameterBindingWidget::Initialize(UAbstractFormalParameter* fParamete
 	auto Button = DFUIUtil::AddWidget<UButton>(HeaderBox);
 	DFUIUtil::AddLabel(WidgetTree, Button, "Create new");
 	DFStyleUtil::TextButtonStyle(Button, DFStyleUtil::GREY_LVL_2);
-	//Button->OnPressed.AddUniqueDynamic(this, &UListParameterBindingWidget::NewItem);
+	Button->OnPressed.AddUniqueDynamic(this, &UListParameterBindingWidget::NewItem);
 
 	ListStack = DFUIUtil::AddUserWidget<UDFUIStack>(OuterVBox);
 
@@ -43,7 +56,7 @@ void UListParameterBindingWidget::Initialize(UAbstractFormalParameter* fParamete
 	auto ListParam = Cast<UListFormalParameter>(Parameter);
 	for (UParameterValueContext* SubContext : Vals->Get())
 	{
-		//AddWidgetFromParam(SubContext, ListParam->GetChildType())->MakeListItem(this);
+		AddWidgetFromParam(SubContext, ListParam->GetChildType());
 	}
 }
 
