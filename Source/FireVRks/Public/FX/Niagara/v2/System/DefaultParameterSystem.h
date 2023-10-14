@@ -281,6 +281,7 @@ public:
 		auto Sys = NewObject<UDefaultParameterSystem>(UDFStatics::ANCHOR);
 		Sys->Initialize();
 		Sys->SetId(UDFStatics::DEFAULT_SYSTEM_ID);
+		Sys->SetDisplayName("Default Aerial Effect");
 		return Sys;
 	}
 	

@@ -32,7 +32,7 @@ void UBlockParameterBindingWidget::Initialize(UAbstractFormalParameter* Param, U
 	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_1);
 
 	HeaderBox = DFUIUtil::MakeWidget<UHorizontalBox>(WidgetTree);
-	auto BlockName = DFUIUtil::AddLabel(WidgetTree, HeaderBox, ParamsBlock->GetName());
+	auto BlockName = DFUIUtil::AddLabel(WidgetTree, HeaderBox, ParamsBlock->GetDisplayName());
 	if(auto SlotT = Cast<UHorizontalBoxSlot>(BlockName->Slot))
 	{
 		SlotT->SetSize(FSlateChildSize(ESlateSizeRule::Fill));

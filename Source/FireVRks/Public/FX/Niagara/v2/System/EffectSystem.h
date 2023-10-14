@@ -18,6 +18,8 @@ class FIREVRKS_API UEffectSystem : public UObject, public ParameterProvider
 	UPROPERTY()
 	UDFId* Id;
 
+	FString DisplayName;
+
 public:
 	UDFId* GetId() const
 	{
@@ -29,6 +31,16 @@ public:
 		this->Id = fId;
 	}
 
+	FString GetDisplayName() const
+	{
+		return DisplayName;
+	}
+
+	void SetDisplayName(const FString& bDisplayName)
+	{
+		this->DisplayName = bDisplayName;
+	}
+
 	virtual void Initialize() PURE_VIRTUAL("Initialize",)
-	virtual UTexture2D* GetIcon() PURE_VIRTUAL("GetICon", return nullptr;);
+	virtual UTexture2D* GetIcon() PURE_VIRTUAL("GetIcon", return nullptr;);
 };

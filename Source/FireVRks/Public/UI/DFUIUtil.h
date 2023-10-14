@@ -40,12 +40,15 @@ public:
 	template <class T>
 	static T* AttemptFindWidgetByType(UWidget* Widget)
 	{
-		auto OuterRes = AttemptFindWidgetByOuterChain<T>(Widget);
-		if (OuterRes)
+		if (auto UserWidget = FindOuterParent(Widget))
 		{
-			return OuterRes;
+			if(auto OuterAsTarget = Cast<T>(UserWidget))
+			{
+				return OuterAsTarget;
+			} 
+			return AttemptFindWidgetByType<T>(UserWidget);
 		}
-		return AttemptFindWidgetByParentChain<T>(Widget);
+		return nullptr;
 	}
 
 	template <class T>
@@ -69,23 +72,22 @@ public:
 		return nullptr;
 	}
 
-	template <class T>
-	static T* AttemptFindWidgetByParentChain(UWidget* Widget)
+	static UUserWidget* FindOuterParent(UWidget* Widget)
 	{
-		if (auto SelfAsTarget = Cast<T>(Widget))
-		{
-			return SelfAsTarget;
-		}
 		auto Parent = Widget->GetParent();
-		auto ParentAsWidget = Cast<UWidget>(Parent);
-		auto ParentAsTarget = Cast<T>(Parent);
-		if (ParentAsTarget)
+		if (Parent == nullptr)
 		{
-			return ParentAsTarget;
+			if (auto Outer = Cast<UWidgetTree>(Widget->GetOuter()))
+			{
+				if (auto ParentUWidget = Cast<UUserWidget>(Outer->GetOuter()))
+				{
+					return ParentUWidget;
+				}
+			}
 		}
-		if (ParentAsWidget)
+		if(auto ParentAsWidget = Cast<UWidget>(Parent))
 		{
-			AttemptFindWidgetTree(ParentAsWidget);
+			return FindOuterParent(ParentAsWidget);			
 		}
 		return nullptr;
 	}

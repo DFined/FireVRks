@@ -30,7 +30,7 @@ void USystemInstantiationParameterBindingWidget::Initialize(UAbstractFormalParam
 	auto VBox = DFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
 	auto Box = DFUIUtil::AddWidget<UHorizontalBox>(WidgetTree, VBox);
 
-	auto ParamName = DFUIUtil::AddLabel(WidgetTree, Box, fParameter->GetName());
+	auto ParamName = DFUIUtil::AddLabel(WidgetTree, Box, fParameter->GetDisplayName());
 	DFStyleUtil::SafeSetHBoxSlotWidth(ParamName->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 	DFStyleUtil::TextBlockStyle(ParamName);
 

@@ -37,7 +37,7 @@ void UListParameterBindingWidget::Initialize(UAbstractFormalParameter* fParamete
 {
 	auto OuterVBox = DFUIUtil::AddWidget<UVerticalBox>(this->WidgetTree, OuterBorder);
 	auto HeaderBox = DFUIUtil::AddUserWidget<UDFUILine>(OuterVBox);
-	auto NameLabel = DFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), fParameter->GetName());
+	auto NameLabel = DFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), fParameter->GetDisplayName());
 	DFStyleUtil::TextBlockStyle(NameLabel);
 	if(UHorizontalBoxSlot* TSlot = Cast<UHorizontalBoxSlot>(NameLabel->Slot))
 	{

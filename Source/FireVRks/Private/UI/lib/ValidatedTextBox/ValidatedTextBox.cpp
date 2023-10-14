@@ -18,6 +18,7 @@ void UValidatedTextBox::HandleOnTextCommitted(const FText& NewText, ETextCommit:
 			MyEditableTextBlock->SetText(NewText);
 			PrevText = NewText.ToString();
 			Super::HandleOnTextCommitted(NewText, CommitMethod);
+			this->NotifyOfChange(this);
 		}
 		else
 		{
