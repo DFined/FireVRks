@@ -7,33 +7,13 @@
 #include "UI/lib/ValidatedTextBox/FColorTextBox.h"
 #include "UI/lib/ValidatedTextBox/FloatTextBox.h"
 #include "UI/lib/ValidatedTextBox/IntTextBox.h"
+#include "UI/ParameterIntegration/v2/ArraySelectorComboBox.h"
 #include "UI/ParameterIntegration/v2/ParameterBindingWidget.h"
 
 template <class OuterType, typename InnerType>
 InnerType UParamUtil::GetTypedValue(UAbstractParameterValue* Value)
 {
 	return Cast<OuterType>(Value)->Get();
-}
-
-template <class Type>
-Type* UParamUtil::Setup(FString Id, FString Name, bool Required, Type* Parameter)
-{
-	Parameter->SetRequired(Required);
-	Parameter->SetDisplayName(Name);
-	Parameter->SetId(UDFId::Named(UDFStatics::ANCHOR, Id));
-	return Parameter;
-}
-
-template <class Type>
-Type* UParamUtil::Setup(FString Name, bool Required, Type* Parameter)
-{
-	return Setup(FGuid::NewGuid().ToString(), Name, Required, Parameter);
-}
-
-template <class Param, typename Value>
-Param* UParamUtil::Global(FString Name, bool Required, Value DefaultValue)
-{
-	return Setup(Name, Required, Param::New(UDFStatics::ANCHOR, DefaultValue));
 }
 
 WidgetWithValue* UParamUtil::GetValueWidget(UUserWidget* Outer, UAbstractParameterValue* Value, ParameterType Type)
@@ -64,6 +44,11 @@ WidgetWithValue* UParamUtil::GetValueWidget(UUserWidget* Outer, UAbstractParamet
 		case ENUM:
 			{
 				Widget = DFUIUtil::MakeWidget<UParameterBindingComboBox>(Outer->WidgetTree);
+				break;
+			}
+		case ARRAY_SELECTOR:
+			{
+				Widget = DFUIUtil::MakeWidget<UArraySelectorComboBox>(Outer->WidgetTree);
 				break;
 			}
 	}

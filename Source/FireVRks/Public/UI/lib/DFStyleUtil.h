@@ -3,6 +3,8 @@
 #include "Components/Border.h"
 #include "Components/Button.h"
 #include "Components/CheckBox.h"
+#include "Components/ComboBox.h"
+#include "Components/ComboBoxString.h"
 #include "Components/EditableTextBox.h"
 #include "Components/HorizontalBoxSlot.h"
 #include "Components/TextBlock.h"
@@ -42,4 +44,29 @@ public:
 
 	template<class SlotType>
 	static void SetPadding(UWidget* Widget, FMargin Margin);
+
+	static void ComboBox(UComboBoxString* Box)
+	{
+		Box->ContentPadding = FMargin(0);
+		Box->Font = DEFAULT_FONT;
+		Box->ItemStyle.SetTextColor(LIGHT_TEXT_1);
+		FSlateBrush& Style = Box->WidgetStyle.ComboButtonStyle.ButtonStyle.Normal;
+		Style.DrawAs = ESlateBrushDrawType::RoundedBox;
+		Style.TintColor = GREY_LVL_0;
+		Style.OutlineSettings.Color = GREY_LVL_2;
+		Style.OutlineSettings.Width = 2;
+		Box->WidgetStyle.ContentPadding = FMargin(0);
+
+		FSlateBrush& HoveredStyle = Box->WidgetStyle.ComboButtonStyle.ButtonStyle.Hovered;
+		HoveredStyle.TintColor = GREY_LVL_0;
+		HoveredStyle.OutlineSettings.Color = GREY_LVL_2;
+		HoveredStyle.OutlineSettings.Width = 2;
+
+		FSlateBrush& PressedStyle = Box->WidgetStyle.ComboButtonStyle.ButtonStyle.Pressed;
+		PressedStyle.TintColor = GREY_LVL_0;
+		PressedStyle.OutlineSettings.Color = GREY_LVL_2;
+		PressedStyle.OutlineSettings.Width = 2;
+	
+		Box->ForegroundColor = LIGHT_TEXT_1;
+	}
 };

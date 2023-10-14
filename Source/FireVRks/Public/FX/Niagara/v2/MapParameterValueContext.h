@@ -1,6 +1,7 @@
 #pragma once
 #include "ParameterValueContext.h"
 #include "MapParameterValueContext.generated.h"
+class UDFId;
 
 UCLASS()
 class FIREVRKS_API UMapParameterValueContext : public UParameterValueContext, public TMap<UDFId*, UAbstractParameterValue*>

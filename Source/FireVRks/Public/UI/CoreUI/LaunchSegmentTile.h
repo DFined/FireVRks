@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Display/DisplayLaunchSegment.h"
+#include "UI/CoreUI/DisplayEditorUI.h"
 #include "UI/DFUIUtil.h"
 #include "UI/lib/Container/DFUIContainer.h"
 #include "UI/lib/Container/DFUIStack.h"

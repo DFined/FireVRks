@@ -1,4 +1,4 @@
-#include "ParameterBindingWidget.h"
+#include "UI/ParameterIntegration/v2/ParameterBindingWidget.h"
 
 #include "UI/DFUIUtil.h"
 #include "UI/ParameterIntegration/v2/ParameterInputUI.h"

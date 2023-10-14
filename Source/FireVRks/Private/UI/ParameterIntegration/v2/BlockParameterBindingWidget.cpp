@@ -1,6 +1,6 @@
-#include "BlockParameterBindingWidget.h"
+#include "UI/ParameterIntegration/v2/BlockParameterBindingWidget.h"
 
-#include "ParameterRenderer.h"
+#include "UI/ParameterIntegration/v2/ParameterRenderer.h"
 #include "Components/VerticalBoxSlot.h"
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/FormalParameter/BlockFormalParameter.h"

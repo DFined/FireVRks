@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EffectParameterInputUI.h"
 #include "ParameterBindingWidget.h"
+#include "Components/Border.h"
 #include "SystemInstantiationParameterBindingWidget.generated.h"
 
 UCLASS()

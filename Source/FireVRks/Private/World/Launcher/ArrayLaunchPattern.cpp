@@ -1,6 +1,6 @@
-#include "ArrayLaunchPattern.h"
+#include "World/Launcher/ArrayLaunchPattern.h"
 
-#include "LaunchSettings.h"
+#include "World/Launcher/LaunchSettings.h"
 
 TArray<UAbstractFormalParameter*>* UArrayLaunchPattern::GetOuterParameters()
 {
@@ -13,6 +13,7 @@ void UArrayLaunchPattern::Init()
 	{
 		Parameters = TArray<UAbstractFormalParameter*>();
 		Parameters.Add(ARRAY_LAUNCH_SETTING);
+		Parameters.Add(ARRAY_NAME);
 		Parameters.Add(SYSTEMS);
 		
 		ARRAY_LAUNCH_SETTING->Add(ARRAY_TRAVERSAL_TYPE);

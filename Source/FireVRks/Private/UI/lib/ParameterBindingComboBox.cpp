@@ -26,26 +26,7 @@ void UParameterBindingComboBox::SetValue(UAbstractParameterValue* Value)
 
 void UParameterBindingComboBox::DefaultStyle()
 {
-	this->ContentPadding = FMargin(0);
-	this->Font = DFStyleUtil::DEFAULT_FONT;
-	this->ItemStyle.SetTextColor(DFStyleUtil::LIGHT_TEXT_1);
-	FSlateBrush& Style = this->WidgetStyle.ComboButtonStyle.ButtonStyle.Normal;
-	Style.DrawAs = ESlateBrushDrawType::RoundedBox;
-	Style.TintColor = DFStyleUtil::GREY_LVL_0;
-	Style.OutlineSettings.Color = DFStyleUtil::GREY_LVL_2;
-	Style.OutlineSettings.Width = 2;
-
-	FSlateBrush& HoveredStyle = this->WidgetStyle.ComboButtonStyle.ButtonStyle.Hovered;
-	HoveredStyle.TintColor = DFStyleUtil::GREY_LVL_0;
-	HoveredStyle.OutlineSettings.Color = DFStyleUtil::GREY_LVL_2;
-	HoveredStyle.OutlineSettings.Width = 2;
-
-	FSlateBrush& PressedStyle = this->WidgetStyle.ComboButtonStyle.ButtonStyle.Pressed;
-	PressedStyle.TintColor = DFStyleUtil::GREY_LVL_0;
-	PressedStyle.OutlineSettings.Color = DFStyleUtil::GREY_LVL_2;
-	PressedStyle.OutlineSettings.Width = 2;
-	
-	this->ForegroundColor = DFStyleUtil::LIGHT_TEXT_1;
+	DFStyleUtil::ComboBox(this);
 }
 
 UAbstractParameterValue* UParameterBindingComboBox::GetValue(UParameterValueContext* Context)

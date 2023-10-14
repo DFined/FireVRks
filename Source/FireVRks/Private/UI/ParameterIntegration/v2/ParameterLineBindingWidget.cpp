@@ -1,4 +1,4 @@
-#include "ParameterLineBindingWidget.h"
+#include "UI/ParameterIntegration/v2/ParameterLineBindingWidget.h"
 
 #include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "FX/Niagara/v2/ParamUtil.h"

@@ -1,4 +1,5 @@
 #pragma once
+#include "DFStyleUtil.h"
 #include "Components/ComboBoxString.h"
 #include "FX/Niagara/SystemSettings/Enums/EnumLike.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
@@ -16,6 +17,7 @@ public:
 		: UComboBoxString(ObjectInitializer)
 	{
 		OnSelectionChanged.AddUniqueDynamic(this, &UParameterBindingComboBox::HandleSelectionChangedInternal);
+		DFStyleUtil::ComboBox(this);
 	}
 
 private:

@@ -1,6 +1,7 @@
-#include "WidgetWithValue.h"
+#include "UI/ParameterIntegration/v2/WidgetWithValue.h"
 
-#include "ParameterInputUI.h"
+#include "UI/ParameterIntegration/v2/ParameterInputUI.h"
+#include "UI/DFUIUtil.h"
 
 void WidgetWithValue::DefaultStyle()
 {

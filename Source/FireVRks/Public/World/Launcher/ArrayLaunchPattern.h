@@ -1,8 +1,8 @@
 #pragma once
 #include "GenericLauncherArray.h"
-#include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/System/ParameterProvider.h"
 #include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/ArraySelectorParameter.h"
 #include "FX/Niagara/v2/FormalParameter/BlockFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/BoolFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/EnumFormalParameter.h"
@@ -12,6 +12,7 @@
 #include "FX/Niagara/v2/FormalParameter/SystemInstantiationFormalParameter.h"
 #include "FX/Niagara/v2/System/DefaultParameterSystem.h"
 #include "ArrayLaunchPattern.generated.h"
+
 
 UCLASS()
 class FIREVRKS_API UArrayLaunchPattern : public UObject, public ParameterProvider
@@ -26,6 +27,8 @@ class FIREVRKS_API UArrayLaunchPattern : public UObject, public ParameterProvide
 public:
 	UPROPERTY()
 	UBlockFormalParameter* ARRAY_LAUNCH_SETTING = UParamUtil::Global<UBlockFormalParameter, bool>("Array settings", true, true);
+	UPROPERTY()
+	UArraySelectorParameter* ARRAY_NAME = UParamUtil::Global<UArraySelectorParameter>("Array Name", true);
 	UPROPERTY()
 	UEnumFormalParameter* ARRAY_TRAVERSAL_TYPE = UParamUtil::Global<UEnumFormalParameter, EnumLikeValue*>(
 		"Array traversal direction", true, &EnumLikeValue::END_TO_END

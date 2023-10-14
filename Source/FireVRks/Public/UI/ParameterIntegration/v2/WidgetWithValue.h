@@ -1,7 +1,7 @@
 #pragma once
+#include "Components/Widget.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
 #include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
-#include "UI/DFUIUtil.h"
 #include "UI/lib/DFStylableWidget.h"
 
 class FIREVRKS_API WidgetWithValue : DFStylableWidget

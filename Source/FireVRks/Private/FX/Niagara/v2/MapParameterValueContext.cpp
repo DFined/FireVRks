@@ -1,6 +1,6 @@
-#include "MapParameterValueContext.h"
+#include "FX/Niagara/v2/MapParameterValueContext.h"
 
-#include "FormalParameter/AbstractFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
 
 UAbstractParameterValue* UMapParameterValueContext::Get(UAbstractFormalParameter* Parameter)
 {
