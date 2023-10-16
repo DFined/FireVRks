@@ -13,7 +13,7 @@ UPanelWidget* USystemDisplayTile::MakeRootWidget(UWidgetTree* Tree)
 void USystemDisplayTile::SetSystem(UEffectSystem* System, int Size)
 {
 	auto Box = DFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
-	auto Name = DFUIUtil::AddLabel(WidgetTree, Box, System->GetName());
+	auto Name = DFUIUtil::AddLabel(WidgetTree, Box, System->GetDisplayName());
 	DFStyleUtil::TextBlockStyle(Name);
 	
 	auto Icon = DFUIUtil::AddWidget<UImage>(WidgetTree, Box);

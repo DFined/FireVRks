@@ -29,14 +29,14 @@ UBlockFormalParameter* UCompoundableFormalParameter::GetBlockParam()
 template <class Outer, typename Inner>
 Inner UCompoundableFormalParameter::GetMin(UParameterValueContext* Context)
 {
-	auto Param = Context->Get(SelectorParam) ? Context->Get(MinParam) : Context->Get(DefaultParam);
+	auto Param = UParamUtil::GetTypedValue<UBoolParameterValue, bool>(Context->Get(SelectorParam)) ? Context->Get(MinParam) : Context->Get(DefaultParam);
 	return UParamUtil::GetTypedValue<Outer, Inner>(Param);
 }
 
 template <class Outer, typename Inner>
 Inner UCompoundableFormalParameter::GetMax(UParameterValueContext* Context)
 {
-	auto Param = Context->Get(SelectorParam) ? Context->Get(MaxParam) : Context->Get(DefaultParam);
+	auto Param = UParamUtil::GetTypedValue<UBoolParameterValue, bool>(Context->Get(SelectorParam)) ? Context->Get(MaxParam) : Context->Get(DefaultParam);
 	return UParamUtil::GetTypedValue<Outer, Inner>(Param);
 }
 

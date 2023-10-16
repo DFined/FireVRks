@@ -14,7 +14,8 @@ UNiagaraSystem* const UDFStatics::TRAIL_SYSTEM = LoadObject<UNiagaraSystem>(ANCH
 ULauncherManager* const UDFStatics::LAUNCHER_MANAGER = ULauncherManager::MakeInstance();
 UArrayLaunchPattern* const UDFStatics::ARRAY_LAUNCH_PATTERN = UArrayLaunchPattern::MakeInstance();
 UEffectSystemManager* const UDFStatics::EFFECT_SYSTEM_MANAGER = UEffectSystemManager::Instance();
-
+UEffectSpawnCoordinator* const UDFStatics::EFFECT_SPAWN_COORDINATOR = UEffectSpawnCoordinator::New();
+AActor* UDFStatics::Player = nullptr;
 
 ULauncherManager* UDFStatics::GetLauncherManager()
 {
@@ -53,4 +54,14 @@ TArray<FString> UDFStatics::GetFiles(FString FileTypes)
 		);
 	}
 	return OutFilenames;
+}
+
+UEffectSpawnCoordinator* UDFStatics::GetCoordinator()
+{
+	return EFFECT_SPAWN_COORDINATOR;
+}
+
+AActor* UDFStatics::GetPlayer()
+{
+	return Player;
 }

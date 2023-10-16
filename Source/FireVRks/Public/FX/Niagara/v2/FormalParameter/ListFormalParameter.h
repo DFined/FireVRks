@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "AbstractFormalParameter.h"
+#include "FX/Niagara/v2/ParamUtil.h"
+#include "FX/Niagara/v2/ParameterValue/ListParameterValue.h"
 #include "ListFormalParameter.generated.h"
 
 /**
@@ -24,4 +26,6 @@ public:
 	}
 	
 	static UListFormalParameter* New(UObject* Outer, UAbstractFormalParameter* ChildType);
+
+	DF_PARAMETER_GETTER(UListParameterValue, TArray<UParameterValueContext*>);
 };

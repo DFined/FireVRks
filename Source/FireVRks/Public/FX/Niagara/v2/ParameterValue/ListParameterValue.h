@@ -9,7 +9,8 @@ UCLASS()
 class FIREVRKS_API UListParameterValue : public UAbstractParameterValue
 {
 	GENERATED_BODY()
-	
+
+	UPROPERTY()
 	TArray<UParameterValueContext*> Values;
 
 public:

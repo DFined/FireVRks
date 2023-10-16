@@ -14,6 +14,7 @@ FString UArraySelectorComboBox::NONE_OPTION_NAME = "__NONE__";
 UArraySelectorComboBox::UArraySelectorComboBox()
 {
 	DFStyleUtil::ComboBox(this);
+	OnSelectionChanged.AddUniqueDynamic(this, &UArraySelectorComboBox::HandleSelectionChangedInternal);
 }
 
 void UArraySelectorComboBox::DefaultStyle()
@@ -43,10 +44,16 @@ void UArraySelectorComboBox::ReInitOptions(UGenericLauncherArray* Array)
 	}
 }
 
+void UArraySelectorComboBox::ReInit()
+{
+	ReInitOptions(nullptr);
+}
+
 void UArraySelectorComboBox::Initialize(UAbstractParameterValue* Value)
 {
 	auto Array = UParamUtil::GetTypedValue<UArraySelectorParameterValue, UGenericLauncherArray*>(Value);
 	ReInitOptions(Array);
+	this->OnOpening.AddUniqueDynamic(this, &UArraySelectorComboBox::ReInit);
 }
 
 UAbstractParameterValue* UArraySelectorComboBox::GetValue(UParameterValueContext* Context)
@@ -71,4 +78,13 @@ void UArraySelectorComboBox::SetValue(UAbstractParameterValue* Value)
 UWidget* UArraySelectorComboBox::AsWidget()
 {
 	return this;
+}
+
+
+void UArraySelectorComboBox::HandleSelectionChangedInternal(FString SelectedItem, ESelectInfo::Type SelectionType)
+{
+	if(SelectionType != ESelectInfo::Direct)
+	{
+		NotifyOfChange(this);
+	}
 }

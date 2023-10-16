@@ -5,6 +5,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "FX/Niagara/Scheduler/CallbackSystemDriver.h"
+#include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "FX/Niagara/v2/ValueEqualsPredicate.h"
 #include "FX/Niagara/v2/FormalParameter/EnumFormalParameter.h"
 #include "FX/Niagara/v2/ParameterValue/FloatParameterValue.h"
@@ -252,11 +253,11 @@ UTexture2D* UDefaultParameterSystem::GetIcon()
 }
 
 
-void UDefaultParameterSystem::SpawnSystem(UEffectSpawnData* Data, AActor* PlayerRef)
+void UDefaultParameterSystem::SpawnSystem(USystemSpawnData* Data, AActor* PlayerRef)
 {
 	auto Context = Data->GetContext();
 
-	auto Location = Data->GetSpawnTarget()->GetActorLocation() + Data->GetOffset();
+	auto Location = Data->GetLocation();
 
 	auto Distance = 20000;
 	if (PlayerRef)
@@ -264,7 +265,7 @@ void UDefaultParameterSystem::SpawnSystem(UEffectSpawnData* Data, AActor* Player
 		Distance = Location.Distance(Location, PlayerRef->GetActorLocation());
 	}
 
-	auto Effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(Data->GetSpawnTarget(), UDFStatics::DEFAULT_SYSTEM, Location);
+	auto Effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(Data->GetWorldObject(), UDFStatics::DEFAULT_SYSTEM, Location);
 
 	auto RotationType = EFFECT_ROTATION_TYPE->GetValue(Context);
 
@@ -276,7 +277,7 @@ void UDefaultParameterSystem::SpawnSystem(UEffectSpawnData* Data, AActor* Player
 			break;
 		case 1:
 			{
-				Normal = Data->GetUpwards();
+				Normal = Data->GetUpwardVector();
 				break;
 			}
 		case 2:
@@ -405,85 +406,85 @@ void UDefaultParameterSystem::SpawnSystem(UEffectSpawnData* Data, AActor* Player
 	{
 		ACallbackSystemDriver* Handler = nullptr;
 
-		for (UParameterValueContext* SOSContext : SosBlocks)
-		{
-			auto StartTime = SOS_EFFECT_TIME->GetMin<FLOAT_VALUE>(SOSContext);
-			auto EndTime = SOS_EFFECT_TIME->GetMax<FLOAT_VALUE>(SOSContext);
-			auto ChildEffectsNum = SOS_CHILD_SHELLS_NUM->GetValue(SOSContext);
-
-
-			auto World = GEngine->GetWorldFromContextObject(Effect, EGetWorldErrorMode::ReturnNull);
-
-			auto SosShape = SOS_EFFECT_SHAPE->GetValue(SOSContext);
-
-			auto SystemInstanceParams = Cast<USystemInstantiationParameterValue>(SOSContext->Get(SOS_EFFECT_PICKER));
-
-			if (SosShape == &EnumLikeValue::SOS_FROM_PARENT_PARTICLES)
-			{
-				if (Handler == nullptr)
-				{
-					Handler = World->SpawnActor<ACallbackSystemDriver>(FVector(Location), FRotator());
-					Handler->SetActorTickEnabled(true);
-					Handler->Init(SPRITE_COUNT->GetValue(Context), LIFETIME->GetMax<UFloatParameterValue, float>(Context), Effect);
-				}
-
-				auto SpawnData = UEffectSpawnData::New(
-					Data->GetSpawnTarget(),
-					UDFStatics::EFFECT_SYSTEM_MANAGER->Get (SystemInstanceParams->GetSystem()),
-					SystemInstanceParams->GetContext(),
-					Data->GetSpawnTarget(),
-					0,
-					FVector(),
-					Normal
-				);
-				Handler->AddSpawnInfo(
-					SpawnData,
-					SOS_EFFECT_TIME->GetMin<FLOAT_VALUE>(SOSContext),
-					SOS_EFFECT_TIME->GetMax<FLOAT_VALUE>(SOSContext),
-					SOS_CHILD_SHELLS_NUM->GetValue(SOSContext),
-					SOS_DELAY_TYPE->GetValue(SOSContext),
-					SOS_RECURRING_MAX_NUM->GetValue(SOSContext)
-				);
-			}
-			else
-			{
-				for (int i = 0; i < ChildEffectsNum; i++)
-				{
-					auto SpawnDelay = FMath::RandRange(StartTime, EndTime);
-
-
-					int Scale = FMath::RandRange(SOS_SHAPE_SCALE->GetMin<FLOAT_VALUE>(SOSContext), SOS_SHAPE_SCALE->GetMax<FLOAT_VALUE>(SOSContext));
-					FVector Offset;
-
-					switch (SosShape->GetOrdinal())
-					{
-						case 1: Offset = FMath::VRand() * Scale;
-							break;
-						case 2:
-							{
-								auto Quat = UKismetMathLibrary::Quat_FindBetweenVectors(
-									FVector(0, 1, 0), FVector(SOS_SHAPE_NORMAL->GetValue(SOSContext))
-								);
-								float Phase = (M_PI * 2 * i) / ChildEffectsNum;
-								FVector Rad = (FVector(1, 0, 0) * FMath::Sin(Phase) + FVector(0, 0, 1) * FMath::Cos(Phase));
-								Offset = Quat.RotateVector(Rad) * Scale;
-							}
-
-						default: break;
-					}
+		// for (UParameterValueContext* SOSContext : SosBlocks)
+		// {
+			// auto StartTime = SOS_EFFECT_TIME->GetMin<FLOAT_VALUE>(SOSContext);
+			// auto EndTime = SOS_EFFECT_TIME->GetMax<FLOAT_VALUE>(SOSContext);
+			// auto ChildEffectsNum = SOS_CHILD_SHELLS_NUM->GetValue(SOSContext);
+			//
+			//
+			// auto World = GEngine->GetWorldFromContextObject(Effect, EGetWorldErrorMode::ReturnNull);
+			//
+			// auto SosShape = SOS_EFFECT_SHAPE->GetValue(SOSContext);
+			//
+			// auto SystemInstanceParams = Cast<USystemInstantiationParameterValue>(SOSContext->Get(SOS_EFFECT_PICKER));
+			//
+			// if (SosShape == &EnumLikeValue::SOS_FROM_PARENT_PARTICLES)
+			// {
+			// 	if (Handler == nullptr)
+			// 	{
+			// 		Handler = World->SpawnActor<ACallbackSystemDriver>(FVector(Location), FRotator());
+			// 		Handler->SetActorTickEnabled(true);
+			// 		Handler->Init(SPRITE_COUNT->GetValue(Context), LIFETIME->GetMax<UFloatParameterValue, float>(Context), Effect);
+			// 	}
+			//
+			// 	auto SpawnData = ULaunchSettings::Make(
+			// 		Data->GetWorldObject(),
+			// 		UDFStatics::EFFECT_SYSTEM_MANAGER->Get (SystemInstanceParams->GetSystem()),
+			// 		SystemInstanceParams->GetContext(),
+			// 		Data->GetSpawnTarget(),
+			// 		0,
+			// 		FVector(),
+			// 		Normal
+			// 	);
+			// 	Handler->AddSpawnInfo(
+			// 		SpawnData,
+			// 		SOS_EFFECT_TIME->GetMin<FLOAT_VALUE>(SOSContext),
+			// 		SOS_EFFECT_TIME->GetMax<FLOAT_VALUE>(SOSContext),
+			// 		SOS_CHILD_SHELLS_NUM->GetValue(SOSContext),
+			// 		SOS_DELAY_TYPE->GetValue(SOSContext),
+			// 		SOS_RECURRING_MAX_NUM->GetValue(SOSContext)
+			// 	);
+			// }
+			// else
+			// {
+			// 	for (int i = 0; i < ChildEffectsNum; i++)
+			// 	{
+			// 		auto SpawnDelay = FMath::RandRange(StartTime, EndTime);
+			//
+			//
+			// 		int Scale = FMath::RandRange(SOS_SHAPE_SCALE->GetMin<FLOAT_VALUE>(SOSContext), SOS_SHAPE_SCALE->GetMax<FLOAT_VALUE>(SOSContext));
+			// 		FVector Offset;
+			//
+			// 		switch (SosShape->GetOrdinal())
+			// 		{
+			// 			case 1: Offset = FMath::VRand() * Scale;
+			// 				break;
+			// 			case 2:
+			// 				{
+			// 					auto Quat = UKismetMathLibrary::Quat_FindBetweenVectors(
+			// 						FVector(0, 1, 0), FVector(SOS_SHAPE_NORMAL->GetValue(SOSContext))
+			// 					);
+			// 					float Phase = (M_PI * 2 * i) / ChildEffectsNum;
+			// 					FVector Rad = (FVector(1, 0, 0) * FMath::Sin(Phase) + FVector(0, 0, 1) * FMath::Cos(Phase));
+			// 					Offset = Quat.RotateVector(Rad) * Scale;
+			// 				}
+			//
+			// 			default: break;
+			// 		}
 
 					// UDFStatics::EFFECT_SYSTEM_SCHEDULER->ScheduleSpawn(
 					// 	new EffectSpawnData(
 					// 		SystemInstanceParams->GetSystem(), SystemInstanceParams->GetContext(), Data->GetSpawnTarget(), SpawnDelay, Offset)
 					// );
-				}
-			}
-		}
-		if (Handler != nullptr)
-		{
-			Handler->Finalize();
-			//TODO Fix memory leak here
-		}
+		// 		}
+		// 	}
+		// }
+		// if (Handler != nullptr)
+		// {
+		// 	Handler->Finalize();
+		// 	//TODO Fix memory leak here
+		// }
 	}
 
 

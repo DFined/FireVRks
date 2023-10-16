@@ -3,6 +3,8 @@
 #pragma once
 
 #include "AbstractFormalParameter.h"
+#include "FX/Niagara/v2/ParamUtil.h"
+#include "FX/Niagara/v2/ParameterValue/ArraySelectorParameterValue.h"
 #include "ArraySelectorParameter.generated.h"
 
 UCLASS()
@@ -13,6 +15,6 @@ class FIREVRKS_API UArraySelectorParameter : public UAbstractFormalParameter
 public:
 
 	static UArraySelectorParameter* New(UObject* Outer);
-	static UArraySelectorParameter* New(UObject* Outer, bool Expanded);
 
+	DF_PARAMETER_GETTER(UArraySelectorParameterValue, UGenericLauncherArray*);
 };

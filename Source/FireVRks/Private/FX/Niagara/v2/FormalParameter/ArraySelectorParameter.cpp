@@ -9,8 +9,3 @@ UArraySelectorParameter* UArraySelectorParameter::New(UObject* Outer)
 	Param->Type = ARRAY_SELECTOR; 
 	return Param;
 }
-
-UArraySelectorParameter* UArraySelectorParameter::New(UObject* Outer, bool Expanded)
-{
-	return nullptr;
-}

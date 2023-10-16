@@ -23,9 +23,13 @@ public:
 	virtual void DefaultStyle() override;
 	void ReInitOptions(UGenericLauncherArray* Array);
 
+	UFUNCTION()
+	void ReInit();
 	virtual void Initialize(UAbstractParameterValue* Value) override;
 	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override;
 	virtual void SetValue(UAbstractParameterValue* Value) override;
 	virtual UWidget* AsWidget() override;
 
+	UFUNCTION()
+	void HandleSelectionChangedInternal(FString SelectedItem, ESelectInfo::Type SelectionType);
 };

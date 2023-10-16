@@ -1,5 +1,4 @@
 #pragma once
-#include "GenericLauncherArray.h"
 #include "FX/Niagara/v2/System/ParameterProvider.h"
 #include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/ArraySelectorParameter.h"
@@ -53,8 +52,8 @@ public:
 	virtual TArray<UAbstractFormalParameter*>* GetOuterParameters() override;
 
 	void Init();
-
-	void Launch(UParameterValueContext* Context, UGenericLauncherArray* LauncherArray);
+	
+	void Launch(UParameterValueContext* Context) const;
 
 	static UArrayLaunchPattern* MakeInstance();
 };

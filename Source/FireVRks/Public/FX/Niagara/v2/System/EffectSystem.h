@@ -7,6 +7,8 @@
 #include "UObject/Object.h"
 #include "EffectSystem.generated.h"
 
+class USystemSpawnData;
+class ULaunchSettings;
 /**
  * 
  */
@@ -43,4 +45,6 @@ public:
 
 	virtual void Initialize() PURE_VIRTUAL("Initialize",)
 	virtual UTexture2D* GetIcon() PURE_VIRTUAL("GetIcon", return nullptr;);
+	virtual void SpawnSystem(USystemSpawnData* Data, AActor* PlayerRef) PURE_VIRTUAL("SpawnSystem",);
+
 };

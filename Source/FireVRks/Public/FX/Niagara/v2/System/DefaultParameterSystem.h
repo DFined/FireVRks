@@ -1,11 +1,13 @@
 #pragma once
 #include "EffectSystem.h"
-#include "FX/Niagara/Scheduler/EffectSpawnData.h"
+#include "FX/Niagara/Scheduler/LaunchSettings.h"
+#include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "FX/Niagara/SystemSettings/Enums/EnumLike.h"
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/FormalParameter/BoolFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/ColorFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/CompoundableFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/EnumFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/FloatFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/IntFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/ListFormalParameter.h"
@@ -288,6 +290,6 @@ public:
 	virtual TArray<UAbstractFormalParameter*>* GetOuterParameters() override;
 	FString GetId();
 	FString GetName();
-	UTexture2D* GetIcon();
-	void SpawnSystem(UEffectSpawnData* Data, AActor* PlayerRef);
+	virtual UTexture2D* GetIcon() override;
+	virtual void SpawnSystem(USystemSpawnData* Data, AActor* PlayerRef) override;
 };

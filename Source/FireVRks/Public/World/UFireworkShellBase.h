@@ -1,5 +1,6 @@
 #pragma once
-#include "FX/Niagara/Scheduler/EffectSpawnData.h"
+#include "FX/Niagara/Scheduler/LaunchSettings.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 #include "UFireworkShellBase.generated.h"
 
 UCLASS()
@@ -8,8 +9,14 @@ class FIREVRKS_API AFireworkShellBase : public AActor
 	GENERATED_BODY()
 
 	UPROPERTY()
-	UEffectSpawnData* SpawnData;
-
+	UEffectSystem* System;
+	UPROPERTY()
+	UParameterValueContext* Context;
+	UPROPERTY()	
+	UProjectileMovementComponent* Component;
+	UPROPERTY()
+	ULaunchSettings* Settings;
+	
 	float Lifetime;
 
 public:
@@ -20,7 +27,7 @@ public:
 	virtual void OnConstruction(const FTransform& Transform) override;
 
 	static AFireworkShellBase* MakeShell(
-		UObject* ContextObject, FVector* Location, FRotator* Rotation, UEffectSystem* System, UParameterValueContext* Context, float Lifetime, float Velocity
+		UObject* ContextObject, FVector* Location, FRotator* Rotation, ULaunchSettings* Settings
 	);
 
 	virtual void BeginDestroy() override;

@@ -1,10 +1,11 @@
 #include "UFireworkShellBase.h"
 
 #include "NiagaraComponent.h"
+#include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Util/DFStatics.h"
 
-AFireworkShellBase::AFireworkShellBase(): SpawnData(nullptr), Lifetime(0)
+AFireworkShellBase::AFireworkShellBase(): System(nullptr), Context(nullptr), Component(nullptr), Lifetime(0)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.SetTickFunctionEnable(true);
@@ -12,7 +13,9 @@ AFireworkShellBase::AFireworkShellBase(): SpawnData(nullptr), Lifetime(0)
 
 void AFireworkShellBase::Spawn()
 {
-	//UDFStatics::EFFECT_SYSTEM_SCHEDULER->SpawnNow(SpawnData);
+	auto Velocity = Component->Velocity;
+	Velocity.Normalize(0.05);
+	System->SpawnSystem(USystemSpawnData::New(this, Context, this->GetActorLocation(), Velocity), UDFStatics::GetPlayer());
 }
 
 
@@ -41,20 +44,20 @@ void AFireworkShellBase::OnConstruction(const FTransform& Transform)
 	Emitter->Activate(true);
 }
 
-
-AFireworkShellBase* AFireworkShellBase::MakeShell(UObject* ContextObject, FVector* Location, FRotator* Rotation, UEffectSystem* System,
-                                                  UParameterValueContext* Context, float Lifetime, float Velocity)
+AFireworkShellBase* AFireworkShellBase::MakeShell(UObject* ContextObject, FVector* Location, FRotator* Rotation, ULaunchSettings* Settings)
 {
 	auto World = GEngine->GetWorldFromContextObject(ContextObject, EGetWorldErrorMode::ReturnNull);
 
 	auto Shell = Cast<AFireworkShellBase>(World->SpawnActor(StaticClass(), Location, Rotation));
-	Shell->SpawnData = UEffectSpawnData::New(Shell, System, Context, Shell, 0, FVector(0), Shell->GetActorForwardVector());
-	Shell->Lifetime = Lifetime;
+	Shell->System = Settings->GetSystem();
+	Shell->Context = Settings->GetContext();
+	Shell->Lifetime = Settings->GetShellLifetime();
 	Shell->SetActorLocation(*Location);
-	auto Component = Cast<UProjectileMovementComponent>(
+	Shell->Component = Cast<UProjectileMovementComponent>(
 		Shell->AddComponentByClass(UProjectileMovementComponent::StaticClass(), false, FTransform(), false)
 	);
-	Component->SetVelocityInLocalSpace(Rotation->RotateVector(FVector(0,0,1)) * Velocity);
+	Shell->Component->SetVelocityInLocalSpace(Rotation->RotateVector(FVector(0,0,1)) * Settings->GetShellVelocity());
+	Shell->Settings = Settings;
 	return Shell;
 }
 

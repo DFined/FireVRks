@@ -1,6 +1,7 @@
 #pragma once
 #include "DFAnchor.h"
 #include "NiagaraSystem.h"
+#include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
 #include "FX/Niagara/v2/System/EffectSystemManager.h"
 #include "World/Launcher/LauncherManager.h"
 #include "DFStatics.generated.h"
@@ -22,6 +23,8 @@ public:
 	static ULauncherManager* const LAUNCHER_MANAGER;
 	static UArrayLaunchPattern* const ARRAY_LAUNCH_PATTERN;
 	static UEffectSystemManager* const EFFECT_SYSTEM_MANAGER;
+	static UEffectSpawnCoordinator* const EFFECT_SPAWN_COORDINATOR;
+	static AActor* Player;
 
 	UFUNCTION(BlueprintCallable)
 	static ULauncherManager* GetLauncherManager();
@@ -36,8 +39,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static TArray<FString> GetFiles(FString FileTypes);
 
+	UFUNCTION(BlueprintCallable)
+	static UEffectSpawnCoordinator* GetCoordinator();
+
 	template <class Type>
 	static Type* New();
+
+	static AActor* GetPlayer();
+
+	UFUNCTION(BlueprintCallable)
+	static void SetPlayer(AActor* bPlayer)
+	{
+		Player = bPlayer;
+	}
 };
 
 template <class Type>

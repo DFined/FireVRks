@@ -22,13 +22,11 @@ void AGenericFireworkLauncher::Fire(ULaunchSettings* LaunchSettings)
 		this,
 		&Vector,
 		&Rotator,
-		LaunchSettings->GetSystem(),
-		LaunchSettings->GetContext(),
-		LaunchSettings->GetShellLifetime(),
-		LaunchSettings->GetShellVelocity()
+		LaunchSettings
 	);
 }
 
 void AGenericFireworkLauncher::DoOpenUI_Implementation()
 {
+	
 }

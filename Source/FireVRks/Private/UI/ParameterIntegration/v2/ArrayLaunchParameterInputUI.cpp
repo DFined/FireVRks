@@ -3,13 +3,10 @@
 #include "Util/DFStatics.h"
 #include "World/Launcher/ArrayLaunchPattern.h"
 
-void UArrayLaunchParameterInputUI::Launch(FString ArrayName) const
+void UArrayLaunchParameterInputUI::Launch()
 {
-	auto Array = UDFStatics::LAUNCHER_MANAGER->FindLauncherArray(ArrayName);
-	if (Array)
-	{
-		UDFStatics::ARRAY_LAUNCH_PATTERN->Launch(this->Context, Array);
-	}
+	DumpToContext();
+	UDFStatics::GetArrayLaunchPattern()->Launch(Context);
 }
 
 UArrayLaunchParameterInputUI* UArrayLaunchParameterInputUI::InstanceEmpty(UPanelWidget* Widget)

@@ -10,7 +10,7 @@
 #include "ParamUtil.generated.h"
 
 #define INT_VALUE UIntParameterValue, int
-#define FLOAT_VALUE UIntParameterValue, float
+#define FLOAT_VALUE UFloatParameterValue, float
 #define BOOL_VALUE UBoolParameterValue, bool
 #define ENUM_VALUE UEnumParameterValue, EnumLikeValue*
 

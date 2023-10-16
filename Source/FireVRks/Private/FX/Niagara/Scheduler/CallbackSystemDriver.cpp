@@ -86,7 +86,7 @@ void ACallbackSystemDriver::Init(int ParentParticleCount, float maxLifetime, UNi
 	}
 }
 
-void ACallbackSystemDriver::AddSpawnInfo(UEffectSpawnData* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects)
+void ACallbackSystemDriver::AddSpawnInfo(ULaunchSettings* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects)
 {
 	for (int i = 0; i < ParticleCount; ++i)
 	{

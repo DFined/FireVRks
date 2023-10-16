@@ -9,7 +9,7 @@ class FIREVRKS_API  UArrayLaunchParameterInputUI : public UParameterInputUI
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintCallable)
-	void Launch(FString ArrayName) const;
+	void Launch();
 
 	UFUNCTION(BlueprintCallable)
 	static UArrayLaunchParameterInputUI* InstanceEmpty(UPanelWidget* Widget);

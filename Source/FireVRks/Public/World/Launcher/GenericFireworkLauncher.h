@@ -1,5 +1,5 @@
 #pragma once
-#include "LaunchSettings.h"
+#include "FX/Niagara/Scheduler/LaunchSettings.h"
 #include "World/DFUIAble.h"
 
 #include "GenericFireworkLauncher.generated.h"

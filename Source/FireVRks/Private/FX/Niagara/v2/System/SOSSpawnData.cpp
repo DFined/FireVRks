@@ -1,7 +1,7 @@
 #include "FX/Niagara/System/SOSSpawnData.h"
 
 
-SOSSpawnData::SOSSpawnData(UEffectSpawnData* SpawnData, float FSpawnIn, bool bFromEnd, bool bRecurringInterval, int SosSpawnCount):
+SOSSpawnData::SOSSpawnData(ULaunchSettings* SpawnData, float FSpawnIn, bool bFromEnd, bool bRecurringInterval, int SosSpawnCount):
 	SpawnData(SpawnData),
 	FromEnd(bFromEnd),
 	RecurringInterval(bRecurringInterval),

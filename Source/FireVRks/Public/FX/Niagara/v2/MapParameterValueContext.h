@@ -4,9 +4,12 @@
 class UDFId;
 
 UCLASS()
-class FIREVRKS_API UMapParameterValueContext : public UParameterValueContext, public TMap<UDFId*, UAbstractParameterValue*>
+class FIREVRKS_API UMapParameterValueContext : public UParameterValueContext
 {
 	GENERATED_BODY()
+
+	UPROPERTY()
+	TMap<UDFId*, UAbstractParameterValue*> Map;
 public:
 	virtual UAbstractParameterValue* Get(UAbstractFormalParameter* Parameter) override;
 

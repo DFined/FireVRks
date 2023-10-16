@@ -1,5 +1,5 @@
 #pragma once
-#include "EffectSpawnData.h"
+#include "LaunchSettings.h"
 #include "NiagaraComponent.h"
 #include "NiagaraDataInterfaceExport.h"
 #include "FX/Niagara/System/SOSSpawnData.h"
@@ -30,7 +30,7 @@ public:
 
 	void Init(int ParentParticleCount, float maxLifetime, UNiagaraComponent* BSystem);
 
-	void AddSpawnInfo(UEffectSpawnData* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects);
+	void AddSpawnInfo(ULaunchSettings* Data, float MinSpawnIn, float MaxSpawnIn, int EffectCount, EnumLikeValue* DelayType, int MaxEffects);
 
 	void Finalize();
 
