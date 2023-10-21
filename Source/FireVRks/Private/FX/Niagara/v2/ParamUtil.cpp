@@ -23,32 +23,32 @@ WidgetWithValue* UParamUtil::GetValueWidget(UUserWidget* Outer, UAbstractParamet
 	{
 		case INTEGER:
 			{
-				Widget = DFUIUtil::MakeWidget<UIntTextBox>(Outer->WidgetTree);
+				Widget = UDFUIUtil::MakeWidget<UIntTextBox>(Outer->WidgetTree);
 				break;
 			}
 		case BOOLEAN:
 			{
-				Widget = DFUIUtil::MakeWidget<UParameterBindingCheckbox>(Outer->WidgetTree);
+				Widget = UDFUIUtil::MakeWidget<UParameterBindingCheckbox>(Outer->WidgetTree);
 				break;
 			}
 		case FLOAT:
 			{
-				Widget = DFUIUtil::MakeWidget<UFloatTextBox>(Outer->WidgetTree);
+				Widget = UDFUIUtil::MakeWidget<UFloatTextBox>(Outer->WidgetTree);
 				break;
 			}
 		case COLOR:
 			{
-				Widget = DFUIUtil::MakeWidget<UFColorTextBox>(Outer->WidgetTree);
+				Widget = UDFUIUtil::MakeWidget<UFColorTextBox>(Outer->WidgetTree);
 				break;
 			}
 		case ENUM:
 			{
-				Widget = DFUIUtil::MakeWidget<UParameterBindingComboBox>(Outer->WidgetTree);
+				Widget = UDFUIUtil::MakeWidget<UParameterBindingComboBox>(Outer->WidgetTree);
 				break;
 			}
 		case ARRAY_SELECTOR:
 			{
-				Widget = DFUIUtil::MakeWidget<UArraySelectorComboBox>(Outer->WidgetTree);
+				Widget = UDFUIUtil::MakeWidget<UArraySelectorComboBox>(Outer->WidgetTree);
 				break;
 			}
 	}

@@ -1,4 +1,5 @@
 #pragma once
+#include "NiagaraComponent.h"
 #include "FX/Niagara/Scheduler/LaunchSettings.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "UFireworkShellBase.generated.h"
@@ -16,12 +17,17 @@ class FIREVRKS_API AFireworkShellBase : public AActor
 	UProjectileMovementComponent* Component;
 	UPROPERTY()
 	ULaunchSettings* Settings;
+	UPROPERTY()
+	UNiagaraComponent* Emitter;
 	
 	float Lifetime;
+	bool IsSpawned = false;
 
 public:
 	AFireworkShellBase();
 	void Spawn();
+	UFUNCTION()
+	void DestroyShell(UNiagaraComponent* PSystem);
 	virtual void Tick(float DeltaSeconds) override;
 
 	virtual void OnConstruction(const FTransform& Transform) override;

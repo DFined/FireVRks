@@ -43,7 +43,7 @@ public:
 	UPROPERTY()
 	UFloatFormalParameter* SHELL_LIFETIME = UParamUtil::Global<UFloatFormalParameter, float>("Shell Lifetime", true, 2.0f);
 	UPROPERTY()
-	UIntFormalParameter* SHELL_VELOCITY = UParamUtil::Global<UIntFormalParameter, int>("Shell Velocity", true, 10000);
+	UIntFormalParameter* SHELL_VELOCITY = UParamUtil::Global<UIntFormalParameter, int>("Shell Velocity", true, 6500);
 	UPROPERTY()
 	USystemInstantiationFormalParameter* SYSTEM_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, UDFId*>(
 		"System", true, UDFStatics::DEFAULT_SYSTEM_ID
@@ -53,7 +53,7 @@ public:
 
 	void Init();
 	
-	void Launch(UParameterValueContext* Context) const;
+	void Launch(UParameterValueContext* Context, float Delay, bool IsTest) const;
 
 	static UArrayLaunchPattern* MakeInstance();
 };

@@ -11,10 +11,10 @@ UParameterBindingWidget* UParameterRenderer::RenderParam(UDFUIContainer* Contain
 	UParameterBindingWidget* PBW;
 	switch (Parameter->GetType())
 	{
-		case BLOCK: PBW = DFUIUtil::AddUserWidget<UBlockParameterBindingWidget>(Container); break;
-		case LIST: PBW = DFUIUtil::AddUserWidget<UListParameterBindingWidget>(Container); break;
-		case SYSTEM_INSTANTIATION: PBW = DFUIUtil::AddUserWidget<USystemInstantiationParameterBindingWidget>(Container); break;
-		default: PBW = DFUIUtil::AddUserWidget<UParameterLineBindingWidget>(Container); 
+		case BLOCK: PBW = UDFUIUtil::AddUserWidget<UBlockParameterBindingWidget>(Container); break;
+		case LIST: PBW = UDFUIUtil::AddUserWidget<UListParameterBindingWidget>(Container); break;
+		case SYSTEM_INSTANTIATION: PBW = UDFUIUtil::AddUserWidget<USystemInstantiationParameterBindingWidget>(Container); break;
+		default: PBW = UDFUIUtil::AddUserWidget<UParameterLineBindingWidget>(Container); 
 	}
 	
 	PBW->Setup(Parameter, ValueContext);

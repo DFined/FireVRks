@@ -18,7 +18,7 @@ void UValidatedTextBox::HandleOnTextCommitted(const FText& NewText, ETextCommit:
 			MyEditableTextBlock->SetText(NewText);
 			PrevText = NewText.ToString();
 			Super::HandleOnTextCommitted(NewText, CommitMethod);
-			this->NotifyOfChange(this);
+			OnChange();
 		}
 		else
 		{
@@ -46,6 +46,11 @@ void UValidatedTextBox::DefaultStyle()
 UWidget* UValidatedTextBox::AsWidget()
 {
 	return this;
+}
+
+void UValidatedTextBox::OnChange()
+{
+	this->NotifyOfChange(this);
 }
 
 void UValidatedTextBox::Initialize(UAbstractParameterValue* Value)

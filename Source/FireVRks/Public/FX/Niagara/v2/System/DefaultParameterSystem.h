@@ -32,11 +32,11 @@ public:
 	UBlockFormalParameter* MAIN_SETTINGS_BLOCK = UParamUtil::Global<UBlockFormalParameter, bool>("Effect Settings", true, true);
 
 	UPROPERTY()
-	UCompoundableFormalParameter* VELOCITY = UCompoundableFormalParameter::New<UIntFormalParameter, int>(UDFStatics::ANCHOR, "Velocity", true, 15000);
+	UCompoundableFormalParameter* VELOCITY = UCompoundableFormalParameter::New<UIntFormalParameter, int>(UDFStatics::ANCHOR, "Velocity", true, 5000);
 	UPROPERTY()
-	UCompoundableFormalParameter* LIFETIME = UCompoundableFormalParameter::New<UFloatFormalParameter, float>(UDFStatics::ANCHOR, "Sprite Lifetime", true, 5.0f);
+	UCompoundableFormalParameter* LIFETIME = UCompoundableFormalParameter::New<UFloatFormalParameter, float>(UDFStatics::ANCHOR, "Sprite Lifetime", true, 2.0f);
 	UPROPERTY()
-	UCompoundableFormalParameter* SPRITE_SIZE = UCompoundableFormalParameter::New<UIntFormalParameter, int>(UDFStatics::ANCHOR, "Sprite size", true, 100);
+	UCompoundableFormalParameter* SPRITE_SIZE = UCompoundableFormalParameter::New<UIntFormalParameter, int>(UDFStatics::ANCHOR, "Sprite size", true, 50);
 
 	UPROPERTY()
 	UBoolFormalParameter* USE_SECOND_COLOR = UParamUtil::Global<UBoolFormalParameter, bool>("Dual color", true, false);
@@ -229,7 +229,7 @@ public:
 	UPROPERTY()
 	UFloatFormalParameter* SMOKE_TRAIL_INTENSITY = UParamUtil::Global<UFloatFormalParameter, float>("Smoke Trail Intensity", false, 1.0f);
 	UPROPERTY()
-	UIntFormalParameter* SMOKE_TRAIL_SPRITE_SIZE = UParamUtil::Global<UIntFormalParameter, int>("Smoke Trail Sprite Size", true, 500);
+	UIntFormalParameter* SMOKE_TRAIL_SPRITE_SIZE = UParamUtil::Global<UIntFormalParameter, int>("Smoke Trail Sprite Size", true, 30);
 	UPROPERTY()
 	UFloatFormalParameter* SMOKE_TRAIL_EMISSION_DURATION = UParamUtil::Global<UFloatFormalParameter, float>("Smoke Trail Emission Duration", false, 4.0f);
 	UPROPERTY()

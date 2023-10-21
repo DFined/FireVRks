@@ -18,7 +18,7 @@ UCLASS()
 class FIREVRKS_API ULaunchSegmentTile : public UDFUIContainer
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY()
 	UBorder* RootBorder;
 
@@ -30,9 +30,12 @@ class FIREVRKS_API ULaunchSegmentTile : public UDFUIContainer
 
 	UPROPERTY()
 	UDisplayLaunchSegment* Segment;
-	
+
 	UPROPERTY()
 	UDisplayEditorUI* Parent;
+
+	UPROPERTY()
+	TArray<UStackableLaunchInstanceTile*> Tiles;
 
 public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
@@ -43,8 +46,10 @@ public:
 	void NewTile(UWidget* Widget);
 
 	void Initialize(UDisplayLaunchSegment* fSegment, UDisplayEditorUI* EditorParent);
-	
+
 	UFUNCTION()
 	void Remove();
 	void RemoveTile(UStackableLaunchInstanceTile* StackableLaunchInstanceTile);
+
+	void ScheduleLaunch();
 };

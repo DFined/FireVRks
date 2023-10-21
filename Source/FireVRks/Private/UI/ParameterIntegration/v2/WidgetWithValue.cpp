@@ -9,7 +9,7 @@ void WidgetWithValue::DefaultStyle()
 
 void WidgetWithValue::NotifyOfChange(UWidget* Self)
 {
-	auto ParentUi = DFUIUtil::AttemptFindWidgetByType<UParameterInputUI>(Self);
+	auto ParentUi = UDFUIUtil::AttemptFindWidgetByType<UParameterInputUI>(Self);
 	ParentUi->OnChange();
 }
 

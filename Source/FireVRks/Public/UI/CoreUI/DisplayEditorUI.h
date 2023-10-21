@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/Border.h"
 #include "Components/CanvasPanel.h"
-#include "Components/CanvasPanelSlot.h"
 #include "Display/DisplayData.h"
 #include "UI/DFUIUtil.h"
 #include "UI/lib/Container/DFUIContainer.h"
@@ -21,6 +20,8 @@ class FIREVRKS_API UDisplayEditorUI : public UDFUIContainer
 	inline static int SPACING = 15;
 	inline static int BUTTON_SIZE = 32;
 
+	int ReTileIn = 0;
+
 	UPROPERTY()
 	UBorder* RootBorder;
 
@@ -28,7 +29,7 @@ class FIREVRKS_API UDisplayEditorUI : public UDFUIContainer
 	UCanvasPanel* Canvas;
 
 	UPROPERTY()
-	TArray<UWidget*> Children;
+	TArray<ULaunchSegmentTile*> Children;
 
 	UPROPERTY()
 	TArray<UButton*> Buttons;
@@ -43,8 +44,14 @@ public:
 	void Initialize(UDisplayData* Data);
 
 	UFUNCTION()
-	void NewSegment();
+	void NewSegment(UWidget* InputWidget);
+
+	UFUNCTION()
+	void GetNewTime();
+
 	void MakePlusButton(int Offset, int i);
+
+	UFUNCTION()
 	void ReTile();
 
 	void Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* Segment);
@@ -54,4 +61,13 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static UDisplayEditorUI* New(UPanelWidget* Parent, UDisplayData* fData);
+
+	UFUNCTION(BlueprintCallable)
+	void ScheduleDisplay();
+
+	UFUNCTION()
+	void ScheduleLayout();
+
+protected:
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 };

@@ -9,13 +9,14 @@ class FIREVRKS_API UValidatedTextBox : public UEditableTextBox, public WidgetWit
 	GENERATED_BODY()
 	
 	bool (*Validator)(FString);
-	FString PrevText;
 
 public:
 	explicit UValidatedTextBox();
 
 protected:
 	virtual void HandleOnTextCommitted(const FText& NewText, ETextCommit::Type CommitMethod) override;
+	FString PrevText;
+
 
 public:
 	explicit UValidatedTextBox(const FObjectInitializer& Initializer, bool (*ValidatorFunc)(FString))
@@ -33,4 +34,6 @@ public:
 	virtual void DefaultStyle() override;
 
 	virtual UWidget* AsWidget() override;
+
+	virtual void OnChange();
 };

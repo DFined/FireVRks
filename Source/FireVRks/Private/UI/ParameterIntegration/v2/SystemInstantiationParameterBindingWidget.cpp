@@ -12,7 +12,7 @@
 
 UPanelWidget* USystemInstantiationParameterBindingWidget::MakeRootWidget(UWidgetTree* Tree)
 {
-	OuterBorder = DFUIUtil::MakeWidget<UBorder>(Tree);
+	OuterBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_1);
 	return OuterBorder;
 }
@@ -27,20 +27,21 @@ void USystemInstantiationParameterBindingWidget::Initialize(UAbstractFormalParam
 	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(fParameter));
 	System = UDFStatics::EFFECT_SYSTEM_MANAGER->Get(Value->GetSystem());
 
-	auto VBox = DFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
-	auto Box = DFUIUtil::AddWidget<UHorizontalBox>(WidgetTree, VBox);
+	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
+	auto Box = UDFUIUtil::AddWidget<UHorizontalBox>(WidgetTree, VBox);
 
-	auto ParamName = DFUIUtil::AddLabel(WidgetTree, Box, fParameter->GetDisplayName());
+	auto ParamName = UDFUIUtil::AddLabel(WidgetTree, Box, fParameter->GetDisplayName());
 	DFStyleUtil::SafeSetHBoxSlotWidth(ParamName->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 	DFStyleUtil::TextBlockStyle(ParamName);
 
-	auto SysSelector = DFUIUtil::AddUserWidget<USystemDisplayTile>(Box);
+	auto SysSelector = UDFUIUtil::AddUserWidget<USystemDisplayTile>(Box);
 	DFStyleUtil::SafeSetHBoxSlotWidth(SysSelector->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	SysSelector->SetSystem(System, 96);
 
-	InstanceParamUI = DFUIUtil::AddWidget<UEffectParameterInputUI>(WidgetTree, VBox);
+	InstanceParamUI = UDFUIUtil::AddWidget<UEffectParameterInputUI>(WidgetTree, VBox);
 	InstanceParamUI->SetSystem(System);
 	InstanceParamUI->Draw(Value->GetContext());
+	InstanceParamUI->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &USystemInstantiationParameterBindingWidget::LayoutChanged);
 }
 
 void USystemInstantiationParameterBindingWidget::WriteToContext(UParameterValueContext* Context)

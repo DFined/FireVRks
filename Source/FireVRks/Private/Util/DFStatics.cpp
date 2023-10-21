@@ -32,6 +32,7 @@ void UDFStatics::Reset()
 {
 	LAUNCHER_MANAGER->Reset();
 	EFFECT_SYSTEM_MANAGER->Initialize();
+	EFFECT_SPAWN_COORDINATOR->Reset();
 }
 
 TArray<FString> UDFStatics::GetFiles(FString FileTypes)

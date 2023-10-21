@@ -1,17 +1,22 @@
 #pragma once
+#include "DFInputPopup.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ExpandableArea.h"
 #include "Components/TextBlock.h"
-#include "Components/VerticalBox.h"
+#include "Kismet/GameplayStatics.h"
 #include "lib/Container/DFUILine.h"
 #include "UI/lib/DFStyleUtil.h"
+#include "Util/DFStatics.h"
+#include "DFUIUtil.generated.h"
 
 #define NDEBUG 1
 
-class DFUIUtil
+UCLASS()
+class UDFUIUtil : public UObject
 {
+	GENERATED_BODY()
 public:
 	/**
 	 * Util compact widget constructors
@@ -203,5 +208,16 @@ public:
 		DFStyleUtil::ImgButtonStyle(Button, Icon, Size);
 
 		return Button;
+	}
+
+	template <class InputType>
+	static UDFInputPopup* OpenInputPopup(APlayerController* Controller, FString Label)
+	{
+		auto Popup = CreateWidget<UDFInputPopup>(Controller, UDFInputPopup::StaticClass());
+		auto InputWidget = MakeWidget<InputType>(Popup->WidgetTree);
+		
+		Popup->AddToViewport(1000);
+		Popup->InitializePopup(InputWidget, Label);
+		return Popup;
 	}
 };

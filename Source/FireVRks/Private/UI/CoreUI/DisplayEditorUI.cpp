@@ -3,17 +3,19 @@
 
 #include "UI/CoreUI/DisplayEditorUI.h"
 
+#include "Components/CanvasPanelSlot.h"
 #include "Components/ScrollBoxSlot.h"
 #include "UI/DFUIUtil.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/LaunchSegmentTile.h"
+#include "UI/lib/ValidatedTextBox/TimeValidatedTextBox.h"
 
 UPanelWidget* UDisplayEditorUI::MakeRootWidget(UWidgetTree* Tree)
 {
-	RootBorder = DFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	DFStyleUtil::BasicBorderStyle(RootBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
 
-	Canvas = DFUIUtil::AddWidget<UCanvasPanel>(Tree, RootBorder);
+	Canvas = UDFUIUtil::AddWidget<UCanvasPanel>(Tree, RootBorder);
 
 	return RootBorder;
 }
@@ -33,46 +35,58 @@ void UDisplayEditorUI::Initialize(UDisplayData* fData)
 	}
 	for (auto Segment : *Data->GetLaunchSegments())
 	{
-		auto SegmentUI = DFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
+		auto SegmentUI = UDFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
 		auto bSlot = Cast<UCanvasPanelSlot>(SegmentUI->Slot);
 		SegmentUI->Initialize(Segment, this);
 		bSlot->SetAutoSize(true);
 		Children.Add(SegmentUI);
+		SegmentUI->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UDisplayEditorUI::ScheduleLayout);
 	}
-	Canvas->ForceLayoutPrepass();
 	this->ReTile();
 }
 
-void UDisplayEditorUI::NewSegment()
+void UDisplayEditorUI::NewSegment(UWidget* Input)
 {
+	auto TimeBox = Cast<UTimeValidatedTextBox>(Input);
 
 	auto Segment = UDisplayLaunchSegment::New(Data);
 	Data->GetLaunchSegments()->Add(Segment);
-	
-	auto SegmentUI = DFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
+	Segment->SetTime(TimeBox->GetSeconds());
+
+	auto SegmentUI = UDFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
 	auto bSlot = Cast<UCanvasPanelSlot>(SegmentUI->Slot);
 	SegmentUI->Initialize(Segment, this);
 	bSlot->SetAutoSize(true);
 	Children.Add(SegmentUI);
 
-	Canvas->ForceLayoutPrepass();
+	SegmentUI->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UDisplayEditorUI::ScheduleLayout);
 	ReTile();
+}
+
+void UDisplayEditorUI::GetNewTime()
+{
+	auto Ctrlr = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	auto Popup = UDFUIUtil::OpenInputPopup<UTimeValidatedTextBox>(Ctrlr, "Enter launch time for new segment");
+	auto InputBox = Popup->GetWidget<UTimeValidatedTextBox>();
+	InputBox->SetSeconds(0);
+	Popup->GetOnConfirm()->AddUniqueDynamic(this, &UDisplayEditorUI::NewSegment);
 }
 
 void UDisplayEditorUI::MakePlusButton(int Offset, int i)
 {
-	auto Btn = DFUIUtil::MakeImageButton(WidgetTree, Canvas, &Icons::PLUS_ICON, BUTTON_SIZE);
+	auto Btn = UDFUIUtil::MakeImageButton(WidgetTree, Canvas, &Icons::PLUS_ICON, BUTTON_SIZE);
 	Buttons.Add(Btn);
 	if (auto bSlot = Cast<UCanvasPanelSlot>(Btn->Slot))
 	{
-		bSlot->SetPosition(FVector2D(Offset + (2 * SPACING + BUTTON_SIZE)*i + SPACING, BUTTON_SIZE));
+		bSlot->SetPosition(FVector2D(Offset + (2 * SPACING + BUTTON_SIZE) * i + SPACING, BUTTON_SIZE));
 		bSlot->SetAutoSize(true);
 	}
-	Btn->OnPressed.AddUniqueDynamic(this, &UDisplayEditorUI::NewSegment);
+	Btn->OnPressed.AddUniqueDynamic(this, &UDisplayEditorUI::GetNewTime);
 }
 
 void UDisplayEditorUI::ReTile()
 {
+	ForceLayoutPrepass();
 	for (UButton* Button : Buttons)
 	{
 		Canvas->RemoveChild(Button);
@@ -105,14 +119,43 @@ void UDisplayEditorUI::Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* S
 
 UDisplayEditorUI* UDisplayEditorUI::NewEmpty(UPanelWidget* Parent)
 {
-	auto Editor = DFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
+	auto Editor = UDFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
 	Editor->Initialize(UDisplayData::New(Editor));
 	return Editor;
 }
 
 UDisplayEditorUI* UDisplayEditorUI::New(UPanelWidget* Parent, UDisplayData* Data)
 {
-	auto Editor = DFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
+	auto Editor = UDFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
 	Editor->Initialize(Data);
 	return Editor;
+}
+
+void UDisplayEditorUI::ScheduleDisplay()
+{
+	auto Segments = Data->GetLaunchSegments();
+
+	for(int i = 0; i < Segments->Num(); i++)
+	{
+		auto LaunchSettings = *(*Segments)[i]->GetLaunchSettings();
+		Children[i]->ScheduleLaunch();
+	}
+}
+
+void UDisplayEditorUI::ScheduleLayout()
+{
+		ReTileIn = 20;
+}
+
+void UDisplayEditorUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	if(ReTileIn == 0)
+	{
+		ReTile();
+		ReTileIn--;
+	}
+	else 
+	{
+		ReTileIn--;
+	}	
 }

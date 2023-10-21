@@ -28,7 +28,7 @@ void UArrayLaunchPattern::Init()
 	}
 }
 
-void UArrayLaunchPattern::Launch(UParameterValueContext* Context) const
+void UArrayLaunchPattern::Launch(UParameterValueContext* Context, float CommonDelay, bool IsTest) const
 {
 	if (const auto LauncherArray = ARRAY_NAME->GetValue(Context))
 	{
@@ -42,7 +42,6 @@ void UArrayLaunchPattern::Launch(UParameterValueContext* Context) const
 			for (const auto SystemContext : SYSTEMS->GetValue(Context))
 			{
 				const auto Launcher = (*Launchers)[Invert ? EndNum - i - 1 : i];
-				// GEngine->ForceGarbageCollection();
 			
 				const auto SystemInstanceParams = Cast<USystemInstantiationParameterValue>(SystemContext->Get(SYSTEM_PICKER));
 
@@ -51,12 +50,12 @@ void UArrayLaunchPattern::Launch(UParameterValueContext* Context) const
 					UDFStatics::EFFECT_SYSTEM_MANAGER->Get(SystemInstanceParams->GetSystem()),
 					SystemInstanceParams->GetContext(),
 					Launcher,
-					Delay * i,
-					SHELL_LIFETIME->GetValue(Context),
-					SHELL_VELOCITY->GetValue(Context)
+					CommonDelay + Delay * i,
+					SHELL_LIFETIME->GetValue(SystemContext),
+					SHELL_VELOCITY->GetValue(SystemContext)
 				);
 
-				UDFStatics::GetCoordinator()->Enqueue(true, SpawnData);
+				IsTest ? UDFStatics::GetCoordinator()->EnqueueTest(SpawnData) : UDFStatics::GetCoordinator()->EnqueueDisplay(SpawnData);
 			}
 		}
 	}

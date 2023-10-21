@@ -28,5 +28,10 @@ public:
 		return Time;
 	}
 
+	void SetTime(float fTime)
+	{
+		this->Time = fTime;
+	}
+
 	static UDisplayLaunchSegment* New(UObject* Outer);
 };

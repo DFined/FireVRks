@@ -33,6 +33,9 @@ class FIREVRKS_API UStackableLaunchInstanceTile : public UDFUIContainer
 	UPROPERTY()
 	UParameterValueContext* Context;
 
+	UPROPERTY()
+	UArrayLaunchParameterInputUI* LaunchInputUI;
+
 public:
 	UFUNCTION()
 	void AddTile();
@@ -47,4 +50,6 @@ public:
 	{
 		return Context;
 	}
+
+	void ScheduleLaunch(float Delay);
 };

@@ -7,10 +7,17 @@
 /**
  * Base polymorphic wrapper for simple DF-UI containers
  */
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDFUILayoutChange);
+
 UCLASS(Abstract)
 class FIREVRKS_API UDFUIContainer : public UDFUIBase
 {
 	GENERATED_BODY()
+
+protected:
+	FOnDFUILayoutChange LayoutChangeDelegate;
 	
 public:
 	
@@ -26,4 +33,15 @@ public:
 	virtual UPanelWidget* GetMountingPoint() PURE_VIRTUAL("GetMountingPoint", return nullptr;);
 
 	virtual void OnChange() PURE_VIRTUAL("OnChange",);
+
+	FOnDFUILayoutChange* GetLayoutChangeDelegate()
+	{
+		return &LayoutChangeDelegate;
+	}
+
+	UFUNCTION()
+	void LayoutChanged()
+	{
+		LayoutChangeDelegate.Broadcast();
+	}
 };

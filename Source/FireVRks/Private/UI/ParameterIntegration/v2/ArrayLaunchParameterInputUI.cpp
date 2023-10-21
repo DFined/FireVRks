@@ -1,12 +1,13 @@
 #include "UI/ParameterIntegration/v2/ArrayLaunchParameterInputUI.h"
 
+#include "UI/DFUIUtil.h"
 #include "Util/DFStatics.h"
 #include "World/Launcher/ArrayLaunchPattern.h"
 
-void UArrayLaunchParameterInputUI::Launch()
+void UArrayLaunchParameterInputUI::Launch(float Delay, bool Test)
 {
 	DumpToContext();
-	UDFStatics::GetArrayLaunchPattern()->Launch(Context);
+	UDFStatics::GetArrayLaunchPattern()->Launch(Context, Delay, Test);
 }
 
 UArrayLaunchParameterInputUI* UArrayLaunchParameterInputUI::InstanceEmpty(UPanelWidget* Widget)
@@ -21,7 +22,7 @@ UArrayLaunchParameterInputUI* UArrayLaunchParameterInputUI::Instance(UPanelWidge
 	{
 		return InstanceEmpty(Widget);
 	}
-	auto NewWidget = DFUIUtil::AddUserWidget<UArrayLaunchParameterInputUI>(Widget);
+	auto NewWidget = UDFUIUtil::AddUserWidget<UArrayLaunchParameterInputUI>(Widget);
 	NewWidget->SetProvider(UDFStatics::ARRAY_LAUNCH_PATTERN);
 	
 	NewWidget->Draw(fContext);

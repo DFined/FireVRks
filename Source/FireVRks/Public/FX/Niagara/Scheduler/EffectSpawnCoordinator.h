@@ -17,14 +17,24 @@ class FIREVRKS_API UEffectSpawnCoordinator : public UObject
 	UPROPERTY()
 	TArray<ULaunchSettings*> DisplayQueue;
 
+	float CurrentPlaybackPosition = 0;
+	int NumSkip = 0;
+
 public:
 	UFUNCTION(BlueprintCallable)
-	void Tick(bool IsTest, float DeltaSeconds);
+	void TickTesting(float DeltaSeconds);
+	UFUNCTION(BlueprintCallable)
+	void TickDisplay(float DeltaSeconds);
 
 	void SpawnEffect(ULaunchSettings* Data);
 
 	UFUNCTION(BlueprintCallable)
-	void Enqueue(bool IsTest, ULaunchSettings* Data);
+	void EnqueueTest(ULaunchSettings* Data);
+	void EnqueueDisplay(ULaunchSettings* Data);
+
+	UFUNCTION(BlueprintCallable)
+	void Seek(float Location);
+	void Reset();
 
 	static UEffectSpawnCoordinator* New();
 };

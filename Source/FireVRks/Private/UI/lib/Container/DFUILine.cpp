@@ -7,7 +7,7 @@
 
 UPanelWidget* UDFUILine::MakeRootWidget(UWidgetTree* Tree)
 {
-	HBox = DFUIUtil::MakeWidget<UHorizontalBox>(Tree);
+	HBox = UDFUIUtil::MakeWidget<UHorizontalBox>(Tree);
 	return HBox;
 }
 

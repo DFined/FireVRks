@@ -5,18 +5,18 @@
 
 UPanelWidget* USystemDisplayTile::MakeRootWidget(UWidgetTree* Tree)
 {
-	OuterBorder = DFUIUtil::MakeWidget<UBorder>(Tree);
+	OuterBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
 	return OuterBorder; 
 }
 
 void USystemDisplayTile::SetSystem(UEffectSystem* System, int Size)
 {
-	auto Box = DFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
-	auto Name = DFUIUtil::AddLabel(WidgetTree, Box, System->GetDisplayName());
+	auto Box = UDFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
+	auto Name = UDFUIUtil::AddLabel(WidgetTree, Box, System->GetDisplayName());
 	DFStyleUtil::TextBlockStyle(Name);
 	
-	auto Icon = DFUIUtil::AddWidget<UImage>(WidgetTree, Box);
+	auto Icon = UDFUIUtil::AddWidget<UImage>(WidgetTree, Box);
 	Icon->SetBrush(DFStyleUtil::SetupImageBrush(System->GetIcon(), Size));
 	DFStyleUtil::SafeSetVBoxSlotAlignment(Icon->Slot, HAlign_Center);
 }

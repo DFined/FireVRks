@@ -12,7 +12,7 @@
 
 UPanelWidget* UListParameterBindingWidget::MakeRootWidget(UWidgetTree* Tree)
 {
-	OuterBorder = DFUIUtil::MakeWidget<UBorder>(Tree);
+	OuterBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
 	return OuterBorder;
 }
@@ -26,30 +26,32 @@ void UListParameterBindingWidget::NewItem()
 {
 	AddWidgetFromParam(UMapParameterValueContext::New(this), Cast<UListFormalParameter>(Parameter)->GetChildType());
 	this->OnChange();
+	this->LayoutChanged();
 }
 
 void UListParameterBindingWidget::AddWidgetFromParam(UParameterValueContext* SubContext, UAbstractFormalParameter* ChildType)
 {
-	UParameterRenderer::RenderParam(ListStack, SubContext, ChildType);
+	auto NewWidget = UParameterRenderer::RenderParam(ListStack, SubContext, ChildType);
+	NewWidget->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UListParameterBindingWidget::LayoutChanged);
 }
 
 void UListParameterBindingWidget::Initialize(UAbstractFormalParameter* fParameter, UParameterValueContext* Context)
 {
-	auto OuterVBox = DFUIUtil::AddWidget<UVerticalBox>(this->WidgetTree, OuterBorder);
-	auto HeaderBox = DFUIUtil::AddUserWidget<UDFUILine>(OuterVBox);
-	auto NameLabel = DFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), fParameter->GetDisplayName());
+	auto OuterVBox = UDFUIUtil::AddWidget<UVerticalBox>(this->WidgetTree, OuterBorder);
+	auto HeaderBox = UDFUIUtil::AddUserWidget<UDFUILine>(OuterVBox);
+	auto NameLabel = UDFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), fParameter->GetDisplayName());
 	DFStyleUtil::TextBlockStyle(NameLabel);
 	if(UHorizontalBoxSlot* TSlot = Cast<UHorizontalBoxSlot>(NameLabel->Slot))
 	{
 		TSlot->SetPadding(FMargin(0,0,30,0));
 		TSlot->SetVerticalAlignment(VAlign_Center);
 	}
-	auto Button = DFUIUtil::AddWidget<UButton>(HeaderBox);
-	DFUIUtil::AddLabel(WidgetTree, Button, "Create new");
+	auto Button = UDFUIUtil::AddWidget<UButton>(HeaderBox);
+	UDFUIUtil::AddLabel(WidgetTree, Button, "Create new");
 	DFStyleUtil::TextButtonStyle(Button, DFStyleUtil::GREY_LVL_2);
 	Button->OnPressed.AddUniqueDynamic(this, &UListParameterBindingWidget::NewItem);
 
-	ListStack = DFUIUtil::AddUserWidget<UDFUIStack>(OuterVBox);
+	ListStack = UDFUIUtil::AddUserWidget<UDFUIStack>(OuterVBox);
 
 
 	auto Vals = Cast<UListParameterValue>(Context->Get(Parameter));

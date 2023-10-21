@@ -8,9 +8,9 @@ void UParameterLineBindingWidget::Initialize(UAbstractFormalParameter* FParamete
 {
 	DFStyleUtil::LineBorderStyle(Border);
 
-	auto Line = DFUIUtil::AddUserWidget<UDFUILine>(Border);
+	auto Line = UDFUIUtil::AddUserWidget<UDFUILine>(Border);
 
-	auto NameBox = DFUIUtil::AddLabel(WidgetTree, Line->GetMountingPoint(), FParameter->GetDisplayName());
+	auto NameBox = UDFUIUtil::AddLabel(WidgetTree, Line->GetMountingPoint(), FParameter->GetDisplayName());
 	Cast<UHorizontalBoxSlot>(NameBox->Slot)->SetPadding(FMargin(0, 0, 30, 0));
 
 	DFStyleUtil::TextBlockStyle(NameBox);
@@ -24,7 +24,7 @@ void UParameterLineBindingWidget::Initialize(UAbstractFormalParameter* FParamete
 
 UPanelWidget* UParameterLineBindingWidget::MakeRootWidget(UWidgetTree* Tree)
 {
-	Border = DFUIUtil::MakeWidget<UBorder>(Tree);
+	Border = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	return Border;
 }
 

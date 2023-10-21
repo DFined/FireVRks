@@ -13,7 +13,7 @@ UCanvasPanelSlot* UInsertablePanelGrid::GetSlot(int X, int Y)
 
 void UInsertablePanelGrid::MakePlusButton(int X, int Y)
 {
-	auto Btn = DFUIUtil::MakeImageButton(WidgetTree, this->GetMountingPoint(), &Icons::PLUS_ICON, BUTTON_SIZE);
+	auto Btn = UDFUIUtil::MakeImageButton(WidgetTree, this->GetMountingPoint(), &Icons::PLUS_ICON, BUTTON_SIZE);
 	auto BSlot = Cast<UCanvasPanelSlot>(Btn->Slot);
 	BSlot->SetAutoSize(true);
 	BSlot->SetPosition(FVector2D(X, Y));
@@ -105,7 +105,7 @@ void UInsertablePanelGrid::ReTile()
 
 UPanelWidget* UInsertablePanelGrid::MakeRootWidget(UWidgetTree* Tree)
 {
-	Panel = DFUIUtil::MakeWidget<UCanvasPanel>(Tree);
+	Panel = UDFUIUtil::MakeWidget<UCanvasPanel>(Tree);
 	return Panel;
 }
 

@@ -5,19 +5,43 @@
 
 #include "Util/DFStatics.h"
 
-void UEffectSpawnCoordinator::Tick(bool IsTest, float DeltaSeconds)
+void UEffectSpawnCoordinator::TickTesting(float DeltaSeconds)
 {
-	auto Queue = IsTest ? &TestQueue : &DisplayQueue;
-	for (int i = Queue->Num() - 1; i >= 0; i--)
+	for (int i = TestQueue.Num() - 1; i >= 0; i--)
 	{
-		auto Val = (*Queue)[i];
+		auto Val = (TestQueue)[i];
 		Val->SetSpawnIn(Val->GetSpawnIn() - DeltaSeconds);
 		if (Val->GetSpawnIn() <= 0)
 		{
 			SpawnEffect(Val);
-			Queue->RemoveAt(i);
+			TestQueue.RemoveAt(i);
 		}
 	}
+}
+
+void UEffectSpawnCoordinator::TickDisplay(float Position)
+{
+	if (NumSkip <= 0)
+	{
+		float StartTime = CurrentPlaybackPosition;
+		float EndTime = Position;
+		for (int i = 0; i < DisplayQueue.Num(); i++)
+		{
+			if (DisplayQueue[i]->GetSpawnIn() >= StartTime)
+			{
+				if (DisplayQueue[i]->GetSpawnIn() < EndTime)
+				{
+					SpawnEffect(DisplayQueue[i]);
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+		CurrentPlaybackPosition = Position;
+	}
+	NumSkip--;
 }
 
 void UEffectSpawnCoordinator::SpawnEffect(ULaunchSettings* Data)
@@ -29,10 +53,31 @@ void UEffectSpawnCoordinator::SpawnEffect(ULaunchSettings* Data)
 	}
 }
 
-
-void UEffectSpawnCoordinator::Enqueue(bool IsTest, ULaunchSettings* Data)
+void UEffectSpawnCoordinator::EnqueueDisplay(ULaunchSettings* Data)
 {
-	auto Queue = IsTest ? &TestQueue : &DisplayQueue;
+	int i = 0;
+	while (i < DisplayQueue.Num() && *DisplayQueue[i] < *Data)
+	{
+		i++;
+	}
+	DisplayQueue.Insert(Data, i);
+}
+
+void UEffectSpawnCoordinator::Seek(float Location)
+{
+	CurrentPlaybackPosition = Location;
+	NumSkip = 2;
+}
+
+void UEffectSpawnCoordinator::Reset()
+{
+	TestQueue.Empty();
+	DisplayQueue.Empty();
+}
+
+void UEffectSpawnCoordinator::EnqueueTest(ULaunchSettings* Data)
+{
+	auto Queue = &TestQueue;
 
 	if (Queue->IsEmpty())
 	{

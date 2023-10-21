@@ -8,30 +8,31 @@
 #include "UI/Icons.h"
 #include "UI/CoreUI/DisplayEditorUI.h"
 #include "UI/CoreUI/StackableLaunchInstanceTile.h"
+#include "Util/DFU.h"
 
 UPanelWidget* ULaunchSegmentTile::MakeRootWidget(UWidgetTree* Tree)
 {
-	RootBorder = DFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	DFStyleUtil::BasicBorderStyle(RootBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_3);
-	auto VBox = DFUIUtil::AddWidget<UVerticalBox>(Tree, RootBorder);
+	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, RootBorder);
 
-	auto TimeHBox = DFUIUtil::AddWidget<UHorizontalBox>(Tree, VBox);
+	auto TimeHBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, VBox);
 
-	auto TimeLabel = DFUIUtil::AddWidget<UTextBlock>(Tree, TimeHBox);
+	auto TimeLabel = UDFUIUtil::AddWidget<UTextBlock>(Tree, TimeHBox);
 	TimeLabel->SetText(FText::FromString("Launch Time: "));
 	DFStyleUtil::TextBlockStyle(TimeLabel);
 	DFStyleUtil::SafeSetHBoxSlotWidth(TimeLabel->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 
-	TimeText = DFUIUtil::AddWidget<UTextBlock>(Tree, TimeHBox);
+	TimeText = UDFUIUtil::AddWidget<UTextBlock>(Tree, TimeHBox);
 	DFStyleUtil::TextBlockStyle(TimeText);
 	DFStyleUtil::SafeSetHBoxSlotWidth(TimeText->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 
-	auto DelBtn = DFUIUtil::MakeImageButton(Tree, TimeHBox, &Icons::DELETE_ICON, 32);
+	auto DelBtn = UDFUIUtil::MakeImageButton(Tree, TimeHBox, &Icons::DELETE_ICON, 32);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	DelBtn->OnPressed.AddUniqueDynamic(this, &ULaunchSegmentTile::Remove);
 
 
-	Stack = DFUIUtil::AddUserWidget<UDFUIStack>(VBox);
+	Stack = UDFUIUtil::AddUserWidget<UDFUIStack>(VBox);
 	return RootBorder;
 }
 
@@ -47,8 +48,10 @@ UPanelSlot* ULaunchSegmentTile::Append(UWidget* Widget)
 
 void ULaunchSegmentTile::NewTile(UParameterValueContext* Context)
 {
-	auto Tile = DFUIUtil::AddUserWidget<UStackableLaunchInstanceTile>(Stack);
+	auto Tile = UDFUIUtil::AddUserWidget<UStackableLaunchInstanceTile>(Stack);
 	Tile->Initialize(Context, this);
+	Tile->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &ULaunchSegmentTile::LayoutChanged);
+	Tiles.Add(Tile);
 }
 
 void ULaunchSegmentTile::NewTile(UWidget* Widget)
@@ -70,7 +73,7 @@ void ULaunchSegmentTile::Initialize(UDisplayLaunchSegment* fSegment, UDisplayEdi
 		NewTile(Context);
 	}
 
-	TimeText->SetText(FText::FromString(FString::SanitizeFloat(Segment->GetTime())));
+	TimeText->SetText(FText::FromString(DFU::SecondsToTimeCode(Segment->GetTime())));
 	this->Parent = EditorParent;
 }
 
@@ -92,4 +95,13 @@ void ULaunchSegmentTile::RemoveTile(UStackableLaunchInstanceTile* StackableLaunc
 	
 	Parent->ForceLayoutPrepass();
 	Parent->ReTile();
+	Tiles.Remove(StackableLaunchInstanceTile);
+}
+
+void ULaunchSegmentTile::ScheduleLaunch()
+{
+	for (auto Tile : Tiles)
+	{
+		Tile->ScheduleLaunch(Segment->GetTime());
+	}
 }

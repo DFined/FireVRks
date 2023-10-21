@@ -18,16 +18,21 @@ void AFireworkShellBase::Spawn()
 	System->SpawnSystem(USystemSpawnData::New(this, Context, this->GetActorLocation(), Velocity), UDFStatics::GetPlayer());
 }
 
+void AFireworkShellBase::DestroyShell(UNiagaraComponent* PSystem)
+{
+	this->Destroy();
+}
 
 
 void AFireworkShellBase::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 	Lifetime -= DeltaSeconds;
-	if (Lifetime <= 0)
+	if (Lifetime <= 0 && !IsSpawned)
 	{
 		Spawn();
-		this->Destroy();
+		IsSpawned = true;
+		Emitter->Deactivate();
 	}
 }
 
@@ -39,9 +44,10 @@ void AFireworkShellBase::OnConstruction(const FTransform& Transform)
 	Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	Sphere->SetStaticMesh(UDFStatics::SPHERE_MESH);
 
-	auto Emitter = Cast<UNiagaraComponent>(AddComponentByClass(UNiagaraComponent::StaticClass(), false, LocalTransform, false));
+	Emitter = Cast<UNiagaraComponent>(AddComponentByClass(UNiagaraComponent::StaticClass(), false, LocalTransform, false));
 	Emitter->SetAsset(UDFStatics::TRAIL_SYSTEM);
 	Emitter->Activate(true);
+	Emitter->OnSystemFinished.AddUniqueDynamic(this, &AFireworkShellBase::DestroyShell);
 }
 
 AFireworkShellBase* AFireworkShellBase::MakeShell(UObject* ContextObject, FVector* Location, FRotator* Rotation, ULaunchSettings* Settings)
