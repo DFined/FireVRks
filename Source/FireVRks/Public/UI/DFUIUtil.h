@@ -4,11 +4,10 @@
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/ExpandableArea.h"
+#include "Components/Spacer.h"
 #include "Components/TextBlock.h"
-#include "Kismet/GameplayStatics.h"
 #include "lib/Container/DFUILine.h"
 #include "UI/lib/DFStyleUtil.h"
-#include "Util/DFStatics.h"
 #include "DFUIUtil.generated.h"
 
 #define NDEBUG 1
@@ -17,6 +16,7 @@ UCLASS()
 class UDFUIUtil : public UObject
 {
 	GENERATED_BODY()
+
 public:
 	/**
 	 * Util compact widget constructors
@@ -47,10 +47,10 @@ public:
 	{
 		if (auto UserWidget = FindOuterParent(Widget))
 		{
-			if(auto OuterAsTarget = Cast<T>(UserWidget))
+			if (auto OuterAsTarget = Cast<T>(UserWidget))
 			{
 				return OuterAsTarget;
-			} 
+			}
 			return AttemptFindWidgetByType<T>(UserWidget);
 		}
 		return nullptr;
@@ -90,9 +90,9 @@ public:
 				}
 			}
 		}
-		if(auto ParentAsWidget = Cast<UWidget>(Parent))
+		if (auto ParentAsWidget = Cast<UWidget>(Parent))
 		{
-			return FindOuterParent(ParentAsWidget);			
+			return FindOuterParent(ParentAsWidget);
 		}
 		return nullptr;
 	}
@@ -202,6 +202,14 @@ public:
 		return TextBox;
 	}
 
+	static UButton* MakeImageButton(UWidgetTree* Tree, UPanelWidget* Parent, UTexture2D* Image, int Size)
+	{
+		auto Button = AddWidget<UButton>(Tree, Parent);
+		DFStyleUtil::ImgButtonStyle(Button, Image, Size);
+
+		return Button;
+	}
+
 	static UButton* MakeImageButton(UWidgetTree* Tree, UPanelWidget* Parent, Icon* Icon, int Size)
 	{
 		auto Button = AddWidget<UButton>(Tree, Parent);
@@ -215,9 +223,47 @@ public:
 	{
 		auto Popup = CreateWidget<UDFInputPopup>(Controller, UDFInputPopup::StaticClass());
 		auto InputWidget = MakeWidget<InputType>(Popup->WidgetTree);
-		
+
 		Popup->AddToViewport(1000);
 		Popup->InitializePopup(InputWidget, Label);
 		return Popup;
+	}
+
+	static UButton* AddButtonToButtonPanel(UHorizontalBox* Panel, FString ButtonLabel, UWidgetTree* Tree)
+	{
+		if(Panel->GetChildrenCount() == 0)
+		{
+			auto Spacer = AddWidget<USpacer>(Tree, Panel);
+			DFStyleUtil::SafeSetHBoxSlotWidth(Spacer->Slot, FSlateChildSize(ESlateSizeRule::Fill));
+		}
+
+		auto Button = AddWidget<UButton>(Tree, Panel);
+		DFStyleUtil::SafeSetHBoxSlotWidth(Button->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
+		DFStyleUtil::TextButtonStyle(Button, DFStyleUtil::GREY_LVL_3);
+
+		auto Label = AddWidget<UTextBlock>(Tree, Button);
+		Label->SetText(FText::FromString(ButtonLabel));
+		DFStyleUtil::TextBlockStyle(Label);
+		
+		
+		auto Spacer = AddWidget<USpacer>(Tree, Panel);
+		DFStyleUtil::SafeSetHBoxSlotWidth(Spacer->Slot, FSlateChildSize(ESlateSizeRule::Fill));
+		
+		return Button;
+	}
+
+	template <class WidgetType>
+	static WidgetType* NamedWidget(UPanelWidget* Parent, UWidgetTree* Tree, FString Label)
+	{
+		auto HBox = AddWidget<UHorizontalBox>(Tree, Parent);
+		auto LabelWidget = AddWidget<UTextBlock>(Tree, HBox);
+		LabelWidget->SetText(FText::FromString(Label));
+		DFStyleUtil::TextBlockStyle(LabelWidget);
+		
+		auto Widget = AddWidget<WidgetType>(Tree, HBox);
+		DFStyleUtil::SafeSetHBoxSlotWidth(Widget->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Center);
+		DFStyleUtil::SetPadding<UHorizontalBoxSlot>(Widget, FMargin(15,0,10,0));
+
+		return Widget;
 	}
 };

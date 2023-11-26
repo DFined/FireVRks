@@ -19,6 +19,30 @@ class FIREVRKS_API UParamUtil : public UObject
 {
 	GENERATED_BODY()
 
+	static inline FString PARAMETER_NAMES[] = {
+		"INTEGER",
+		"BOOLEAN",
+		"ENUM",
+		"FLOAT",
+		"COLOR",
+		"BLOCK",
+		"LIST",
+		"SYSTEM_INSTANTIATION",
+		"ARRAY_SELECTOR"
+	};
+
+	static inline ParameterType TYPES[] = {
+		INTEGER,
+		BOOLEAN,
+		ENUM,
+		FLOAT,
+		COLOR,
+		BLOCK,
+		LIST,
+		SYSTEM_INSTANTIATION,
+		ARRAY_SELECTOR
+	};
+
 public:
 	static WidgetWithValue* GetValueWidget(UUserWidget* Outer, UAbstractParameterValue* Value, ParameterType Type);
 
@@ -54,4 +78,16 @@ public:
 	}
 
 	static void WriteContainerToContext(UPanelWidget* Container, UParameterValueContext* Context);
+
+	static FString Name(ParameterType Type)
+	{
+		return PARAMETER_NAMES[Type];
+	}
+
+	static ParameterType Type(int Ordinal)
+	{
+		return TYPES[Ordinal];
+	}
+
+	static UAbstractFormalParameter* NewParam(UObject* Outer, FString Name, bool Required, ParameterType Type);
 };

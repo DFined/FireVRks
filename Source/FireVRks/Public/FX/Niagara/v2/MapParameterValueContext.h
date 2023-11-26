@@ -14,6 +14,7 @@ public:
 	virtual UAbstractParameterValue* Get(UAbstractFormalParameter* Parameter) override;
 
 	virtual void SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value) override;
+	void SetValue(UDFId* Parameter, UAbstractParameterValue* Value);
 
 	static UMapParameterValueContext* New(UObject* Outer)
 	{

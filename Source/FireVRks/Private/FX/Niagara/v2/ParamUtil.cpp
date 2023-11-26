@@ -1,5 +1,9 @@
 #include "FX/Niagara/v2/ParamUtil.h"
 
+#include "FX/Niagara/v2/FormalParameter/BoolFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/ColorFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/FloatFormalParameter.h"
+#include "FX/Niagara/v2/FormalParameter/IntFormalParameter.h"
 #include "FX/Niagara/v2/ParameterValue/IntParameterValue.h"
 #include "UI/DFUIUtil.h"
 #include "UI/lib/ParameterBindingCheckbox.h"
@@ -65,3 +69,16 @@ void UParamUtil::WriteContainerToContext(UPanelWidget* Container, UParameterValu
 		}			
 	}
 }
+
+UAbstractFormalParameter* UParamUtil::NewParam(UObject* Outer, FString Name, bool Required, ParameterType Type)
+{
+	switch (Type)
+	{
+		case INTEGER: return Setup(Name, Required, UIntFormalParameter::New(Outer, 1));
+		case FLOAT: return Setup(Name, Required, UFloatFormalParameter::New(Outer, 1.0));
+		case COLOR: return Setup(Name, Required, UColorFormalParameter::New(Outer, FLinearColor(255, 0, 0)));
+		case BOOLEAN: return Setup(Name, Required, UBoolFormalParameter::New(Outer, false));
+		default: return nullptr;
+	}
+}
+

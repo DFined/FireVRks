@@ -15,7 +15,7 @@ void AFireworkShellBase::Spawn()
 {
 	auto Velocity = Component->Velocity;
 	Velocity.Normalize(0.05);
-	System->SpawnSystem(USystemSpawnData::New(this, Context, this->GetActorLocation(), Velocity), UDFStatics::GetPlayer());
+	System->SpawnSystem(USystemSpawnData::New(this, Context, this->GetActorLocation(), Velocity));
 }
 
 void AFireworkShellBase::DestroyShell(UNiagaraComponent* PSystem)

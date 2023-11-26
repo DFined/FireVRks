@@ -12,7 +12,7 @@ int UStackableLaunchInstanceTile::PLUS_BUTTON_SIZE = 32;
 UPanelWidget* UStackableLaunchInstanceTile::MakeRootWidget(UWidgetTree* Tree)
 {
 	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	DFStyleUtil::BasicBorderStyle(RootBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
+	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 	auto HBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, RootBorder);
 	VBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, HBox);
 	

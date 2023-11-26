@@ -26,4 +26,14 @@ public:
 	static UEffectSystemManager* Instance();
 
 	UEffectSystem* Get(UDFId* Id);
+
+	void List(TArray<UEffectSystem*>& Systems)
+	{
+		TArray<UDFId*> Ids = TArray<UDFId*>();
+		Effects.GetKeys(Ids);
+		for(auto Id : Ids)
+		{
+			Systems.Add(*Effects.Find(Id));
+		}
+	}
 };

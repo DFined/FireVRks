@@ -66,3 +66,13 @@ AActor* UDFStatics::GetPlayer()
 {
 	return Player;
 }
+
+void UDFStatics::SetPlayer(AActor* bPlayer)
+{
+	Player = bPlayer;
+}
+
+UEffectSystem* UDFStatics::GetDefaultEffectSystem()
+{
+	return EFFECT_SYSTEM_MANAGER->GetDefaultEffect();
+}

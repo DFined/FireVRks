@@ -1,12 +1,14 @@
 #include "UI/DFUIUtil.h"
 #include "UI/ParameterIntegration/v2/BlockParameterBindingWidget.h"
 #include "UI/ParameterIntegration/v2/ListParameterBindingWidget.h"
+#include "UI/ParameterIntegration/v2/ParameterDrawType.h"
 #include "UI/ParameterIntegration/v2/ParameterLineBindingWidget.h"
 #include "UI/ParameterIntegration/v2/ParameterRenderer.h"
 #include "UI/ParameterIntegration/v2/SystemInstantiationParameterBindingWidget.h"
 
 
-UParameterBindingWidget* UParameterRenderer::RenderParam(UDFUIContainer* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter)
+UParameterBindingWidget* UParameterRenderer::RenderParam(
+	UDFUIContainer* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter, ParameterDrawType DrawType)
 {
 	UParameterBindingWidget* PBW;
 	switch (Parameter->GetType())
@@ -17,6 +19,6 @@ UParameterBindingWidget* UParameterRenderer::RenderParam(UDFUIContainer* Contain
 		default: PBW = UDFUIUtil::AddUserWidget<UParameterLineBindingWidget>(Container); 
 	}
 	
-	PBW->Setup(Parameter, ValueContext);
+	PBW->Setup(Parameter, ValueContext, DrawType);
 	return PBW;
 }

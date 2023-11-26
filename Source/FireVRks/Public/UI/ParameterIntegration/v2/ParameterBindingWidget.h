@@ -1,4 +1,5 @@
 #pragma once
+#include "ParameterDrawType.h"
 #include "Blueprint/UserWidget.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
 #include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
@@ -13,15 +14,20 @@ class FIREVRKS_API UParameterBindingWidget : public UDFUIContainer
 protected:
 	UPROPERTY()
 	UAbstractFormalParameter* Parameter;
+
+	UPROPERTY()
+	UParameterValueContext* Context;
+
+	ParameterDrawType DrawType;
 	
 public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override PURE_VIRTUAL("MakeRootWidget", return nullptr;);
 
 	virtual UPanelWidget* GetMountingPoint() override PURE_VIRTUAL("GetMountingPoint", return nullptr;);
 
-	virtual void Setup(UAbstractFormalParameter* FParameter, UParameterValueContext* Context);
+	virtual void Setup(UAbstractFormalParameter* FParameter, UParameterValueContext* Context, ParameterDrawType DrawType);
 	
-	virtual void Initialize(UAbstractFormalParameter* fParameter, UParameterValueContext* Context) PURE_VIRTUAL("Initialize",);
+	virtual void InitializeBindingWidget() PURE_VIRTUAL("Initialize",);
 
 	virtual void WriteToContext(UParameterValueContext* Context) PURE_VIRTUAL("WriteToContext",);
 

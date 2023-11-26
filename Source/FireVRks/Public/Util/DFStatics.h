@@ -48,10 +48,9 @@ public:
 	static AActor* GetPlayer();
 
 	UFUNCTION(BlueprintCallable)
-	static void SetPlayer(AActor* bPlayer)
-	{
-		Player = bPlayer;
-	}
+	static void SetPlayer(AActor* bPlayer);
+
+	static UEffectSystem* GetDefaultEffectSystem();
 };
 
 template <class Type>

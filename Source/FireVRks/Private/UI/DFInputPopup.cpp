@@ -3,13 +3,14 @@
 
 #include "UI/DFInputPopup.h"
 
+#include "Components/BorderSlot.h"
 #include "Components/VerticalBox.h"
 #include "UI/DFUIUtil.h"
 
 UPanelWidget* UDFInputPopup::MakeRootWidget(UWidgetTree* Tree)
 {
 	RootBox = UDFUIUtil::MakeWidget<UVerticalBox>(Tree);
-	return RootBox; 
+	return RootBox;
 }
 
 UPanelWidget* UDFInputPopup::GetMountingPoint()
@@ -33,11 +34,13 @@ void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 {
 	auto BaseBorder = UDFUIUtil::AddWidget<UBorder>(WidgetTree, RootBox);
 	auto RootBorder = UDFUIUtil::AddWidget<UBorder>(WidgetTree, BaseBorder);
-	DFStyleUtil::BasicBorderStyle(BaseBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_4);
-	DFStyleUtil::BasicBorderStyle(RootBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_3);
+	DFStyleUtil::RoundedBorderStyle(BaseBorder, DFStyleUtil::GREY_LVL_3, 10);
+	DFStyleUtil::RoundedBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2, 10);
+	DFStyleUtil::SetPadding<UBorderSlot>(RootBorder, FMargin(5, 5, 5, 5));
+
 	DFStyleUtil::SafeSetVBoxSlotAlignment(BaseBorder->Slot, HAlign_Center);
 	DFStyleUtil::SafeSetVBoxSlotWidth(BaseBorder->Slot, FSlateChildSize(ESlateSizeRule::Fill));
-	
+
 	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(WidgetTree, RootBorder);
 	auto Text = UDFUIUtil::AddWidget<UTextBlock>(WidgetTree, VBox);
 	Text->SetText(FText::FromString(TooltipText));
@@ -47,7 +50,7 @@ void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 	InputWidget = Input;
 	VBox->AddChildToVerticalBox(Input);
 	DFStyleUtil::SafeSetVBoxSlotAlignment(InputWidget->Slot, HAlign_Center);
-	
+
 	auto HBox = UDFUIUtil::AddWidget<UHorizontalBox>(WidgetTree, VBox);
 	DFStyleUtil::SafeSetVBoxSlotAlignment(HBox->Slot, HAlign_Center);
 	auto OkBtn = UDFUIUtil::AddWidget<UButton>(WidgetTree, HBox);
@@ -57,7 +60,7 @@ void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 	OkText->SetText(FText::FromString("Ok"));
 	OkBtn->SetContent(OkText);
 	OkBtn->OnPressed.AddUniqueDynamic(this, &UDFInputPopup::Confirm);
-	
+
 	DFStyleUtil::TextBlockStyle(OkText);
 	DFStyleUtil::TextButtonStyle(OkBtn, DFStyleUtil::GREY_LVL_2);
 

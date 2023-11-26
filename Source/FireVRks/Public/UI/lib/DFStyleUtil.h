@@ -23,12 +23,16 @@ public:
 	static FLinearColor LIGHT_TEXT_1;
 	static FSlateFontInfo DEFAULT_FONT;
 
+	static FLinearColor SELECTED_LEVEL_3;
+
 	static void LineBorderStyle(UBorder* Border);
-	static void BasicBorderStyle(UBorder* Border, ESlateBrushDrawType::Type DrawType, FLinearColor Color);
+	static void BasicBorderStyle(UBorder* Border, FLinearColor Color);
+	static void RoundedBorderStyle(UBorder* Border, FLinearColor Color, int radius);
 	static void TextBoxStyle(UEditableTextBox* Border);
 	static void TextBlockStyle(UTextBlock* TextBlock);
 	static void CheckBoxStyle(UCheckBox* TextBlock);
 	static void TextButtonStyle(UButton* Button, FLinearColor Color);
+	static void ImgButtonStyle(UButton* Button, UTexture2D* Img, float size);
 	static void ImgButtonStyle(UButton* Button, Icon* Icon, float size);
 
 	static FSlateBrush SetupImageBrush(UTexture2D* Icon, float size);
@@ -40,6 +44,8 @@ public:
 	static UTexture2D* DEFAULT_TEXTURE;
 
 	static void SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size);
+	static void SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, EHorizontalAlignment Alignment);
+	static void SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, EHorizontalAlignment HAlignment, EVerticalAlignment VAlignment);
 	static void SafeSetVBoxSlotAlignment(UPanelSlot* Slot, EHorizontalAlignment Alignment);
 
 	template<class SlotType>

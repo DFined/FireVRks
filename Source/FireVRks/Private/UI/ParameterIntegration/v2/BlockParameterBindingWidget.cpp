@@ -27,7 +27,7 @@ void UBlockParameterBindingWidget::LayoutChangedTab(UExpandableArea* Area, bool 
 	LayoutChanged();
 }
 
-void UBlockParameterBindingWidget::Initialize(UAbstractFormalParameter* Param, UParameterValueContext* Context)
+void UBlockParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParameter* Param, UParameterValueContext* Context, ParameterDrawType DrawType)
 {
 
 	UBlockFormalParameter* ParamsBlock = Cast<UBlockFormalParameter>(Parameter);
@@ -36,7 +36,7 @@ void UBlockParameterBindingWidget::Initialize(UAbstractFormalParameter* Param, U
 
 
 	DFStyleUtil::SetPadding<UVerticalBoxSlot>(OuterBorder, FMargin(10, 0, 0, 0));
-	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_1);
+	DFStyleUtil::BasicBorderStyle(OuterBorder, DFStyleUtil::GREY_LVL_1);
 
 	HeaderBox = UDFUIUtil::MakeWidget<UHorizontalBox>(WidgetTree);
 	auto BlockName = UDFUIUtil::AddLabel(WidgetTree, HeaderBox, ParamsBlock->GetDisplayName());
@@ -57,7 +57,7 @@ void UBlockParameterBindingWidget::Initialize(UAbstractFormalParameter* Param, U
 
 	auto OverridesBorder = UDFUIUtil::AddWidget<UBorder>(WidgetTree, ListWrapper);
 
-	DFStyleUtil::BasicBorderStyle(OverridesBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_1);
+	DFStyleUtil::BasicBorderStyle(OverridesBorder, DFStyleUtil::GREY_LVL_1);
 
 	OverrideParamsStack = UDFUIUtil::MakeUserWidget<UDFUIStack>(OverridesBorder);
 
@@ -66,7 +66,7 @@ void UBlockParameterBindingWidget::Initialize(UAbstractFormalParameter* Param, U
 		if (ChildParam->GetPredicate()->Check(Context))
 		{
 			UDFUIContainer* Container = ChildParam->IsRequired() ? RequiredParamsStack : OverrideParamsStack;
-			auto ChildWidget = UParameterRenderer::RenderParam(Container, Context, ChildParam);
+			auto ChildWidget = UParameterRenderer::RenderParam(Container, Context, ChildParam, DrawType);
 			ChildWidget->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UBlockParameterBindingWidget::LayoutChanged);
 		}
 	}
@@ -91,4 +91,8 @@ void UBlockParameterBindingWidget::WriteToContext(UParameterValueContext* Contex
 	Context->SetValue(Parameter, Val);
 	UParamUtil::WriteContainerToContext(RequiredParamsStack->GetMountingPoint(), Context);
 	UParamUtil::WriteContainerToContext(OverrideParamsStack->GetMountingPoint(), Context);
+}
+
+void UBlockParameterBindingWidget::Redraw()
+{
 }

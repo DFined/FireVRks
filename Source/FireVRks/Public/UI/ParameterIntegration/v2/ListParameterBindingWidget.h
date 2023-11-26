@@ -24,12 +24,14 @@ class FIREVRKS_API UListParameterBindingWidget : public UParameterBindingWidget
 	UPROPERTY()
 	UDFUIStack* ListStack;
 
+	ParameterDrawType DrawType;
+
 public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	UFUNCTION()
 	void NewItem();
 	void AddWidgetFromParam(UParameterValueContext* SubContext, UAbstractFormalParameter* ChildType);
-	virtual void Initialize(UAbstractFormalParameter* Parameter, UParameterValueContext* Context) override;
+	virtual void InitializeBindingWidget(UAbstractFormalParameter* Parameter, UParameterValueContext* Context, ParameterDrawType DrawType) override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;
 };

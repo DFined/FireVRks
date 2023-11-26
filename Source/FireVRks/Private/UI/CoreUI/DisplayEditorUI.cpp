@@ -5,6 +5,7 @@
 
 #include "Components/CanvasPanelSlot.h"
 #include "Components/ScrollBoxSlot.h"
+#include "Kismet/GameplayStatics.h"
 #include "UI/DFUIUtil.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/LaunchSegmentTile.h"
@@ -13,7 +14,7 @@
 UPanelWidget* UDisplayEditorUI::MakeRootWidget(UWidgetTree* Tree)
 {
 	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	DFStyleUtil::BasicBorderStyle(RootBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
+	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 
 	Canvas = UDFUIUtil::AddWidget<UCanvasPanel>(Tree, RootBorder);
 

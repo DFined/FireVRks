@@ -291,5 +291,5 @@ public:
 	FString GetId();
 	FString GetName();
 	virtual UTexture2D* GetIcon() override;
-	virtual void SpawnSystem(USystemSpawnData* Data, AActor* PlayerRef) override;
+	virtual void SpawnSystem(USystemSpawnData* Data) override;
 };

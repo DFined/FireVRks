@@ -1,0 +1,8 @@
+#pragma once
+
+enum ParameterDrawType
+{
+	SYSTEM_INSTANCE_PARAMS,
+	INNER_SYSTEM_BINDING,
+	PARAMETER_CREATION
+};

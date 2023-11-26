@@ -9,7 +9,7 @@ UPanelWidget* UParameterInputUI::MakeRootWidget(UWidgetTree* Tree)
 {
 	auto Border = UDFUIUtil::MakeWidget<UBorder>(Tree);
 	VerticalBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, Border);
-	DFStyleUtil::BasicBorderStyle(Border, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
+	DFStyleUtil::BasicBorderStyle(Border, DFStyleUtil::GREY_LVL_2);
 	return Border;
 }
 
@@ -36,7 +36,7 @@ void UParameterInputUI::Draw(UParameterValueContext* InitialContext)
 	{
 		if(Parameter->GetPredicate()->Check(InitialContext))
 		{
-			auto NewParam = UParameterRenderer::RenderParam(this, InitialContext, Parameter);
+			auto NewParam = UParameterRenderer::RenderParam(this, InitialContext, Parameter, SYSTEM_INSTANCE_PARAMS);
 			NewParam->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UParameterInputUI::LayoutChanged);
 		}
 	}

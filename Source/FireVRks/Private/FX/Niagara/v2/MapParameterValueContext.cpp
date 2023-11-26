@@ -22,3 +22,8 @@ void UMapParameterValueContext::SetValue(UAbstractFormalParameter* Parameter, UA
 {
 	Map.Add(Parameter->GetId(), Value);
 }
+
+void UMapParameterValueContext::SetValue(UDFId* Parameter, UAbstractParameterValue* Value)
+{
+	Map.Add(Parameter, Value);
+}

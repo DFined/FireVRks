@@ -13,7 +13,7 @@
 UPanelWidget* USystemInstantiationParameterBindingWidget::MakeRootWidget(UWidgetTree* Tree)
 {
 	OuterBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_1);
+	DFStyleUtil::BasicBorderStyle(OuterBorder, DFStyleUtil::GREY_LVL_1);
 	return OuterBorder;
 }
 
@@ -22,7 +22,7 @@ UPanelWidget* USystemInstantiationParameterBindingWidget::GetMountingPoint()
 	return OuterBorder;
 }
 
-void USystemInstantiationParameterBindingWidget::Initialize(UAbstractFormalParameter* fParameter, UParameterValueContext* Context)
+void USystemInstantiationParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParameter* fParameter, UParameterValueContext* Context, ParameterDrawType DrawType)
 {
 	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(fParameter));
 	System = UDFStatics::EFFECT_SYSTEM_MANAGER->Get(Value->GetSystem());

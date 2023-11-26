@@ -9,32 +9,20 @@ public:
 	template <class SRC, typename RES>
 	static RES IfNotNullMapElse(SRC* Src, RES DefaultValue, RES (*Mapper)(SRC*));
 
-	static FString ZStr(FString in, FString Padding, int len)
+	static FString ZStr(FString In, FString Padding, int Len);
+
+	static FString AStr(FString In, FString Padding, int Len);
+
+	static FString SecondsToTimeCode(float SecondsIn);
+
+	template <class KeyType, class ValType>
+	static void GetValues(TMap<KeyType, ValType> Map, TArray<ValType>& ResultArray)
 	{
-		FString Res = in;
-		for (int i = in.Len(); i < len; i++)
+		TArray<KeyType> Keys = TArray<KeyType>();
+		Map.GetKeys(Keys);
+		for (KeyType Key : Keys)
 		{
-			Res = Padding + Res;
+			ResultArray.Add(*Map.Find(Key));
 		}
-		return Res;
-	}
-	
-	static FString AStr(FString in, FString Padding, int len)
-    	{
-    		FString Res = in;
-    		for (int i = in.Len(); i < len; i++)
-    		{
-    			Res = Res + Padding;
-    		}
-    		return Res;
-    	}
-
-	static FString SecondsToTimeCode(float SecondsIn)
-	{
-		auto Minutes = ((int)SecondsIn) / 60;
-		auto Seconds = ((int)SecondsIn) % 60;
-		auto DeciSeconds = (int)((SecondsIn - ((int)SecondsIn)) * 100);
-
-		return ZStr(FString::FromInt(Minutes), "0", 2) + ":" + ZStr(FString::FromInt(Seconds), "0", 2) + "." + AStr(FString::FromInt(DeciSeconds), "0", 2);
 	}
 };

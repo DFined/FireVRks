@@ -13,7 +13,7 @@
 UPanelWidget* ULaunchSegmentTile::MakeRootWidget(UWidgetTree* Tree)
 {
 	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	DFStyleUtil::BasicBorderStyle(RootBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_3);
+	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_3);
 	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, RootBorder);
 
 	auto TimeHBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, VBox);

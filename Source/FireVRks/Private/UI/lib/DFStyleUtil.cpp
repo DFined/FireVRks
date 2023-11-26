@@ -14,6 +14,8 @@ FLinearColor DFStyleUtil::GREY_LVL_3 = FLinearColor(0.06, 0.06, 0.06);
 FLinearColor DFStyleUtil::GREY_LVL_4 = FLinearColor(0.140000f, 0.140000f, 0.140000f, 0);
 FLinearColor DFStyleUtil::GREY_OUTLINE_LVL_0 = FLinearColor(0.015f, 0.015f, 0.015f);
 
+FLinearColor DFStyleUtil::SELECTED_LEVEL_3 = FLinearColor(0.020833f, 0.020833f, 0.030833f);
+
 FLinearColor DFStyleUtil::LIGHT_TEXT_1 = FLinearColor(200, 200, 200);
 FSlateFontInfo DFStyleUtil::DEFAULT_FONT = FSlateFontInfo(Cast<UObject>(LoadObject<UFont>(NULL, TEXT("/Game/FireVRks/UI/Font/DefaultFont.DefaultFont"))), 12,
                                                           "Roboto");
@@ -38,10 +40,21 @@ void DFStyleUtil::LineBorderStyle(UBorder* Border)
 	Border->SetPadding(FMargin(9, 2));
 }
 
-void DFStyleUtil::BasicBorderStyle(UBorder* Border, ESlateBrushDrawType::Type DrawType, FLinearColor Color)
+void DFStyleUtil::BasicBorderStyle(UBorder* Border, FLinearColor Color)
 {
 	auto Brush = FSlateBrush();
-	Brush.DrawAs = DrawType;
+	Brush.DrawAs = ESlateBrushDrawType::Box;
+	Border->SetBrush(Brush);
+	Border->SetBrushColor(Color);
+}
+
+
+void DFStyleUtil::RoundedBorderStyle(UBorder* Border, FLinearColor Color, int radius)
+{
+	auto Brush = FSlateBrush();
+	Brush.DrawAs = ESlateBrushDrawType::RoundedBox;
+	Brush.OutlineSettings.RoundingType = ESlateBrushRoundingType::FixedRadius;
+	Brush.OutlineSettings.CornerRadii = FVector4(radius, radius, radius, radius);
 	Border->SetBrush(Brush);
 	Border->SetBrushColor(Color);
 }
@@ -111,6 +124,18 @@ void DFStyleUtil::TextButtonStyle(UButton* Button, FLinearColor Color)
 	}
 }
 
+void DFStyleUtil::ImgButtonStyle(UButton* Button, UTexture2D* Img, float size)
+{
+	auto Style = FButtonStyle();
+	auto Brush = SetupImageBrush(Img, size);
+	Style.SetNormal(Brush);
+	Style.SetPressed(Brush);
+	Style.SetHovered(Brush);
+	Style.Hovered.TintColor = FLinearColor(1, 1, 1, 0.5);
+	Style.Pressed.TintColor = FLinearColor(0.2,0.2,0.2);
+	Button->SetStyle(Style);
+}
+
 void DFStyleUtil::ImgButtonStyle(UButton* Button, Icon* Icon, float size)
 {
 	auto Img = LoadCachedTexture(Icon);
@@ -119,6 +144,8 @@ void DFStyleUtil::ImgButtonStyle(UButton* Button, Icon* Icon, float size)
 	Style.SetNormal(Brush);
 	Style.SetPressed(Brush);
 	Style.SetHovered(Brush);
+	Style.Hovered.TintColor = FLinearColor(1, 1, 1, 0.5);
+	Style.Pressed.TintColor = FLinearColor(0.2,0.2,0.2);
 	Button->SetStyle(Style);
 }
 
@@ -163,7 +190,32 @@ void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size)
 	{
 		BoxSlot->SetSize(Size);
 		BoxSlot->SetHorizontalAlignment(HAlign_Fill);
-		BoxSlot->SetVerticalAlignment(VAlign_Center);
+		if(Size.SizeRule == ESlateSizeRule::Automatic)
+		{
+			BoxSlot->SetVerticalAlignment(VAlign_Center);
+		}
+		else
+		{
+			BoxSlot->SetVerticalAlignment(VAlign_Fill);
+		}
+	}
+}
+
+void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, EHorizontalAlignment Alignment)
+{
+	SafeSetHBoxSlotWidth(Slot, Size);
+	if (auto BoxSlot = Cast<UHorizontalBoxSlot>(Slot))
+	{
+		BoxSlot->SetHorizontalAlignment(Alignment);
+	}
+}
+
+void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, EHorizontalAlignment HAlignment, EVerticalAlignment VAlignment)
+{
+	SafeSetHBoxSlotWidth(Slot, Size, HAlignment);
+	if (auto BoxSlot = Cast<UHorizontalBoxSlot>(Slot))
+	{
+		BoxSlot->SetVerticalAlignment(VAlignment);
 	}
 }
 

@@ -14,8 +14,9 @@ class FIREVRKS_API UParameterLineBindingWidget : public UParameterBindingWidget
 
 	WidgetWithValue* ChildWidget;
 public:
-	virtual void Initialize(UAbstractFormalParameter* Parameter, UParameterValueContext* Context) override;
+	virtual void InitializeBindingWidget() override;
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;
+	virtual void OnChange() override;
 };

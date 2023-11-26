@@ -253,17 +253,14 @@ UTexture2D* UDefaultParameterSystem::GetIcon()
 }
 
 
-void UDefaultParameterSystem::SpawnSystem(USystemSpawnData* Data, AActor* PlayerRef)
+void UDefaultParameterSystem::SpawnSystem(USystemSpawnData* Data)
 {
 	auto Context = Data->GetContext();
 
 	auto Location = Data->GetLocation();
 
-	auto Distance = 20000;
-	if (PlayerRef)
-	{
-		Distance = Location.Distance(Location, PlayerRef->GetActorLocation());
-	}
+	
+	auto Distance = Location.Distance(Location, UDFStatics::GetPlayer()->GetActorLocation());
 
 	auto Effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(Data->GetWorldObject(), UDFStatics::DEFAULT_SYSTEM, Location);
 

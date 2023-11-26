@@ -1,12 +1,15 @@
 #include "UI/ParameterIntegration/v2/ParameterBindingWidget.h"
 
 #include "UI/DFUIUtil.h"
+#include "UI/ParameterIntegration/v2/ParameterDrawType.h"
 #include "UI/ParameterIntegration/v2/ParameterInputUI.h"
 
-void UParameterBindingWidget::Setup(UAbstractFormalParameter* FParameter, UParameterValueContext* Context)
+void UParameterBindingWidget::Setup(UAbstractFormalParameter* FParameter, UParameterValueContext* BContext, ParameterDrawType BDrawType)
 {
 	this->Parameter = FParameter;
-	this->Initialize(FParameter, Context);
+	this->Context = BContext;
+	this->DrawType = BDrawType;
+	this->InitializeBindingWidget();
 	this->DefaultStyle();
 }
 
@@ -21,9 +24,4 @@ UAbstractFormalParameter* UParameterBindingWidget::GetParameter() const
 
 void UParameterBindingWidget::OnChange()
 {
-	auto InputUI = UDFUIUtil::AttemptFindWidgetByType<UParameterInputUI>(this);
-	if (InputUI)
-	{
-		InputUI->OnChange();
-	}
 }

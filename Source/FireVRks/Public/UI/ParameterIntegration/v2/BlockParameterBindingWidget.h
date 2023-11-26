@@ -34,6 +34,7 @@ public:
 	virtual UPanelWidget* GetMountingPoint() override;
 	UFUNCTION()
 	void LayoutChangedTab(UExpandableArea* Area, bool bIsExpanded);
-	virtual void Initialize(UAbstractFormalParameter* Parameter, UParameterValueContext* Context) override;
+	virtual void InitializeBindingWidget(UAbstractFormalParameter* Parameter, UParameterValueContext* Context, ParameterDrawType DrawType) override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;
+	void Redraw();
 };

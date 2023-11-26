@@ -13,7 +13,7 @@
 UPanelWidget* UListParameterBindingWidget::MakeRootWidget(UWidgetTree* Tree)
 {
 	OuterBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	DFStyleUtil::BasicBorderStyle(OuterBorder, ESlateBrushDrawType::Box, DFStyleUtil::GREY_LVL_2);
+	DFStyleUtil::BasicBorderStyle(OuterBorder, DFStyleUtil::GREY_LVL_2);
 	return OuterBorder;
 }
 
@@ -31,12 +31,13 @@ void UListParameterBindingWidget::NewItem()
 
 void UListParameterBindingWidget::AddWidgetFromParam(UParameterValueContext* SubContext, UAbstractFormalParameter* ChildType)
 {
-	auto NewWidget = UParameterRenderer::RenderParam(ListStack, SubContext, ChildType);
+	auto NewWidget = UParameterRenderer::RenderParam(ListStack, SubContext, ChildType, DrawType);
 	NewWidget->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UListParameterBindingWidget::LayoutChanged);
 }
 
-void UListParameterBindingWidget::Initialize(UAbstractFormalParameter* fParameter, UParameterValueContext* Context)
+void UListParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParameter* fParameter, UParameterValueContext* Context, ParameterDrawType bDrawType)
 {
+	this->DrawType = bDrawType;
 	auto OuterVBox = UDFUIUtil::AddWidget<UVerticalBox>(this->WidgetTree, OuterBorder);
 	auto HeaderBox = UDFUIUtil::AddUserWidget<UDFUILine>(OuterVBox);
 	auto NameLabel = UDFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), fParameter->GetDisplayName());
