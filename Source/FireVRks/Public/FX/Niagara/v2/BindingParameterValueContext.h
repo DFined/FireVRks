@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "ParameterValueContext.h"
 #include "FormalParameter/AbstractFormalParameter.h"
-#include "FormalParameter/ParameterType.h"
+#include "System/SubsystemParameterBindings.h"
 #include "Util/DFId.h"
 #include "BindingParameterValueContext.generated.h"
 
@@ -21,43 +21,34 @@ class FIREVRKS_API UBindingParameterValueContext : public UParameterValueContext
 	UParameterValueContext* OuterContext;
 
 	UPROPERTY()
-	TMap<UDFId*, UAbstractFormalParameter*> Bindings;
-
-	UPROPERTY()
-	TArray<UAbstractFormalParameter*> OuterParameters;
+	USubsystemParameterBindings* Bindings;
 	
 public:
 	virtual UAbstractParameterValue* Get(UAbstractFormalParameter* Parameter) override;
 	virtual void SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value) override;
 
-	TArray<UAbstractFormalParameter*>& GetOuterParameters()
-	{
-		return OuterParameters;
-	}
-
 	UAbstractFormalParameter* FindBinding(UDFId* Id)
 	{
-		auto Bind = Bindings.Find(Id);
+		auto Bind = Bindings->GetBindings().Find(Id);
 		return Bind ? *Bind : nullptr;
-	}
-
-	void FindAvailableOuters(ParameterType Type, TArray<UAbstractFormalParameter*>& Results)
-	{
-		for(UAbstractFormalParameter* Param : OuterParameters)
-		{
-			if(Param->GetType() == Type)
-			{
-				Results.Add(Param);
-			}
-		}
 	}
 
 	static UBindingParameterValueContext* New(UObject* Outer){
 		return NewObject<UBindingParameterValueContext>(Outer);
 	}
 
-	void SetOuterContext(UParameterValueContext* OuterContext)
+	void SetOuterContext(UParameterValueContext* bOuterContext)
 	{
-		this->OuterContext = OuterContext;
+		this->OuterContext = bOuterContext;
+	}
+
+	USubsystemParameterBindings* GetBindings() const
+	{
+		return Bindings;
+	}
+
+	void SetBindings(USubsystemParameterBindings* bBindings)
+	{
+		this->Bindings = bBindings;
 	}
 };

@@ -5,11 +5,8 @@
 
 UBindingParameterValueContext* UParameterValueContext::NewContextFrom(UParameterValueContext* Context)
 {
-	if (auto BindingContext = Cast<UBindingParameterValueContext*>(Context))
-	{
-		UBindingParameterValueContext*  ResContext = UBindingParameterValueContext::New(Context);
-		auto Inner = UMapParameterValueContext::New(ResContext);
-
-		ResContext->SetOuterContext(Inner);
-	}
+	UBindingParameterValueContext* ResContext = UBindingParameterValueContext::New(Context);
+	auto Inner = UMapParameterValueContext::Instance(ResContext);
+	ResContext->SetOuterContext(Inner);
+	return ResContext;
 }

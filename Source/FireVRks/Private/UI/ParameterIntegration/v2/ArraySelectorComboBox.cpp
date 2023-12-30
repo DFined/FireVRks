@@ -56,19 +56,19 @@ void UArraySelectorComboBox::Initialize(UAbstractParameterValue* Value)
 	this->OnOpening.AddUniqueDynamic(this, &UArraySelectorComboBox::ReInit);
 }
 
-UAbstractParameterValue* UArraySelectorComboBox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UArraySelectorComboBox::GetValue(UObject* Outer)
 {
 	if(this->GetSelectedOption().Equals(NONE_OPTION_NAME))
 	{
-		return UArraySelectorParameterValue::New(Context, nullptr);
+		return UArraySelectorParameterValue::New(Outer, nullptr);
 	}
 	auto Array = UDFStatics::GetLauncherManager()->FindLauncherArray(this->GetSelectedOption());
 	if(!Array)
 	{
 		ReInitOptions(nullptr);
-		return UArraySelectorParameterValue::New(Context, nullptr);
+		return UArraySelectorParameterValue::New(Outer, nullptr);
 	}
-	return UArraySelectorParameterValue::New(Context, Array);
+	return UArraySelectorParameterValue::New(Outer, Array);
 }
 
 void UArraySelectorComboBox::SetValue(UAbstractParameterValue* Value)

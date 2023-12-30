@@ -27,8 +27,9 @@ class FIREVRKS_API ULaunchSettings : public UObject
 	bool Used = false;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	static ULaunchSettings* Make(
-		UObject* Outer, UEffectSystem* fSystem, UParameterValueContext* fContext, AActor* SpawnTarget, float fDelay, float fLifetime, float fVelocity
+		UObject* Outer, UEffectSystem* fSystem, UParameterValueContext* fContext, AActor* bSpawnTarget, float fDelay, float fLifetime, float fVelocity
 	);
 
 	void SetSpawnTarget(AActor* fSpawnTarget)

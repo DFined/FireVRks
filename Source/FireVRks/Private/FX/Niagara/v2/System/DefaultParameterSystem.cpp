@@ -229,12 +229,17 @@ void UDefaultParameterSystem::Initialize()
 
 void UDefaultParameterSystem::AddParameter(UAbstractFormalParameter* Parameter)
 {
-	Parameters.Add(Parameter);
+	Parameters.Add(Parameter->GetId(), Parameter);
 }
 
-TArray<UAbstractFormalParameter*>* UDefaultParameterSystem::GetOuterParameters()
+TMap<UDFId*, UAbstractFormalParameter*>* UDefaultParameterSystem::GetOuterParameters()
 {
 	return &Parameters;
+}
+
+void UDefaultParameterSystem::GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result)
+{
+	DFU::GetValues(*GetOuterParameters(), Result);
 }
 
 FString UDefaultParameterSystem::GetId()
@@ -260,7 +265,7 @@ void UDefaultParameterSystem::SpawnSystem(USystemSpawnData* Data)
 	auto Location = Data->GetLocation();
 
 	
-	auto Distance = Location.Distance(Location, UDFStatics::GetPlayer()->GetActorLocation());
+	auto Distance = FMath::Max(Location.Distance(Location, UDFStatics::GetPlayerCamera()->GetComponentLocation()), 1000);
 
 	auto Effect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(Data->GetWorldObject(), UDFStatics::DEFAULT_SYSTEM, Location);
 

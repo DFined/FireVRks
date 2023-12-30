@@ -1,6 +1,7 @@
 #pragma once
 #include "DFAnchor.h"
 #include "NiagaraSystem.h"
+#include "Camera/CameraComponent.h"
 #include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
 #include "FX/Niagara/v2/System/EffectSystemManager.h"
 #include "World/Launcher/LauncherManager.h"
@@ -25,6 +26,7 @@ public:
 	static UEffectSystemManager* const EFFECT_SYSTEM_MANAGER;
 	static UEffectSpawnCoordinator* const EFFECT_SPAWN_COORDINATOR;
 	static AActor* Player;
+	static UCameraComponent* PlayerCamera;
 
 	UFUNCTION(BlueprintCallable)
 	static ULauncherManager* GetLauncherManager();
@@ -49,6 +51,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static void SetPlayer(AActor* bPlayer);
+
+	UFUNCTION(BlueprintCallable)
+	static void SetPlayerCamera(UCameraComponent* bCamera);
+
+	UFUNCTION(BlueprintCallable)
+	static UCameraComponent* GetPlayerCamera();
 
 	static UEffectSystem* GetDefaultEffectSystem();
 };

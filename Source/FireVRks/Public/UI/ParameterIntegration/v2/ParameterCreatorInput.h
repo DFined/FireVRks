@@ -15,8 +15,6 @@ UCLASS()
 class FIREVRKS_API UParameterCreatorInput : public UDFUIContainer
 {
 	GENERATED_BODY()
-
-	inline static ParameterType INSTANTIABLE_TYPES[] = {INTEGER, FLOAT, COLOR, BOOLEAN};
 	
 	UPROPERTY()
 	UVerticalBox* RootBox;
@@ -31,6 +29,8 @@ class FIREVRKS_API UParameterCreatorInput : public UDFUIContainer
 	UCheckBox* ParamRequiredInput;
 
 public:
+	inline static constexpr ParameterType INSTANTIABLE_TYPES[] = {INTEGER, FLOAT, COLOR, BOOLEAN};
+	
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
 	virtual UPanelWidget* GetMountingPoint() override;
 

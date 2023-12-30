@@ -33,6 +33,12 @@ protected:
 	bool Required;
 public:
 	UAbstractParameterValue* DefaultValue() const;
+
+	void SetDefault(UAbstractParameterValue* bDefault)
+	{
+		this->Default = bDefault;
+	}
+
 	UDFId* GetId();
 
 	ParameterPredicate* GetPredicate() const;

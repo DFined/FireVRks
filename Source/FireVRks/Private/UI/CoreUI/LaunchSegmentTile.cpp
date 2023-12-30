@@ -57,7 +57,7 @@ void ULaunchSegmentTile::NewTile(UParameterValueContext* Context)
 void ULaunchSegmentTile::NewTile(UWidget* Widget)
 {
 	int Num = this->GetMountingPoint()->GetAllChildren().Find(Widget) + 1;
-	auto Context = UMapParameterValueContext::New(Segment);
+	auto Context = UMapParameterValueContext::Instance(Segment);
 	Segment->GetLaunchSettings()->Insert(Context, Num);
 	NewTile(Context);
 	

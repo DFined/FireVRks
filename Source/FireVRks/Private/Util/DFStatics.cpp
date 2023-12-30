@@ -16,6 +16,7 @@ UArrayLaunchPattern* const UDFStatics::ARRAY_LAUNCH_PATTERN = UArrayLaunchPatter
 UEffectSystemManager* const UDFStatics::EFFECT_SYSTEM_MANAGER = UEffectSystemManager::Instance();
 UEffectSpawnCoordinator* const UDFStatics::EFFECT_SPAWN_COORDINATOR = UEffectSpawnCoordinator::New();
 AActor* UDFStatics::Player = nullptr;
+UCameraComponent* UDFStatics::PlayerCamera = nullptr;
 
 ULauncherManager* UDFStatics::GetLauncherManager()
 {
@@ -26,6 +27,7 @@ UArrayLaunchPattern* UDFStatics::GetArrayLaunchPattern()
 {
 	return ARRAY_LAUNCH_PATTERN;
 }
+
 
 
 void UDFStatics::Reset()
@@ -70,6 +72,16 @@ AActor* UDFStatics::GetPlayer()
 void UDFStatics::SetPlayer(AActor* bPlayer)
 {
 	Player = bPlayer;
+}
+
+void UDFStatics::SetPlayerCamera(UCameraComponent* bCamera)
+{
+	PlayerCamera = bCamera;
+}
+
+UCameraComponent* UDFStatics::GetPlayerCamera()
+{
+	return PlayerCamera;
 }
 
 UEffectSystem* UDFStatics::GetDefaultEffectSystem()

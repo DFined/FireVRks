@@ -33,14 +33,14 @@ bool UFColorTextBox::ValidateColor(FString Value)
 	return true;
 }
 
-UAbstractParameterValue* UFColorTextBox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UFColorTextBox::GetValue(UObject* Outer)
 {
 	FString Str = this->GetText().ToString();
 	TArray<FString> Parts = TArray<FString>();
 	FString delim = ",";
 	Str.ParseIntoArray(Parts, *delim);
 	return UColorParameterValue::New(
-		Context, FLinearColor(FCString::Atof(*Parts[0]), FCString::Atof(*Parts[1]), FCString::Atof(*Parts[2]), 255)
+		Outer, FLinearColor(FCString::Atof(*Parts[0]), FCString::Atof(*Parts[1]), FCString::Atof(*Parts[2]), 255)
 	);
 }
 

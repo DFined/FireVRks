@@ -35,12 +35,12 @@ public:
 		return WorldObject;
 	}
 
-	FVector GetLocation() const
+	FVector& GetLocation() 
 	{
 		return Location;
 	}
 
-	FVector GetUpwardVector() const
+	FVector& GetUpwardVector()
 	{
 		return UpwardVector;
 	}

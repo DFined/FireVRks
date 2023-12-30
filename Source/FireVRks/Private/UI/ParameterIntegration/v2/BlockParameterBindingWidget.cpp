@@ -27,9 +27,8 @@ void UBlockParameterBindingWidget::LayoutChangedTab(UExpandableArea* Area, bool 
 	LayoutChanged();
 }
 
-void UBlockParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParameter* Param, UParameterValueContext* Context, ParameterDrawType DrawType)
+void UBlockParameterBindingWidget::InitializeBindingWidget()
 {
-
 	UBlockFormalParameter* ParamsBlock = Cast<UBlockFormalParameter>(Parameter);
 
 	auto State = Cast<UBlockParameterValue>(Context->Get(Parameter));
@@ -40,7 +39,7 @@ void UBlockParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParame
 
 	HeaderBox = UDFUIUtil::MakeWidget<UHorizontalBox>(WidgetTree);
 	auto BlockName = UDFUIUtil::AddLabel(WidgetTree, HeaderBox, ParamsBlock->GetDisplayName());
-	if(auto SlotT = Cast<UHorizontalBoxSlot>(BlockName->Slot))
+	if (auto SlotT = Cast<UHorizontalBoxSlot>(BlockName->Slot))
 	{
 		SlotT->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
 	}
@@ -52,7 +51,7 @@ void UBlockParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParame
 	BaseTab->OnExpansionChanged.AddUniqueDynamic(this, &UBlockParameterBindingWidget::LayoutChangedTab);
 
 	RequiredParamsStack = UDFUIUtil::AddUserWidget<UDFUIStack>(ListWrapper);
-	
+
 	DFStyleUtil::SetPadding<UVerticalBoxSlot>(RequiredParamsStack, FMargin(6, 0, 0, 0));
 
 	auto OverridesBorder = UDFUIUtil::AddWidget<UBorder>(WidgetTree, ListWrapper);
@@ -76,7 +75,7 @@ void UBlockParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParame
 		WidgetTree, OverridesBorder, OverridesLabel, OverrideParamsStack, State->IsOverridesExpanded()
 	);
 	OverridesTab->OnExpansionChanged.AddUniqueDynamic(this, &UBlockParameterBindingWidget::LayoutChangedTab);
-	
+
 	if (!OverrideParamsStack->GetMountingPoint()->HasAnyChildren())
 	{
 		OverridesTab->SetVisibility(ESlateVisibility::Collapsed);
@@ -85,14 +84,54 @@ void UBlockParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParame
 	OverridesTab->BorderBrush.DrawAs = ESlateBrushDrawType::NoDrawType;
 }
 
-void UBlockParameterBindingWidget::WriteToContext(UParameterValueContext* Context)
+void UBlockParameterBindingWidget::WriteToContext(UParameterValueContext* bContext)
 {
-	auto Val = UBlockParameterValue::New(Context, BaseTab->GetIsExpanded(), OverridesTab->GetIsExpanded());
-	Context->SetValue(Parameter, Val);
-	UParamUtil::WriteContainerToContext(RequiredParamsStack->GetMountingPoint(), Context);
-	UParamUtil::WriteContainerToContext(OverrideParamsStack->GetMountingPoint(), Context);
+	auto Val = UBlockParameterValue::New(bContext, BaseTab->GetIsExpanded(), OverridesTab->GetIsExpanded());
+	bContext->SetValue(Parameter, Val);
+	UParamUtil::WriteContainerToContext(RequiredParamsStack->GetMountingPoint(), bContext);
+	UParamUtil::WriteContainerToContext(OverrideParamsStack->GetMountingPoint(), bContext);
+}
+
+void UBlockParameterBindingWidget::RedrawParameters(bool Required)
+{
+	int WidgetNum = 0;
+	UBlockFormalParameter* BlockParameter = Cast<UBlockFormalParameter>(Parameter);
+	UDFUIContainer* Stack = Required ? RequiredParamsStack : OverrideParamsStack;
+	TArray<UWidget*> ChildWidgets = TArray<UWidget*>();
+	auto Children = Stack->GetMountingPoint()->GetAllChildren();
+	for (UAbstractFormalParameter* ChildParameter : BlockParameter->GetChildParameters())
+	{
+		if (ChildParameter->IsRequired() == Required)
+		{
+			bool ShouldBeVisible = ChildParameter->GetPredicate()->Check(Context);
+			auto BindingWidget = Children.Num() > WidgetNum ? Cast<UParameterBindingWidget>(Children[WidgetNum]) : nullptr;
+			if (BindingWidget && BindingWidget->GetParameter()->GetId() == ChildParameter->GetId())
+			{
+				if (ShouldBeVisible)
+				{
+					ChildWidgets.Add(Children[WidgetNum]);
+				}
+				WidgetNum++;
+			}
+			else
+			{
+				if (ShouldBeVisible)
+				{
+					auto Widget = UParameterRenderer::RenderParam(Stack, Context, ChildParameter, DrawType);
+					ChildWidgets.Add(Widget);
+				}
+			}
+		}
+	}
+	Stack->GetMountingPoint()->ClearChildren();
+	for (UWidget* ChildWidget : ChildWidgets)
+	{
+		Stack->Append(ChildWidget);
+	}
 }
 
 void UBlockParameterBindingWidget::Redraw()
 {
+	RedrawParameters(true);
+	RedrawParameters(false);
 }

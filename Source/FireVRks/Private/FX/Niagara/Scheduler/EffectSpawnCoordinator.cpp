@@ -3,6 +3,7 @@
 
 #include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
 
+#include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "Util/DFStatics.h"
 
 void UEffectSpawnCoordinator::TickTesting(float DeltaSeconds)
@@ -50,6 +51,17 @@ void UEffectSpawnCoordinator::SpawnEffect(ULaunchSettings* Data)
 	if (auto Launcher = Cast<AGenericFireworkLauncher>(Target))
 	{
 		Launcher->Fire(Data);
+	}
+	else if (Target)
+	{
+		Data->GetSystem()->SpawnSystem(
+			USystemSpawnData::New(
+				Data->GetSpawnTarget(),
+				Data->GetContext(),
+				Data->GetSpawnTarget()->GetActorLocation(),
+				FVector(1,0,0)
+			)
+		);
 	}
 }
 

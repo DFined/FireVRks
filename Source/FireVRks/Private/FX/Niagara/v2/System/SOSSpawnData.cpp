@@ -1,5 +1,4 @@
-#include "FX/Niagara/System/SOSSpawnData.h"
-
+#include "FX/Niagara/v2/System/SOSSpawnData.h"
 
 SOSSpawnData::SOSSpawnData(ULaunchSettings* SpawnData, float FSpawnIn, bool bFromEnd, bool bRecurringInterval, int SosSpawnCount):
 	SpawnData(SpawnData),

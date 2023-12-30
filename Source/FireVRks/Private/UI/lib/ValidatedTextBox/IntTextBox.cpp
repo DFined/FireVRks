@@ -12,10 +12,10 @@ bool UIntTextBox::ValidateInt(FString Value) {
 	return (end - start) == Value.Len();
 }
 
-UAbstractParameterValue* UIntTextBox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UIntTextBox::GetValue(UObject* Outer)
 {
 	FString str = this->GetText().ToString();
-	return UIntParameterValue::New(Context, FCString::Atoi(*str));
+	return UIntParameterValue::New(Outer, FCString::Atoi(*str));
 }
 
 FString UIntTextBox::ValueToString(UAbstractParameterValue* Value)

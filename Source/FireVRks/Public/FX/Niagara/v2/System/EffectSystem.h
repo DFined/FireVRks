@@ -9,9 +9,7 @@
 
 class USystemSpawnData;
 class ULaunchSettings;
-/**
- * 
- */
+
 UCLASS()
 class FIREVRKS_API UEffectSystem : public UObject, public ParameterProvider
 {
@@ -46,5 +44,6 @@ public:
 	virtual void Initialize() PURE_VIRTUAL("Initialize",)
 	virtual UTexture2D* GetIcon() PURE_VIRTUAL("GetIcon", return nullptr;);
 	virtual void SpawnSystem(USystemSpawnData* Data) PURE_VIRTUAL("SpawnSystem",);
-
+	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override PURE_VIRTUAL("GetOuterParameters", return nullptr;);
+	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override PURE_VIRTUAL("GetOuterParameters", ;);
 };

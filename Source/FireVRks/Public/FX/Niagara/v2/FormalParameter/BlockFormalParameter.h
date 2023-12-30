@@ -14,7 +14,7 @@ public:
 
 	void Add(UAbstractFormalParameter* Child);
 
-	TArray<UAbstractFormalParameter*> GetChildParameters() const
+	TArray<UAbstractFormalParameter*>& GetChildParameters()
 	{
 		return ChildParameters;
 	}

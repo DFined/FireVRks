@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/PanelWidget.h"
+#include "UI/ParameterIntegration/v2/ParameterCreatorInput.h"
 #include "UI/ParameterIntegration/v2/WidgetWithValue.h"
 #include "UObject/Object.h"
 #include "Util/DFStatics.h"
@@ -44,7 +45,7 @@ class FIREVRKS_API UParamUtil : public UObject
 	};
 
 public:
-	static WidgetWithValue* GetValueWidget(UUserWidget* Outer, UAbstractParameterValue* Value, ParameterType Type);
+	static WidgetWithValue* GetValueWidget(UUserWidget* Outer, ParameterType Type);
 
 	template <class OuterType, typename InnerType>
 	static InnerType GetTypedValue(UAbstractParameterValue* Value);
@@ -86,7 +87,7 @@ public:
 
 	static ParameterType Type(int Ordinal)
 	{
-		return TYPES[Ordinal];
+		return UParameterCreatorInput::INSTANTIABLE_TYPES[Ordinal];
 	}
 
 	static UAbstractFormalParameter* NewParam(UObject* Outer, FString Name, bool Required, ParameterType Type);

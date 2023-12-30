@@ -7,11 +7,15 @@
 
 UAbstractParameterValue* UBindingParameterValueContext::Get(UAbstractFormalParameter* Parameter)
 {
-	if(auto BoundTo = Bindings.Find(Parameter->GetId()))
+	if (auto BoundTo = Bindings->GetBindings().Find(Parameter->GetId()))
 	{
 		return OuterContext->Get(*BoundTo);
 	}
-	return Parameter->DefaultValue(); 
+	if (auto Constant = Bindings->GetConstantValues().Find(Parameter->GetId()))
+	{
+		return *Constant;
+	}
+	return Parameter->DefaultValue();
 }
 
 void UBindingParameterValueContext::SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value)

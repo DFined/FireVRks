@@ -27,7 +27,7 @@ UPanelWidget* UDisplayEditorUI::GetMountingPoint()
 	return Canvas;
 }
 
-void UDisplayEditorUI::Initialize(UDisplayData* fData)
+void UDisplayEditorUI::InitializeDFWidget(UDisplayData* fData)
 {
 	this->Data = fData;
 	if (auto bSlot = Cast<UScrollBoxSlot>(this->Slot))
@@ -121,14 +121,14 @@ void UDisplayEditorUI::Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* S
 UDisplayEditorUI* UDisplayEditorUI::NewEmpty(UPanelWidget* Parent)
 {
 	auto Editor = UDFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
-	Editor->Initialize(UDisplayData::New(Editor));
+	Editor->InitializeDFWidget(UDisplayData::New(Editor));
 	return Editor;
 }
 
 UDisplayEditorUI* UDisplayEditorUI::New(UPanelWidget* Parent, UDisplayData* Data)
 {
 	auto Editor = UDFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
-	Editor->Initialize(Data);
+	Editor->InitializeDFWidget(Data);
 	return Editor;
 }
 

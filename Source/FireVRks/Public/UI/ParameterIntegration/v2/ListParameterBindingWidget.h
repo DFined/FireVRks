@@ -32,6 +32,6 @@ public:
 	UFUNCTION()
 	void NewItem();
 	void AddWidgetFromParam(UParameterValueContext* SubContext, UAbstractFormalParameter* ChildType);
-	virtual void InitializeBindingWidget(UAbstractFormalParameter* Parameter, UParameterValueContext* Context, ParameterDrawType DrawType) override;
-	virtual void WriteToContext(UParameterValueContext* Context) override;
+	virtual void InitializeBindingWidget() override;
+	virtual void WriteToContext(UParameterValueContext* bContext) override;
 };

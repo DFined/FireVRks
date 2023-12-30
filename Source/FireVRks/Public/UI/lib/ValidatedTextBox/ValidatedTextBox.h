@@ -28,7 +28,7 @@ public:
 
 	virtual void Initialize(UAbstractParameterValue* Value) override;
 	virtual FString ValueToString(UAbstractParameterValue* Value) PURE_VIRTUAL("ValueToString", return "";);
-	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override PURE_VIRTUAL("GetValue", return nullptr;);
+	virtual UAbstractParameterValue* GetValue(UObject* Outer) override PURE_VIRTUAL("GetValue", return nullptr;);
 	virtual void SetValue(UAbstractParameterValue* Value) override;
 
 	virtual void DefaultStyle() override;

@@ -41,7 +41,7 @@ public:
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
-	void Initialize(UDisplayData* Data);
+	void InitializeDFWidget(UDisplayData* Data);
 
 	UFUNCTION()
 	void NewSegment(UWidget* InputWidget);

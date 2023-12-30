@@ -5,16 +5,12 @@
 #include "CoreMinimal.h"
 #include "SystemDisplayTile.h"
 #include "Components/Border.h"
+#include "Components/HorizontalBox.h"
 #include "Components/VerticalBox.h"
-#include "FX/Niagara/v2/BindingParameterValueContext.h"
-#include "FX/Niagara/v2/System/EffectSystem.h"
+#include "FX/Niagara/v2/System/CustomEffectSystem.h"
 #include "UI/lib/Container/DFUIContainer.h"
-#include "Util/DFId.h"
 #include "ParameterBindingSetupUI.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class FIREVRKS_API UParameterBindingSetupUI : public UDFUIContainer
 {
@@ -22,12 +18,6 @@ class FIREVRKS_API UParameterBindingSetupUI : public UDFUIContainer
 
 	UPROPERTY()
 	UBorder* RootBorder;
-
-	UPROPERTY()
-	UDFId* SystemId = nullptr;
-
-	UPROPERTY()
-	UEffectSystem* System;
 	
 	UPROPERTY()
 	USystemDisplayTile* SystemDisplayTile;
@@ -35,12 +25,31 @@ class FIREVRKS_API UParameterBindingSetupUI : public UDFUIContainer
 	UPROPERTY()
 	UVerticalBox* ParamsBox;
 
+	UPROPERTY()
+	UEffectSystem* System;
+
+	UPROPERTY()
+	USubsystemConfig* SubsystemConfig;
+
+	UPROPERTY()
+	UHorizontalBox* HeaderBox;
+
 public:
+	UFUNCTION()
+	void Delete();
+	
 	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
-	void Setup(UParameterValueContext* Context);
+	
+	UFUNCTION()
+	void MoveUp();
+	
+	UFUNCTION()
+	void MoveDown();
+	
+	void Setup();
 	void SetSystem(UEffectSystem* bSystem);
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	UFUNCTION(BlueprintCallable)
-	static UParameterBindingSetupUI* InstanceFrom(UPanelWidget* Parent, UBindingParameterValueContext* Context);
+	static UParameterBindingSetupUI* InstanceFrom(UPanelWidget* Parent, UEffectSystem* bSystem, USubsystemConfig* bBindings);	
 };

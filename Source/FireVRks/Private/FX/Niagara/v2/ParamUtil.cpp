@@ -20,7 +20,7 @@ InnerType UParamUtil::GetTypedValue(UAbstractParameterValue* Value)
 	return Cast<OuterType>(Value)->Get();
 }
 
-WidgetWithValue* UParamUtil::GetValueWidget(UUserWidget* Outer, UAbstractParameterValue* Value, ParameterType Type)
+WidgetWithValue* UParamUtil::GetValueWidget(UUserWidget* Outer, ParameterType Type)
 {
 	WidgetWithValue* Widget = nullptr;
 	switch (Type)

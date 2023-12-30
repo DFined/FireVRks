@@ -29,7 +29,7 @@ public:
 	
 	virtual void InitializeBindingWidget() PURE_VIRTUAL("Initialize",);
 
-	virtual void WriteToContext(UParameterValueContext* Context) PURE_VIRTUAL("WriteToContext",);
+	virtual void WriteToContext(UParameterValueContext* bContext) PURE_VIRTUAL("WriteToContext",);
 
 	virtual void DefaultStyle();
 

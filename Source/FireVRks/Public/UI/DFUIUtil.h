@@ -42,6 +42,7 @@ public:
 		return Widget;
 	}
 
+	// Works well, but bad design. Only use if absolutely necessary
 	template <class T>
 	static T* AttemptFindWidgetByType(UWidget* Widget)
 	{
@@ -52,27 +53,6 @@ public:
 				return OuterAsTarget;
 			}
 			return AttemptFindWidgetByType<T>(UserWidget);
-		}
-		return nullptr;
-	}
-
-	template <class T>
-	static T* AttemptFindWidgetByOuterChain(UWidget* Widget)
-	{
-		if (auto SelfAsTarget = Cast<T>(Widget))
-		{
-			return SelfAsTarget;
-		}
-		auto Outer = Widget->GetOuter();
-		auto OuterAsWidget = Cast<UWidget>(Outer);
-		auto OuterAsTarget = Cast<T>(Outer);
-		if (OuterAsTarget)
-		{
-			return OuterAsTarget;
-		}
-		if (OuterAsWidget)
-		{
-			AttemptFindWidgetTree(OuterAsWidget);
 		}
 		return nullptr;
 	}
@@ -231,7 +211,7 @@ public:
 
 	static UButton* AddButtonToButtonPanel(UHorizontalBox* Panel, FString ButtonLabel, UWidgetTree* Tree)
 	{
-		if(Panel->GetChildrenCount() == 0)
+		if (Panel->GetChildrenCount() == 0)
 		{
 			auto Spacer = AddWidget<USpacer>(Tree, Panel);
 			DFStyleUtil::SafeSetHBoxSlotWidth(Spacer->Slot, FSlateChildSize(ESlateSizeRule::Fill));
@@ -244,11 +224,11 @@ public:
 		auto Label = AddWidget<UTextBlock>(Tree, Button);
 		Label->SetText(FText::FromString(ButtonLabel));
 		DFStyleUtil::TextBlockStyle(Label);
-		
-		
+
+
 		auto Spacer = AddWidget<USpacer>(Tree, Panel);
 		DFStyleUtil::SafeSetHBoxSlotWidth(Spacer->Slot, FSlateChildSize(ESlateSizeRule::Fill));
-		
+
 		return Button;
 	}
 
@@ -259,11 +239,49 @@ public:
 		auto LabelWidget = AddWidget<UTextBlock>(Tree, HBox);
 		LabelWidget->SetText(FText::FromString(Label));
 		DFStyleUtil::TextBlockStyle(LabelWidget);
-		
+
 		auto Widget = AddWidget<WidgetType>(Tree, HBox);
 		DFStyleUtil::SafeSetHBoxSlotWidth(Widget->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Center);
-		DFStyleUtil::SetPadding<UHorizontalBoxSlot>(Widget, FMargin(15,0,10,0));
+		DFStyleUtil::SetPadding<UHorizontalBoxSlot>(Widget, FMargin(15, 0, 10, 0));
 
 		return Widget;
+	}
+
+	static void MoveChildUp(UPanelWidget* Widget, UWidget* Child)
+	{
+		auto Num = Widget->GetChildIndex(Child);
+		if (Num > 0)
+		{
+			auto Children = Widget->GetAllChildren();
+			auto PrevChild = Children[Num - 1];
+			Children[Num - 1] = Child;
+			Children[Num] = PrevChild;
+
+			Widget->ClearChildren();
+
+			for (UWidget* ChildWidget : Children)
+			{
+				Widget->AddChild(ChildWidget);
+			}
+		}
+	}
+
+	static void MoveChildDown(UPanelWidget* Widget, UWidget* Child)
+	{
+		auto Num = Widget->GetChildIndex(Child);
+		if (Num < Widget->GetChildrenCount() - 1)
+		{
+			auto Children = Widget->GetAllChildren();
+			auto PrevChild = Children[Num + 1];
+			Children[Num + 1] = Child;
+			Children[Num] = PrevChild;
+
+			Widget->ClearChildren();
+
+			for (UWidget* ChildWidget : Children)
+			{
+				Widget->AddChild(ChildWidget);
+			}
+		}
 	}
 };

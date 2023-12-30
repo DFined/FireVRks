@@ -2,8 +2,8 @@
 #include "LaunchSettings.h"
 #include "NiagaraComponent.h"
 #include "NiagaraDataInterfaceExport.h"
-#include "FX/Niagara/System/SOSSpawnData.h"
 #include "FX/Niagara/SystemSettings/Enums/EnumLikeValue.h"
+#include "FX/Niagara/v2/System/SOSSpawnData.h"
 #include "CallbackSystemDriver.generated.h"
 
 UCLASS()

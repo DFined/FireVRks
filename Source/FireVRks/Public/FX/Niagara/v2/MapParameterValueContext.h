@@ -1,5 +1,6 @@
 #pragma once
 #include "ParameterValueContext.h"
+#include "Util/DFU.h"
 #include "MapParameterValueContext.generated.h"
 class UDFId;
 
@@ -16,8 +17,5 @@ public:
 	virtual void SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value) override;
 	void SetValue(UDFId* Parameter, UAbstractParameterValue* Value);
 
-	static UMapParameterValueContext* New(UObject* Outer)
-	{
-		return NewObject<UMapParameterValueContext>(Outer, StaticClass());
-	}
+	DF_NEW(UMapParameterValueContext)
 };

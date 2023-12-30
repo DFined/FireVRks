@@ -21,7 +21,7 @@ class FIREVRKS_API UArrayLaunchPattern : public UObject, public ParameterProvide
 	bool IsInit = false;
 
 	UPROPERTY()
-	TArray<UAbstractFormalParameter*> Parameters;
+	TMap<UDFId*, UAbstractFormalParameter*> Parameters;
 
 public:
 	UPROPERTY()
@@ -49,11 +49,15 @@ public:
 		"System", true, UDFStatics::DEFAULT_SYSTEM_ID
 	);
 
-	virtual TArray<UAbstractFormalParameter*>* GetOuterParameters() override;
+	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override;
 
 	void Init();
 	
 	void Launch(UParameterValueContext* Context, float Delay, bool IsTest) const;
 
 	static UArrayLaunchPattern* MakeInstance();
+
+	void Add(UAbstractFormalParameter* Parameter);
+
+	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override;
 };

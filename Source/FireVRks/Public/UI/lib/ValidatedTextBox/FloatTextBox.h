@@ -15,7 +15,7 @@ public:
 	};
 
 	
-	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override;
+	virtual UAbstractParameterValue* GetValue(UObject* Outer) override;
 
 	virtual FString ValueToString(UAbstractParameterValue* Value) override;
 };

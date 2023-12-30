@@ -13,11 +13,12 @@
 void UOuterParameterCreationWidget::NewParameter(UWidget* Widget)
 {
 	auto Input = Cast<UParameterCreatorInput>(Widget);
+	auto Param = UParamUtil::NewParam(System, Input->GetParamName(), Input->GetRequired(), Input->GetType());
 
-	auto Param = UParamUtil::NewParam(this, Input->GetParamName(), Input->GetRequired(), Input->GetType());
-	Context->GetOuterParameters().Add(Param);
-	
-	Draw(Context);
+	System->NewParameter(Param);
+
+	UMapParameterValueContext* Context = UMapParameterValueContext::Instance(this);
+	UParameterRenderer::RenderParam(this, Context, Param, PARAMETER_CREATION);
 }
 
 void UOuterParameterCreationWidget::OnAddParameter()
@@ -28,12 +29,15 @@ void UOuterParameterCreationWidget::OnAddParameter()
 	Popup->GetOnConfirm()->AddUniqueDynamic(this, &UOuterParameterCreationWidget::NewParameter);
 }
 
-void UOuterParameterCreationWidget::Draw(UBindingParameterValueContext* InContext)
+void UOuterParameterCreationWidget::Draw()
 {
-	Context = InContext;
 	Box->ClearChildren();
-	
-	for(UAbstractFormalParameter* Param : Context->GetOuterParameters())
+
+	auto Context = UMapParameterValueContext::Instance(this);
+
+	auto ParamValues = TArray<UAbstractFormalParameter*>();
+	System->GetOuterParametersInOrder(ParamValues);
+	for (UAbstractFormalParameter* Param : ParamValues)
 	{
 		UParameterRenderer::RenderParam(this, Context, Param, PARAMETER_CREATION);
 	}
@@ -42,12 +46,12 @@ void UOuterParameterCreationWidget::Draw(UBindingParameterValueContext* InContex
 UPanelWidget* UOuterParameterCreationWidget::MakeRootWidget(UWidgetTree* Tree)
 {
 	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_1);
+	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 
 	auto OuterBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, RootBorder);
 
 	auto PanelBorder = UDFUIUtil::AddWidget<UBorder>(Tree, OuterBox);
-	DFStyleUtil::BasicBorderStyle(PanelBorder, DFStyleUtil::GREY_LVL_2);
+	DFStyleUtil::BasicBorderStyle(PanelBorder, DFStyleUtil::GREY_LVL_3);
 
 	auto HBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, PanelBorder);
 	auto AddParamButton = UDFUIUtil::AddButtonToButtonPanel(HBox, "Add parameter", Tree);
@@ -61,4 +65,21 @@ UPanelWidget* UOuterParameterCreationWidget::MakeRootWidget(UWidgetTree* Tree)
 UPanelWidget* UOuterParameterCreationWidget::GetMountingPoint()
 {
 	return Box;
+}
+
+void UOuterParameterCreationWidget::SetSystem(UCustomEffectSystem* bSystem)
+{
+	this->System = bSystem;
+}
+
+void UOuterParameterCreationWidget::MoveUp(UParameterBindingWidget* Widget)
+{
+	UDFUIUtil::MoveChildUp(this->GetMountingPoint(), Widget);
+	System->MoveOuterParameterUp(Widget->GetParameter()->GetId());
+}
+
+void UOuterParameterCreationWidget::MoveDown(UParameterBindingWidget* Widget)
+{
+	UDFUIUtil::MoveChildDown(this->GetMountingPoint(), Widget);
+	System->MoveOuterParameterDown(Widget->GetParameter()->GetId());
 }

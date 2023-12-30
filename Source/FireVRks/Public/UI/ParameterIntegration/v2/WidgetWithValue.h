@@ -10,7 +10,7 @@ public:
 	virtual ~WidgetWithValue() override = default;
 	virtual void Initialize(UAbstractParameterValue* Value) = 0;
 	virtual void DefaultStyle() override;
-	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) = 0;
+	virtual UAbstractParameterValue* GetValue(UObject* Outer) = 0;
 	virtual void SetValue(UAbstractParameterValue* Value) = 0;
 
 	virtual void NotifyOfChange(UWidget* Self);

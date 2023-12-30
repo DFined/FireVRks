@@ -22,15 +22,15 @@ UPanelWidget* USystemInstantiationParameterBindingWidget::GetMountingPoint()
 	return OuterBorder;
 }
 
-void USystemInstantiationParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParameter* fParameter, UParameterValueContext* Context, ParameterDrawType DrawType)
+void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
 {
-	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(fParameter));
+	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
 	System = UDFStatics::EFFECT_SYSTEM_MANAGER->Get(Value->GetSystem());
 
 	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(WidgetTree, OuterBorder);
 	auto Box = UDFUIUtil::AddWidget<UHorizontalBox>(WidgetTree, VBox);
 
-	auto ParamName = UDFUIUtil::AddLabel(WidgetTree, Box, fParameter->GetDisplayName());
+	auto ParamName = UDFUIUtil::AddLabel(WidgetTree, Box, Parameter->GetDisplayName());
 	DFStyleUtil::SafeSetHBoxSlotWidth(ParamName->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 	DFStyleUtil::TextBlockStyle(ParamName);
 
@@ -44,10 +44,10 @@ void USystemInstantiationParameterBindingWidget::InitializeBindingWidget(UAbstra
 	InstanceParamUI->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &USystemInstantiationParameterBindingWidget::LayoutChanged);
 }
 
-void USystemInstantiationParameterBindingWidget::WriteToContext(UParameterValueContext* Context)
+void USystemInstantiationParameterBindingWidget::WriteToContext(UParameterValueContext* bContext)
 {
-	auto InstanceContext = NewObject<UMapParameterValueContext>(Context, UMapParameterValueContext::StaticClass());
+	auto InstanceContext = NewObject<UMapParameterValueContext>(bContext, UMapParameterValueContext::StaticClass());
 	InstanceParamUI->WriteToContext(InstanceContext);
-	auto Val = USystemInstantiationParameterValue::New(Context, InstanceContext, System->GetId());
-	Context->SetValue(Parameter, Val);
+	auto Val = USystemInstantiationParameterValue::New(bContext, InstanceContext, System->GetId());
+	bContext->SetValue(Parameter, Val);
 }

@@ -26,7 +26,7 @@ public:
 	UFUNCTION()
 	void ReInit();
 	virtual void Initialize(UAbstractParameterValue* Value) override;
-	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override;
+	virtual UAbstractParameterValue* GetValue(UObject* Outer) override;
 	virtual void SetValue(UAbstractParameterValue* Value) override;
 	virtual UWidget* AsWidget() override;
 

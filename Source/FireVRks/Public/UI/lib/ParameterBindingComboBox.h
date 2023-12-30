@@ -28,7 +28,7 @@ public:
 
 	virtual void DefaultStyle() override;
 
-	virtual UAbstractParameterValue* GetValue(UParameterValueContext* Context) override;
+	virtual UAbstractParameterValue* GetValue(UObject* Outer) override;
 
 	UFUNCTION()
 	void HandleSelectionChangedInternal(FString SelectedItem, ESelectInfo::Type SelectionType)

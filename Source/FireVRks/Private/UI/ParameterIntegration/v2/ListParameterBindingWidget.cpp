@@ -24,7 +24,7 @@ UPanelWidget* UListParameterBindingWidget::GetMountingPoint()
 
 void UListParameterBindingWidget::NewItem()
 {
-	AddWidgetFromParam(UMapParameterValueContext::New(this), Cast<UListFormalParameter>(Parameter)->GetChildType());
+	AddWidgetFromParam(UMapParameterValueContext::Instance(this), Cast<UListFormalParameter>(Parameter)->GetChildType());
 	this->OnChange();
 	this->LayoutChanged();
 }
@@ -35,12 +35,12 @@ void UListParameterBindingWidget::AddWidgetFromParam(UParameterValueContext* Sub
 	NewWidget->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UListParameterBindingWidget::LayoutChanged);
 }
 
-void UListParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParameter* fParameter, UParameterValueContext* Context, ParameterDrawType bDrawType)
+void UListParameterBindingWidget::InitializeBindingWidget()
 {
-	this->DrawType = bDrawType;
+	this->DrawType = DrawType;
 	auto OuterVBox = UDFUIUtil::AddWidget<UVerticalBox>(this->WidgetTree, OuterBorder);
 	auto HeaderBox = UDFUIUtil::AddUserWidget<UDFUILine>(OuterVBox);
-	auto NameLabel = UDFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), fParameter->GetDisplayName());
+	auto NameLabel = UDFUIUtil::AddLabel(this->WidgetTree, HeaderBox->GetMountingPoint(), Parameter->GetDisplayName());
 	DFStyleUtil::TextBlockStyle(NameLabel);
 	if(UHorizontalBoxSlot* TSlot = Cast<UHorizontalBoxSlot>(NameLabel->Slot))
 	{
@@ -63,9 +63,9 @@ void UListParameterBindingWidget::InitializeBindingWidget(UAbstractFormalParamet
 	}
 }
 
-void UListParameterBindingWidget::WriteToContext(UParameterValueContext* Context)
+void UListParameterBindingWidget::WriteToContext(UParameterValueContext* bContext)
 {
-	auto Value = NewObject<UListParameterValue>(Context, UListParameterValue::StaticClass());
+	auto Value = NewObject<UListParameterValue>(bContext, UListParameterValue::StaticClass());
 	for(UWidget* Widget: ListStack->GetMountingPoint()->GetAllChildren())
 	{
 		if(auto ParamWidget = Cast<UParameterBindingWidget>(Widget))
@@ -75,7 +75,7 @@ void UListParameterBindingWidget::WriteToContext(UParameterValueContext* Context
 			ParamWidget->WriteToContext(NewContext);
 		}
 	}
-	Context->SetValue(this->Parameter, Value);
+	bContext->SetValue(this->Parameter, Value);
 }
 
 

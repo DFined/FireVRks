@@ -5,5 +5,6 @@ class ParameterProvider
 {
 public:
 	virtual ~ParameterProvider() = default;
-	virtual TArray<UAbstractFormalParameter*>* GetOuterParameters() {return nullptr;}
+	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() = 0;
+	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) = 0;
 };

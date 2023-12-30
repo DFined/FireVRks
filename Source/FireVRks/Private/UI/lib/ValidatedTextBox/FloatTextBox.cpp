@@ -13,10 +13,10 @@ bool UFloatTextBox::ValidateFloat(FString Value) {
 	return (end - start) == Value.Len();
 }
 
-UAbstractParameterValue* UFloatTextBox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UFloatTextBox::GetValue(UObject* Outer)
 {
 	FString str = this->GetText().ToString();
-	return UFloatParameterValue::New(Context, FCString::Atof(*str));
+	return UFloatParameterValue::New(Outer, FCString::Atof(*str));
 }
 
 FString UFloatTextBox::ValueToString(UAbstractParameterValue* Value)

@@ -4,6 +4,7 @@
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "UI/DFUIUtil.h"
 #include "UI/ParameterIntegration/v2/ParameterRenderer.h"
+#include "Util/DFU.h"
 
 UPanelWidget* UParameterInputUI::MakeRootWidget(UWidgetTree* Tree)
 {
@@ -32,7 +33,9 @@ void UParameterInputUI::WriteToContext(UParameterValueContext* FillContext)
 
 void UParameterInputUI::Draw(UParameterValueContext* InitialContext)
 {
-	for (UAbstractFormalParameter* Parameter : *Provider->GetOuterParameters())
+	auto OuterParameters = TArray<UAbstractFormalParameter*>();
+	Provider->GetOuterParametersInOrder(OuterParameters);
+	for (UAbstractFormalParameter* Parameter : OuterParameters)
 	{
 		if(Parameter->GetPredicate()->Check(InitialContext))
 		{
@@ -40,7 +43,6 @@ void UParameterInputUI::Draw(UParameterValueContext* InitialContext)
 			NewParam->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UParameterInputUI::LayoutChanged);
 		}
 	}
-	DumpToContext();
 }
 
 void UParameterInputUI::OnChange()

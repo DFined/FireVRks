@@ -14,9 +14,9 @@ void UParameterBindingCheckbox::DefaultStyle()
 	DFStyleUtil::CheckBoxStyle(this);	
 }
 
-UAbstractParameterValue* UParameterBindingCheckbox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UParameterBindingCheckbox::GetValue(UObject* Outer)
 {
-	return UBoolParameterValue::New(Context, this->IsChecked());
+	return UBoolParameterValue::New(Outer, this->IsChecked());
 }
 
 void UParameterBindingCheckbox::Initialize(UAbstractParameterValue* Value)

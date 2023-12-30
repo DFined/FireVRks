@@ -1,8 +1,5 @@
 #pragma once
 #include "EffectSystem.h"
-#include "FX/Niagara/Scheduler/LaunchSettings.h"
-#include "FX/Niagara/Scheduler/SystemSpawnData.h"
-#include "FX/Niagara/SystemSettings/Enums/EnumLike.h"
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/FormalParameter/BoolFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/ColorFormalParameter.h"
@@ -21,7 +18,7 @@ class FIREVRKS_API UDefaultParameterSystem : public UEffectSystem
 	GENERATED_BODY()
 
 	UPROPERTY()
-	TArray<UAbstractFormalParameter*> Parameters = TArray<UAbstractFormalParameter*>();
+	TMap<UDFId*, UAbstractFormalParameter*> Parameters = TMap<UDFId*, UAbstractFormalParameter*>();
 
 	bool IsInit = false;
 
@@ -43,7 +40,7 @@ public:
 	UPROPERTY()
 	UColorFormalParameter* MAIN_COLOR = UParamUtil::Global<UColorFormalParameter, FLinearColor>("Main color", true, FLinearColor(255, 1, 1));
 	UPROPERTY()
-	UColorFormalParameter* SECONDARY_COLOR = UParamUtil::Global<UColorFormalParameter, FLinearColor>("Main color", true, FLinearColor(1, 1, 255));
+	UColorFormalParameter* SECONDARY_COLOR = UParamUtil::Global<UColorFormalParameter, FLinearColor>("Secondary color", true, FLinearColor(1, 1, 255));
 	UPROPERTY()
 	UIntFormalParameter* SPRITE_COUNT = UParamUtil::Global<UIntFormalParameter, int>("Star count", true, 100);
 	UPROPERTY()
@@ -273,7 +270,7 @@ public:
 
 	void AddParameter(UAbstractFormalParameter* Parameter);
 
-	TArray<UAbstractFormalParameter*> GetParameters() const
+	TMap<UDFId*, UAbstractFormalParameter*> GetParameters() const
 	{
 		return Parameters;
 	}
@@ -287,7 +284,8 @@ public:
 		return Sys;
 	}
 	
-	virtual TArray<UAbstractFormalParameter*>* GetOuterParameters() override;
+	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override;
+	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override;
 	FString GetId();
 	FString GetName();
 	virtual UTexture2D* GetIcon() override;

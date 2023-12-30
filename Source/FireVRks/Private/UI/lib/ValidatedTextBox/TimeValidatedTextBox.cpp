@@ -14,7 +14,7 @@ bool UTimeValidatedTextBox::ValidateTime(FString Value)
 	return (end - start) == Value.Len();
 }
 
-UAbstractParameterValue* UTimeValidatedTextBox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UTimeValidatedTextBox::GetValue(UObject* Outer)
 {
 	return nullptr;
 }

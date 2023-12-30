@@ -29,10 +29,10 @@ void UParameterBindingComboBox::DefaultStyle()
 	DFStyleUtil::ComboBox(this);
 }
 
-UAbstractParameterValue* UParameterBindingComboBox::GetValue(UParameterValueContext* Context)
+UAbstractParameterValue* UParameterBindingComboBox::GetValue(UObject* Outer)
 {
 	FString Value = this->GetSelectedOption();
-	return UEnumParameterValue::New(Context, EnumType->Get(Value));
+	return UEnumParameterValue::New(Outer, EnumType->Get(Value));
 }
 
 UWidget* UParameterBindingComboBox::AsWidget()

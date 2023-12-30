@@ -24,6 +24,7 @@ public:
 	
 	virtual UPanelWidget* GetMountingPoint() override;
 
+	UFUNCTION(BlueprintCallable)
 	void DumpToContext();
 	void WriteToContext(UParameterValueContext* FillContext);
 
@@ -33,5 +34,11 @@ public:
 	void SetProvider(ParameterProvider* bProvider)
 	{
 		this->Provider = bProvider;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	UParameterValueContext* GetContext() 
+	{
+		return Context;
 	}
 };

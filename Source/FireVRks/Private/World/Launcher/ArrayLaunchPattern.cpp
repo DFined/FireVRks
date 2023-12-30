@@ -2,7 +2,7 @@
 
 #include "FX/Niagara/Scheduler/LaunchSettings.h"
 
-TArray<UAbstractFormalParameter*>* UArrayLaunchPattern::GetOuterParameters()
+TMap<UDFId*, UAbstractFormalParameter*>* UArrayLaunchPattern::GetOuterParameters()
 {
 	return &Parameters;
 }
@@ -11,10 +11,10 @@ void UArrayLaunchPattern::Init()
 {
 	if (!IsInit)
 	{
-		Parameters = TArray<UAbstractFormalParameter*>();
-		Parameters.Add(ARRAY_LAUNCH_SETTING);
-		Parameters.Add(ARRAY_NAME);
-		Parameters.Add(SYSTEMS);
+		Parameters = TMap<UDFId*, UAbstractFormalParameter*>();
+		Add(ARRAY_LAUNCH_SETTING);
+		Add(ARRAY_NAME);
+		Add(SYSTEMS);
 
 		ARRAY_LAUNCH_SETTING->Add(ARRAY_TRAVERSAL_TYPE);
 		ARRAY_LAUNCH_SETTING->Add(INVERT_ORDER);
@@ -67,4 +67,14 @@ UArrayLaunchPattern* UArrayLaunchPattern::MakeInstance()
 	Obj->AddToRoot();
 	Obj->Init();
 	return Obj;
+}
+
+void UArrayLaunchPattern::Add(UAbstractFormalParameter* Parameter)
+{
+	Parameters.Add(Parameter->GetId(), Parameter);
+}
+
+void UArrayLaunchPattern::GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result)
+{
+	DFU::GetValues(Parameters, Result);
 }
