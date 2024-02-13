@@ -72,4 +72,6 @@ public:
 	
 	
 	int GetOrdinal() const;
+
+	FString GetName() const;
 };

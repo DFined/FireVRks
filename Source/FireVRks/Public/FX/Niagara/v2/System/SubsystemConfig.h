@@ -9,16 +9,13 @@
 #include "Util/DFU.h"
 #include "SubsystemConfig.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class FIREVRKS_API USubsystemConfig : public UObject
 {
 	GENERATED_BODY()
 
 	UPROPERTY()
-	FString SubsystemName = "New subsystem";
+	FString DisplayName = "New subsystem";
 
 	UPROPERTY()
 	USubsystemParameterBindings* Bindings;
@@ -31,12 +28,12 @@ public:
 
 	FString GetSubsystemName() const
 	{
-		return SubsystemName;
+		return DisplayName;
 	}
 
 	void SetSubsystemName(const FString& bSubsystemName)
 	{
-		this->SubsystemName = bSubsystemName;
+		this->DisplayName = bSubsystemName;
 	}
 
 	UDFId* GetId() const
@@ -55,4 +52,21 @@ public:
 	}
 
 	DF_CHILD_MEMBER(USubsystemParameterBindings, Bindings)
+
+	TSharedPtr<FJsonObject> ToJson()
+	{
+		auto Obj = new FJsonObject();
+		Obj->SetStringField("Id", Id->GetId());
+		Obj->SetStringField("DisplayName", DisplayName);
+		Bindings->AddToJson(Obj);
+		return MakeShareable(Obj);
+	}
+
+	static USubsystemConfig* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer)
+	{
+		auto Config = Instance(Outer, UDFId::Named(Outer, Json->GetStringField("Id")));
+		Config->SetSubsystemName(Json->GetStringField("DisplayName"));
+		Config->Bindings = USubsystemParameterBindings::GetFromJson(Json, Config); 
+		return Config;
+	}
 };

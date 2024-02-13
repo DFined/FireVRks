@@ -3,20 +3,21 @@
 
 #include "UI/CoreUI/StackableLaunchInstanceTile.h"
 
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/Icons.h"
+#include "Util/DFStatics.h"
 
 int UStackableLaunchInstanceTile::PLUS_BUTTON_SIZE = 32;
 
 
-UPanelWidget* UStackableLaunchInstanceTile::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UStackableLaunchInstanceTile::MakeRootWidget()
 {
-	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
-	auto HBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, RootBorder);
-	VBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, HBox);
+	auto HBox = DFUI::AddWidget<UHorizontalBox>(RootBorder);
+	VBox = DFUI::AddWidget<UVerticalBox>(HBox);
 	
-	auto DelBtn = UDFUIUtil::MakeImageButton(Tree, HBox, &Icons::DELETE_ICON, PLUS_BUTTON_SIZE);
+	auto DelBtn = DFUI::AddImageButton(HBox, UDFStatics::ICONS->DELETE_ICON, PLUS_BUTTON_SIZE);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	DelBtn->OnPressed.AddUniqueDynamic(this, &UStackableLaunchInstanceTile::RemoveTile);
 	
@@ -35,7 +36,7 @@ void UStackableLaunchInstanceTile::Initialize(UParameterValueContext* bContext, 
 	LaunchInputUI->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UStackableLaunchInstanceTile::LayoutChanged);
 	this->Parent = SegmentTile;
 	
-	auto PlusBtn = UDFUIUtil::MakeImageButton(WidgetTree, VBox, &Icons::PLUS_ICON, PLUS_BUTTON_SIZE);
+	auto PlusBtn = DFUI::AddImageButton(VBox, UDFStatics::ICONS->PLUS_ICON, PLUS_BUTTON_SIZE);
 	DFStyleUtil::SafeSetVBoxSlotWidth(PlusBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	PlusBtn->OnPressed.AddUniqueDynamic(this, &UStackableLaunchInstanceTile::AddTile);
 }

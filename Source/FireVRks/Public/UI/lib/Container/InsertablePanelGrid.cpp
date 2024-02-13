@@ -3,8 +3,9 @@
 #include "WidgetArray.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanelSlot.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/Icons.h"
+#include "Util/DFStatics.h"
 
 UCanvasPanelSlot* UInsertablePanelGrid::GetSlot(int X, int Y)
 {
@@ -13,7 +14,7 @@ UCanvasPanelSlot* UInsertablePanelGrid::GetSlot(int X, int Y)
 
 void UInsertablePanelGrid::MakePlusButton(int X, int Y)
 {
-	auto Btn = UDFUIUtil::MakeImageButton(WidgetTree, this->GetMountingPoint(), &Icons::PLUS_ICON, BUTTON_SIZE);
+	auto Btn = DFUI::AddImageButton(this->GetMountingPoint(), UDFStatics::ICONS->PLUS_ICON, BUTTON_SIZE);
 	auto BSlot = Cast<UCanvasPanelSlot>(Btn->Slot);
 	BSlot->SetAutoSize(true);
 	BSlot->SetPosition(FVector2D(X, Y));
@@ -103,9 +104,9 @@ void UInsertablePanelGrid::ReTile()
 }
 
 
-UPanelWidget* UInsertablePanelGrid::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UInsertablePanelGrid::MakeRootWidget()
 {
-	Panel = UDFUIUtil::MakeWidget<UCanvasPanel>(Tree);
+	Panel = DFUI::MakeWidget<UCanvasPanel>(this);
 	return Panel;
 }
 

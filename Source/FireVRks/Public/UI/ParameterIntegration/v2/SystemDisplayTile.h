@@ -2,7 +2,7 @@
 #include "ClickableSystemTile.h"
 #include "Components/Border.h"
 #include "FX/Niagara/v2/System/EffectSystem.h"
-#include "UI/lib/Container/DFUIBase.h"
+#include "DFUI/DFUIBase.h"
 #include "SystemDisplayTile.generated.h"
 
 UCLASS()
@@ -18,7 +18,7 @@ class FIREVRKS_API USystemDisplayTile : public UDFUIBase
 public:
 	UFUNCTION()
 	void OpenSystemSelection(UClickableSystemTile* Tile);
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 
 	void SetSystem(UEffectSystem* System, int IconSize);
 	

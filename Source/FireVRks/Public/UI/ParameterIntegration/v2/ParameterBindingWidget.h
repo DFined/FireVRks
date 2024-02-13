@@ -2,12 +2,12 @@
 #include "ParameterDrawType.h"
 #include "Blueprint/UserWidget.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
-#include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "ParameterBindingWidget.generated.h"
 
+
 UCLASS()
-class FIREVRKS_API UParameterBindingWidget : public UDFUIContainer
+class FIREVRKS_API UParameterBindingWidget : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -21,7 +21,7 @@ protected:
 	ParameterDrawType DrawType;
 	
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override PURE_VIRTUAL("MakeRootWidget", return nullptr;);
+	virtual UPanelWidget* MakeRootWidget() override PURE_VIRTUAL("MakeRootWidget", return nullptr;);
 
 	virtual UPanelWidget* GetMountingPoint() override PURE_VIRTUAL("GetMountingPoint", return nullptr;);
 
@@ -35,5 +35,6 @@ public:
 
 	UAbstractFormalParameter* GetParameter() const;
 
-	virtual void OnChange() override;
+	virtual void OnChange();
+
 };

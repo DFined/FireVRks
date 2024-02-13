@@ -8,11 +8,11 @@
 #include "Components/HorizontalBox.h"
 #include "Components/VerticalBox.h"
 #include "FX/Niagara/v2/System/CustomEffectSystem.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "ParameterBindingSetupUI.generated.h"
 
 UCLASS()
-class FIREVRKS_API UParameterBindingSetupUI : public UDFUIContainer
+class FIREVRKS_API UParameterBindingSetupUI : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -38,7 +38,7 @@ public:
 	UFUNCTION()
 	void Delete();
 	
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	
 	UFUNCTION()
 	void MoveUp();

@@ -3,21 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "ParameterControlWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class FIREVRKS_API UParameterControlWidget : public UDFUIContainer
+class FIREVRKS_API UParameterControlWidget : public UDFUIBase
 {
 	GENERATED_BODY()
-	
 public:	
 	/**
 	 * Construct the root widget
 	*/
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) PURE_VIRTUAL("MakeRootWidget", return nullptr;);
-	virtual void OnChange();
+	virtual UPanelWidget* MakeRootWidget() PURE_VIRTUAL("MakeRootWidget", return nullptr;);
+	virtual void OnChange();	
 };

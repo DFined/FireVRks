@@ -17,4 +17,8 @@ public:
 	static UEnumParameterValue* New(UObject* Outer, EnumLikeValue* Value);
 
 	EnumLikeValue* Get() const;
+	
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+	
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 };

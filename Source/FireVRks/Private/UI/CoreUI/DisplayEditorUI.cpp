@@ -6,17 +6,19 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/ScrollBoxSlot.h"
 #include "Kismet/GameplayStatics.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
+#include "UI/EDFUI.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/LaunchSegmentTile.h"
 #include "UI/lib/ValidatedTextBox/TimeValidatedTextBox.h"
+#include "Util/DFStatics.h"
 
-UPanelWidget* UDisplayEditorUI::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UDisplayEditorUI::MakeRootWidget()
 {
-	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 
-	Canvas = UDFUIUtil::AddWidget<UCanvasPanel>(Tree, RootBorder);
+	Canvas = DFUI::AddWidget<UCanvasPanel>(RootBorder);
 
 	return RootBorder;
 }
@@ -36,7 +38,7 @@ void UDisplayEditorUI::InitializeDFWidget(UDisplayData* fData)
 	}
 	for (auto Segment : *Data->GetLaunchSegments())
 	{
-		auto SegmentUI = UDFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
+		auto SegmentUI = DFUI::AddWidget<ULaunchSegmentTile>(Canvas);
 		auto bSlot = Cast<UCanvasPanelSlot>(SegmentUI->Slot);
 		SegmentUI->Initialize(Segment, this);
 		bSlot->SetAutoSize(true);
@@ -54,7 +56,7 @@ void UDisplayEditorUI::NewSegment(UWidget* Input)
 	Data->GetLaunchSegments()->Add(Segment);
 	Segment->SetTime(TimeBox->GetSeconds());
 
-	auto SegmentUI = UDFUIUtil::AddUserWidget<ULaunchSegmentTile>(Canvas);
+	auto SegmentUI = DFUI::AddWidget<ULaunchSegmentTile>(Canvas);
 	auto bSlot = Cast<UCanvasPanelSlot>(SegmentUI->Slot);
 	SegmentUI->Initialize(Segment, this);
 	bSlot->SetAutoSize(true);
@@ -67,7 +69,7 @@ void UDisplayEditorUI::NewSegment(UWidget* Input)
 void UDisplayEditorUI::GetNewTime()
 {
 	auto Ctrlr = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	auto Popup = UDFUIUtil::OpenInputPopup<UTimeValidatedTextBox>(Ctrlr, "Enter launch time for new segment");
+	auto Popup = EDFUI::OpenInputPopup<UTimeValidatedTextBox>(Ctrlr, "Enter launch time for new segment");
 	auto InputBox = Popup->GetWidget<UTimeValidatedTextBox>();
 	InputBox->SetSeconds(0);
 	Popup->GetOnConfirm()->AddUniqueDynamic(this, &UDisplayEditorUI::NewSegment);
@@ -75,7 +77,7 @@ void UDisplayEditorUI::GetNewTime()
 
 void UDisplayEditorUI::MakePlusButton(int Offset, int i)
 {
-	auto Btn = UDFUIUtil::MakeImageButton(WidgetTree, Canvas, &Icons::PLUS_ICON, BUTTON_SIZE);
+	auto Btn = DFUI::AddImageButton(Canvas, UDFStatics::ICONS->PLUS_ICON, BUTTON_SIZE);
 	Buttons.Add(Btn);
 	if (auto bSlot = Cast<UCanvasPanelSlot>(Btn->Slot))
 	{
@@ -120,14 +122,14 @@ void UDisplayEditorUI::Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* S
 
 UDisplayEditorUI* UDisplayEditorUI::NewEmpty(UPanelWidget* Parent)
 {
-	auto Editor = UDFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
+	auto Editor = DFUI::AddWidget<UDisplayEditorUI>(Parent);
 	Editor->InitializeDFWidget(UDisplayData::New(Editor));
 	return Editor;
 }
 
 UDisplayEditorUI* UDisplayEditorUI::New(UPanelWidget* Parent, UDisplayData* Data)
 {
-	auto Editor = UDFUIUtil::AddUserWidget<UDisplayEditorUI>(Parent);
+	auto Editor = DFUI::AddWidget<UDisplayEditorUI>(Parent);
 	Editor->InitializeDFWidget(Data);
 	return Editor;
 }

@@ -5,23 +5,23 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "UI/Icons.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
+#include "DFUI/DFUI.h"
+#include "Util/DFStatics.h"
 
 
-UPanelWidget* UDFUIStack::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UDFUIStack::MakeRootWidget()
 {
-	auto Box = Tree->ConstructWidget<UVerticalBox>(UVerticalBox::StaticClass());
-	auto Border = Tree->ConstructWidget<UBorder>(UBorder::StaticClass(), "RootWidget");
+	auto Border = DFUI::MakeWidget<UBorder>(this);
+	VerticalBox = DFUI::MakeWidget<UVerticalBox>(Border);
 	FSlateBrush Brush = FSlateBrush();
 	Brush.Margin = FMargin(0.3f, 0.0f, 0.0f, 0.0f);
 	Brush.DrawAs = ESlateBrushDrawType::Box;
-	auto Texture = DFStyleUtil::LoadCachedTexture(&Icons::LEFT_OFFSET_BORDER);
+	auto Texture = DFStyleUtil::LoadCachedTexture(UDFStatics::ICONS->LEFT_OFFSET_BORDER);
 	Brush.SetResourceObject(Texture);
 	Brush.Tiling = ESlateBrushTileType::NoTile;
 	Brush.ImageType = ESlateBrushImageType::Linear;
 	Border->SetBrush(Brush);
-	Border->AddChild(Box);
-	VerticalBox = Box;
 	return Border;
 }
 

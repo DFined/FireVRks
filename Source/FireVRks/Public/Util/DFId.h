@@ -23,4 +23,6 @@ public:
 	static uint32 PreHash(const FString& Fid);
 	static UDFId* Named(UObject* Outer, const FString& Fid);
 	static UDFId* Random(UObject* Outer);
+
+	FString GetId() const;
 };

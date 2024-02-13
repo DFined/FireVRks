@@ -1,5 +1,5 @@
 #pragma once
-#include "DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanel.h"
 #include "UI/lib/Container/WidgetArray.h"
@@ -10,7 +10,7 @@
  * Clusterf*** of a class to implement the main UI. TODO: rewrite this when I figure out a better way to do this
  */
 UCLASS()
-class FIREVRKS_API UInsertablePanelGrid : public UDFUIContainer
+class FIREVRKS_API UInsertablePanelGrid : public UDFUIBase
 {
 	GENERATED_BODY()
 	
@@ -47,7 +47,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ReTile();
 
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 
 	virtual UPanelWidget* GetMountingPoint() override;
 };

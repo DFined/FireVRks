@@ -23,7 +23,7 @@ class FIREVRKS_API USystemInstantiationParameterBindingWidget : public UParamete
 	UEffectParameterInputUI* InstanceParamUI;
 
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	virtual void InitializeBindingWidget() override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;

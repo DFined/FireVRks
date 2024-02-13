@@ -3,9 +3,10 @@
 #include "FX/Niagara/v2/BindingParameterValueContext.h"
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/System/SubsystemConfig.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/EffectEditorUI.h"
+#include "UI/lib/Container/DFUILine.h"
 #include "UI/ParameterIntegration/v2/BlockParameterBindingWidget.h"
 #include "UI/ParameterIntegration/v2/OuterParameterCreationWidget.h"
 #include "UI/ParameterIntegration/v2/ParamBindingSelectionWidget.h"
@@ -19,13 +20,13 @@ void UParameterLineBindingWidget::OnDelete()
 
 void UParameterLineBindingWidget::MoveUp()
 {
-	auto OuterWidget = UDFUIUtil::AttemptFindWidgetByType<UOuterParameterCreationWidget>(this);
+	auto OuterWidget = DFUI::AttemptFindWidgetByType<UOuterParameterCreationWidget>(this);
 	OuterWidget->MoveUp(this);
 }
 
 void UParameterLineBindingWidget::MoveDown()
 {
-	auto OuterWidget = UDFUIUtil::AttemptFindWidgetByType<UOuterParameterCreationWidget>(this);
+	auto OuterWidget = DFUI::AttemptFindWidgetByType<UOuterParameterCreationWidget>(this);
 	OuterWidget->MoveDown(this);
 }
 
@@ -60,16 +61,16 @@ void UParameterLineBindingWidget::OnParamBound(FString SelectedItem, ESelectInfo
 {
 	if (SelectionType != ESelectInfo::Type::Direct)
 	{
-		auto Config = DFU::AttemptFindObjectByType<USubsystemConfig>(Context);
+		auto BindingContext = Cast<UBindingParameterValueContext>(Context);
 		auto SelectedParam = BindSelector->GetSelectedParam();
 		if (SelectedParam)
 		{
-			Config->GetBindings()->GetBindings().Add(Parameter->GetId(), SelectedParam);
+			BindingContext->GetBindings()->GetBindings().Add(Parameter->GetId(), SelectedParam);
 			ChildWidget->AsWidget()->SetVisibility(ESlateVisibility::Collapsed);
 		}
 		else
 		{
-			Config->GetBindings()->GetBindings().Remove(Parameter->GetId());
+			BindingContext->GetBindings()->GetBindings().Remove(Parameter->GetId());
 			ChildWidget->AsWidget()->SetVisibility(ESlateVisibility::Visible);
 		}
 	}
@@ -84,14 +85,11 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 
 	DFStyleUtil::LineBorderStyle(Border);
 
-	auto Line = UDFUIUtil::AddUserWidget<UDFUILine>(Border);
+	auto Line = DFUI::AddWidget<UDFUILine>(Border);
 
-	auto NameBox = UDFUIUtil::AddLabel(WidgetTree, Line->GetMountingPoint(), Parameter->GetDisplayName());
+	auto NameBox = DFUI::AddLabel(Line->GetMountingPoint(), Parameter->GetDisplayName());
 	Cast<UHorizontalBoxSlot>(NameBox->Slot)->SetPadding(FMargin(0, 0, 30, 0));
 	DFStyleUtil::SafeSetHBoxSlotWidth(NameBox->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Fill, VAlign_Center);
-
-	DFStyleUtil::TextBlockStyle(NameBox);
-
 
 	ChildWidget = UParamUtil::GetValueWidget(this, Parameter->GetType());
 	switch (DrawType)
@@ -118,15 +116,17 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 
 	if (DrawType == PARAMETER_CREATION)
 	{
-		auto UpBtn = UDFUIUtil::MakeImageButton(WidgetTree, Line->GetMountingPoint(), &Icons::UP_ICON, 24);
+		auto UpBtn = DFUI::AddImageButton(Line->GetMountingPoint(), UDFStatics::ICONS->UP_ICON, 24);
 		DFStyleUtil::SafeSetHBoxSlotWidth(UpBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 		UpBtn->OnPressed.AddUniqueDynamic(this, &UParameterLineBindingWidget::MoveUp);
 
-		auto DownBtn = UDFUIUtil::MakeImageButton(WidgetTree, Line->GetMountingPoint(), &Icons::DOWN_ICON, 24);
+		auto DownBtn = DFUI::AddImageButton(Line->GetMountingPoint(), UDFStatics::ICONS->DOWN_ICON,
+		                                          24);
 		DFStyleUtil::SafeSetHBoxSlotWidth(DownBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 		DownBtn->OnPressed.AddUniqueDynamic(this, &UParameterLineBindingWidget::MoveDown);
 
-		auto DeleteBtn = UDFUIUtil::MakeImageButton(WidgetTree, Line->GetMountingPoint(), &Icons::DELETE_ICON, 32);
+		auto DeleteBtn = DFUI::AddImageButton(Line->GetMountingPoint(),
+		                                            UDFStatics::ICONS->DELETE_ICON, 32);
 		DFStyleUtil::SafeSetHBoxSlotWidth(DeleteBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 		DeleteBtn->OnPressed.AddUniqueDynamic(this, &UParameterLineBindingWidget::OnDelete);
 	}
@@ -137,7 +137,7 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 
 		TArray<UAbstractFormalParameter*> AvailableParams = TArray<UAbstractFormalParameter*>();
 		System->FindAvailableOuters(Parameter->GetType(), AvailableParams);
-		BindSelector = UDFUIUtil::MakeWidget<UParamBindingSelectionWidget>(WidgetTree);
+		BindSelector = DFUI::MakeWidget<UParamBindingSelectionWidget>(this);
 		BindSelector->ReInit(AvailableParams);
 		DFStyleUtil::ComboBox(BindSelector);
 		BindSelector->OnSelectionChanged.AddUniqueDynamic(this, &UParameterLineBindingWidget::OnParamBound);
@@ -157,9 +157,9 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 }
 
 
-UPanelWidget* UParameterLineBindingWidget::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UParameterLineBindingWidget::MakeRootWidget()
 {
-	Border = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	Border = DFUI::MakeWidget<UBorder>(this);
 	return Border;
 }
 
@@ -173,24 +173,34 @@ void UParameterLineBindingWidget::WriteToContext(UParameterValueContext* bContex
 	bContext->SetValue(Parameter, ChildWidget->GetValue(bContext));
 }
 
+void UParameterLineBindingWidget::RedrawParentBlock()
+{
+	auto Block = DFUI::AttemptFindWidgetByType<UBlockParameterBindingWidget>(this);
+	if (Block)
+	{
+		Block->Redraw();
+	}
+}
+
 void UParameterLineBindingWidget::OnChange()
 {
 	switch (DrawType)
 	{
 	case PARAMETER_CREATION:
 		Parameter->SetDefault(ChildWidget->GetValue(Parameter));
+		break;
 	case SYSTEM_INSTANCE_PARAMS:
 		{
 			Context->SetValue(Parameter, ChildWidget->GetValue(Context));
-			auto Block = UDFUIUtil::AttemptFindWidgetByType<UBlockParameterBindingWidget>(this);
-			if (Block)
-			{
-				Block->Redraw();
-			}
+			RedrawParentBlock();
 			break;
 		}
 	case INNER_SYSTEM_BINDING:
-		auto Config = DFU::AttemptFindObjectByType<USubsystemConfig>(Context);
-		Config->GetBindings()->GetConstantValues().Add(Parameter->GetId(), ChildWidget->GetValue(Config));
+		if (auto BindingContext = Cast<UBindingParameterValueContext>(Context))
+		{
+			BindingContext->GetBindings()->GetConstantValues().Add(Parameter->GetId(), ChildWidget->GetValue(Context));
+			RedrawParentBlock();
+		}
+		break;
 	}
 }

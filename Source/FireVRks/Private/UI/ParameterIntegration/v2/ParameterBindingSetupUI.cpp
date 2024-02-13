@@ -3,70 +3,71 @@
 
 #include "UI/ParameterIntegration/v2/ParameterBindingSetupUI.h"
 
+#include "Components/Spacer.h"
 #include "FX/Niagara/v2/BindingParameterValueContext.h"
 #include "FX/Niagara/v2/System/SubsystemConfig.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/EffectEditorUI.h"
 #include "UI/ParameterIntegration/v2/ParameterRenderer.h"
 #include "UI/ParameterIntegration/v2/SystemDisplayTile.h"
+#include "Util/DFStatics.h"
 
 void UParameterBindingSetupUI::Delete()
 {
 	this->RemoveFromParent();
 	auto CustomSystem = DFU::AttemptFindObjectByType<UCustomEffectSystem>(SubsystemConfig);
-	CustomSystem->GetSubsystemConfig().Remove(SubsystemConfig->GetId());
+	CustomSystem->GetSubsystemConfig().Remove(SubsystemConfig);
 }
 
 
 void UParameterBindingSetupUI::MoveUp()
 {
-	auto Editor = UDFUIUtil::AttemptFindWidgetByType<UEffectEditorUI>(this);
+	auto Editor = DFUI::AttemptFindWidgetByType<UEffectEditorUI>(this);
 	Editor->MoveSystemUp(this);
 }
 
 void UParameterBindingSetupUI::MoveDown()
 {
-	auto Editor = UDFUIUtil::AttemptFindWidgetByType<UEffectEditorUI>(this);
+	auto Editor = DFUI::AttemptFindWidgetByType<UEffectEditorUI>(this);
 	Editor->MoveSystemDown(this);
 }
 
-UPanelWidget* UParameterBindingSetupUI::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UParameterBindingSetupUI::MakeRootWidget()
 {
-	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 
-	HeaderBox = UDFUIUtil::MakeWidget<UHorizontalBox>(Tree);
+	HeaderBox = DFUI::MakeWidget<UHorizontalBox>(this);
 	
-	auto VBox = UDFUIUtil::MakeWidget<UVerticalBox>(Tree);
+	auto VBox = DFUI::MakeWidget<UVerticalBox>(this);
 	
-	UDFUIUtil::MakeExpandableTab(Tree, RootBorder, HeaderBox, VBox, true);
+	DFUI::MakeExpandableTab(RootBorder, HeaderBox, VBox, true);
 
-	SystemDisplayTile = UDFUIUtil::AddUserWidget<USystemDisplayTile>(VBox);
+	SystemDisplayTile = DFUI::AddWidget<USystemDisplayTile>(VBox);
 
-	ParamsBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, VBox);
+	ParamsBox = DFUI::AddWidget<UVerticalBox>(VBox);
 	return RootBorder;
 }
 
 
 void UParameterBindingSetupUI::Setup()
 {
-	auto Label = UDFUIUtil::AddLabel(WidgetTree, HeaderBox, SubsystemConfig->GetSubsystemName());
-	DFStyleUtil::TextBlockStyle(Label);
+	auto Label = DFUI::AddLabel(HeaderBox, SubsystemConfig->GetSubsystemName());
 	DFStyleUtil::SafeSetHBoxSlotWidth(Label->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 
-	auto Spacer = UDFUIUtil::AddWidget<USpacer>(WidgetTree, HeaderBox);
+	auto Spacer = DFUI::AddWidget<USpacer>(HeaderBox);
 	DFStyleUtil::SafeSetHBoxSlotWidth(Spacer->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 	
-	auto UpBtn = UDFUIUtil::MakeImageButton(WidgetTree, HeaderBox, &Icons::UP_ICON, 24);
+	auto UpBtn = DFUI::AddImageButton(HeaderBox, UDFStatics::ICONS->UP_ICON, 24);
 	DFStyleUtil::SafeSetHBoxSlotWidth(UpBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	UpBtn->OnPressed.AddUniqueDynamic(this, &UParameterBindingSetupUI::MoveUp);
 	
-	auto DownBtn = UDFUIUtil::MakeImageButton(WidgetTree, HeaderBox, &Icons::DOWN_ICON, 24);
+	auto DownBtn = DFUI::AddImageButton(HeaderBox, UDFStatics::ICONS->DOWN_ICON, 24);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DownBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	DownBtn->OnPressed.AddUniqueDynamic(this, &UParameterBindingSetupUI::MoveDown);
 
-	auto DelBtn = UDFUIUtil::MakeImageButton(WidgetTree, HeaderBox, &Icons::DELETE_ICON, 24);
+	auto DelBtn = DFUI::AddImageButton(HeaderBox, UDFStatics::ICONS->DELETE_ICON, 24);
 	DelBtn->OnPressed.AddUniqueDynamic(this, &UParameterBindingSetupUI::Delete);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 
@@ -95,7 +96,7 @@ UPanelWidget* UParameterBindingSetupUI::GetMountingPoint()
 
 UParameterBindingSetupUI* UParameterBindingSetupUI::InstanceFrom(UPanelWidget* Parent, UEffectSystem* System, USubsystemConfig* Bindings)
 {
-	auto SetupUI = UDFUIUtil::AddUserWidget<UParameterBindingSetupUI>(Parent);
+	auto SetupUI = DFUI::AddWidget<UParameterBindingSetupUI>(Parent);
 	SetupUI->System = System;
 	SetupUI->SubsystemConfig = Bindings;
 	SetupUI->Setup();

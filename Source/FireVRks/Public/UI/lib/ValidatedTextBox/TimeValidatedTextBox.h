@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ValidatedTextBox.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
 #include "TimeValidatedTextBox.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)

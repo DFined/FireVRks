@@ -6,8 +6,9 @@
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/FormalParameter/ArraySelectorParameter.h"
 #include "FX/Niagara/v2/ParameterValue/ArraySelectorParameterValue.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
 #include "Util/DFStatics.h"
+#include "World/Launcher/LauncherManager.h"
 
 FString UArraySelectorComboBox::NONE_OPTION_NAME = "__NONE__";
 

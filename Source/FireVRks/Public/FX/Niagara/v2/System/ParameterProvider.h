@@ -1,5 +1,6 @@
 #pragma once
 #include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
+#include "Util/DFId.h"
 
 class ParameterProvider
 {

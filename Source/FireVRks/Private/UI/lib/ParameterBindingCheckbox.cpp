@@ -2,7 +2,7 @@
 
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/ParameterValue/BoolParameterValue.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
 
 void UParameterBindingCheckbox::SetValue(UAbstractParameterValue* Value)
 {

@@ -15,10 +15,18 @@ UAbstractParameterValue* UBindingParameterValueContext::Get(UAbstractFormalParam
 	{
 		return *Constant;
 	}
-	return Parameter->DefaultValue();
+	
+	return Parameter->DefaultValue()->Clone(Parameter);
 }
 
 void UBindingParameterValueContext::SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value)
 {
 	throw std::runtime_error("Setting values in binding context is not implemented");
+}
+
+TSharedPtr<FJsonObject> UBindingParameterValueContext::ToJson()
+{
+	auto Obj = new FJsonObject();
+	Bindings->AddToJson(Obj);
+	return MakeShareable(Obj);
 }

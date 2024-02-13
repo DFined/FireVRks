@@ -4,15 +4,16 @@
 #include "UI/CoreUI/SystemPicker.h"
 
 #include "Components/UniformGridSlot.h"
-#include "UI/DFUIUtil.h"
+#include "FX/Niagara/v2/System/EffectSystemManager.h"
+#include "DFUI/DFUI.h"
 #include "UI/ParameterIntegration/v2/ClickableSystemTile.h"
 #include "Util/DFStatics.h"
 
-UPanelWidget* USystemPicker::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* USystemPicker::MakeRootWidget()
 {
-	Border = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	Border = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(Border, DFStyleUtil::GREY_LVL_1);
-	Grid = UDFUIUtil::AddWidget<UUniformGridPanel>(Tree, Border);
+	Grid = DFUI::AddWidget<UUniformGridPanel>(Border);
 	Grid->SetSlotPadding(FMargin(5,5,5,5));
 	return Border;
 }
@@ -45,7 +46,7 @@ void USystemPicker::SetSystems()
 	int y = 0;
 	for(UEffectSystem* System : Systems)
 	{
-		auto Tile = UDFUIUtil::MakeUserWidget<UClickableSystemTile>(this);
+		auto Tile = DFUI::MakeUserWidget<UClickableSystemTile>(this);
 		Grid->AddChildToUniformGrid(Tile, x, y);
 		Tile->Initialize(System, TileSize);
 		Tile->GetOnPressed().AddUniqueDynamic(this, &USystemPicker::OnSelectSystem);

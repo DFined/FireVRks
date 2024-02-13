@@ -1,12 +1,17 @@
 #pragma once
 #include "DFAnchor.h"
-#include "NiagaraSystem.h"
-#include "Camera/CameraComponent.h"
-#include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
-#include "FX/Niagara/v2/System/EffectSystemManager.h"
-#include "World/Launcher/LauncherManager.h"
 #include "DFStatics.generated.h"
 
+class UEffectSystem;
+class UIcons;
+class UFileHelper;
+class UCameraComponent;
+class UEffectSpawnCoordinator;
+class UEffectSystemManager;
+class ULauncherManager;
+class USlateBrushAsset;
+class UNiagaraSystem;
+class UDFId;
 class UArrayLaunchPattern;
 
 UCLASS()
@@ -21,12 +26,15 @@ public:
 	static UStaticMesh* const SPHERE_MESH;
 	static UNiagaraSystem* const DEFAULT_SYSTEM;
 	static UNiagaraSystem* const TRAIL_SYSTEM;
+	static USlateBrushAsset* const EFFECT_TESTING_SLATE_BRUSH;
 	static ULauncherManager* const LAUNCHER_MANAGER;
 	static UArrayLaunchPattern* const ARRAY_LAUNCH_PATTERN;
 	static UEffectSystemManager* const EFFECT_SYSTEM_MANAGER;
 	static UEffectSpawnCoordinator* const EFFECT_SPAWN_COORDINATOR;
 	static AActor* Player;
 	static UCameraComponent* PlayerCamera;
+	static UIcons* const ICONS;
+	static UFileHelper* const FILE_HELPER;
 
 	UFUNCTION(BlueprintCallable)
 	static ULauncherManager* GetLauncherManager();

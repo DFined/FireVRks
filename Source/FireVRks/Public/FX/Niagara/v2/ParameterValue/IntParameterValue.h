@@ -24,4 +24,9 @@ public:
 	{
 		return !(Lhs == RHS);
 	}
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+	static int ValueFromJson(TSharedPtr<FJsonObject> Obj);
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 };

@@ -22,4 +22,8 @@ public:
 	static UArraySelectorParameterValue* New(UObject* Outer, UGenericLauncherArray* bArray);
 
 	UGenericLauncherArray* Get();
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 };

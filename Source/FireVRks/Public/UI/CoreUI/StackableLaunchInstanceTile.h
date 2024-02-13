@@ -7,7 +7,7 @@
 #include "Components/Border.h"
 #include "Components/VerticalBox.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "UI/ParameterIntegration/v2/ArrayLaunchParameterInputUI.h"
 #include "StackableLaunchInstanceTile.generated.h"
 
@@ -15,7 +15,7 @@
  * 
  */
 UCLASS()
-class FIREVRKS_API UStackableLaunchInstanceTile : public UDFUIContainer
+class FIREVRKS_API UStackableLaunchInstanceTile : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -41,7 +41,7 @@ public:
 	void AddTile();
 	UFUNCTION()
 	void RemoveTile();
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	void Initialize(UParameterValueContext* Context, ULaunchSegmentTile* SegmentTile);
@@ -52,4 +52,5 @@ public:
 	}
 
 	void ScheduleLaunch(float Delay);
+
 };

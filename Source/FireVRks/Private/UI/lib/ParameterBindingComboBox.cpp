@@ -3,7 +3,7 @@
 #include "FX/Niagara/SystemSettings/Enums/EnumLikeValue.h"
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "FX/Niagara/v2/ParameterValue/EnumParameterValue.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
 
 void UParameterBindingComboBox::Initialize(UAbstractParameterValue* Value)
 {

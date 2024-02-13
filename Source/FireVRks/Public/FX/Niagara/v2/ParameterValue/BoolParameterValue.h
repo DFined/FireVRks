@@ -17,4 +17,9 @@ public:
 	static UBoolParameterValue* New(UObject* Outer, bool Value);
 
 	bool Get() const;
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
+	static bool ValueFromJson(TSharedPtr<FJsonObject> Json);
 };

@@ -7,8 +7,9 @@
 #include "Components/UniformGridPanel.h"
 #include "FX/Niagara/v2/System/EffectSystem.h"
 #include "Kismet/GameplayStatics.h"
-#include "UI/DFUIUtil.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUI.h"
+#include "DFUI/DFUIBase.h"
+#include "UI/EDFUI.h"
 #include "UI/ParameterIntegration/v2/ClickableSystemTile.h"
 #include "SystemPicker.generated.h"
 
@@ -16,7 +17,7 @@
  * 
  */
 UCLASS()
-class FIREVRKS_API USystemPicker : public UDFUIContainer
+class FIREVRKS_API USystemPicker : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -36,7 +37,7 @@ class FIREVRKS_API USystemPicker : public UDFUIContainer
 	int SelectedY;
 
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	UFUNCTION()
@@ -46,7 +47,7 @@ public:
 	static void SelectSystem(UObject* Object)
 	{
 		auto Ctrlr = UGameplayStatics::GetPlayerController(Object->GetWorld(), 0);
-		auto Popup = UDFUIUtil::OpenInputPopup<USystemPicker>(Ctrlr, "Select an effect system");
+		auto Popup = EDFUI::OpenInputPopup<USystemPicker>(Ctrlr, "Select an effect system");
 		Popup->GetWidget<USystemPicker>()->SetSystems();
 		
 	}

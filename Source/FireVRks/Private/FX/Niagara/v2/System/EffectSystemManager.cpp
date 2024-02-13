@@ -10,6 +10,7 @@ void UEffectSystemManager::Initialize()
 	Effects.Empty();
 	DEFAULT_EFFECT = UDefaultParameterSystem::Make();
 	Register(DEFAULT_EFFECT);
+	SystemInEditing = UCustomEffectSystem::Instance(this);
 }
 
 void UEffectSystemManager::Register(UEffectSystem* System)
@@ -36,4 +37,19 @@ UEffectSystem* UEffectSystemManager::Get(UDFId* Id)
 		return *Res;
 	}
 	return nullptr;
+}
+
+void UEffectSystemManager::List(TArray<UEffectSystem*>& Systems)
+{
+	TArray<UDFId*> Ids = TArray<UDFId*>();
+	Effects.GetKeys(Ids);
+	for(auto Id : Ids)
+	{
+		Systems.Add(*Effects.Find(Id));
+	}
+}
+
+UCustomEffectSystem* UEffectSystemManager::GetSystemInEditing() const
+{
+	return SystemInEditing;
 }

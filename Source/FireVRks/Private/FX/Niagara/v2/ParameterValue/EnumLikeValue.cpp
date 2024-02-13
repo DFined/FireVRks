@@ -21,6 +21,11 @@ int EnumLikeValue::GetOrdinal() const
 	return Ordinal;
 }
 
+FString EnumLikeValue::GetName() const
+{
+	return Name;
+}
+
 bool operator==(const EnumLikeValue& Lhs, const EnumLikeValue& RHS)
 {
 	return Lhs.Id == RHS.Id

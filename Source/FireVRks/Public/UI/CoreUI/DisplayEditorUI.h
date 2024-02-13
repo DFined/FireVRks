@@ -6,14 +6,14 @@
 #include "Components/Border.h"
 #include "Components/CanvasPanel.h"
 #include "Display/DisplayData.h"
-#include "UI/DFUIUtil.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUI.h"
+#include "DFUI/DFUIBase.h"
 #include "DisplayEditorUI.generated.h"
 
 class ULaunchSegmentTile;
 
 UCLASS()
-class FIREVRKS_API UDisplayEditorUI : public UDFUIContainer
+class FIREVRKS_API UDisplayEditorUI : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -38,7 +38,7 @@ class FIREVRKS_API UDisplayEditorUI : public UDFUIContainer
 	UDisplayData* Data;
 
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	void InitializeDFWidget(UDisplayData* Data);

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/VerticalBox.h"
-#include "lib/Container/DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "DFInputPopup.generated.h"
 
 
@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnCancel);
 
 
 UCLASS()
-class FIREVRKS_API UDFInputPopup : public UDFUIContainer
+class FIREVRKS_API UDFInputPopup : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -28,7 +28,7 @@ class FIREVRKS_API UDFInputPopup : public UDFUIContainer
 	FOnCancel OnCancel;
 
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	UFUNCTION()
 	void Confirm();

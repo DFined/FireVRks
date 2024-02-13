@@ -18,4 +18,6 @@ public:
 	void SetValue(UDFId* Parameter, UAbstractParameterValue* Value);
 
 	DF_NEW(UMapParameterValueContext)
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
 };

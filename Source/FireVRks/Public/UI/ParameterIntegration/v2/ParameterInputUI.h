@@ -1,6 +1,7 @@
 #pragma once
 #include "ParameterControlWidget.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "ParameterDrawType.h"
+#include "DFUI/DFUIBase.h"
 #include "Components/VerticalBox.h"
 #include "FX/Niagara/v2/System/ParameterProvider.h"
 #include "ParameterInputUI.generated.h"
@@ -20,7 +21,7 @@ protected:
 	ParameterProvider* Provider;
 	
 public:	
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	
 	virtual UPanelWidget* GetMountingPoint() override;
 
@@ -29,6 +30,7 @@ public:
 	void WriteToContext(UParameterValueContext* FillContext);
 
 	void Draw(UParameterValueContext* InitialContext);
+	void Draw(UParameterValueContext* InitialContext, ParameterDrawType DrawType);
 	virtual void OnChange() override;
 
 	void SetProvider(ParameterProvider* bProvider)

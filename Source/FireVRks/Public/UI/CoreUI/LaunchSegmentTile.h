@@ -5,9 +5,10 @@
 #include "CoreMinimal.h"
 #include "Display/DisplayLaunchSegment.h"
 #include "UI/CoreUI/DisplayEditorUI.h"
-#include "UI/DFUIUtil.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUI.h"
+#include "DFUI/DFUIBase.h"
 #include "UI/lib/Container/DFUIStack.h"
+#include "UI/ParameterIntegration/v2/ParameterBindingWidget.h"
 #include "LaunchSegmentTile.generated.h"
 
 class UStackableLaunchInstanceTile;
@@ -15,7 +16,7 @@ class UStackableLaunchInstanceTile;
  * 
  */
 UCLASS()
-class FIREVRKS_API ULaunchSegmentTile : public UDFUIContainer
+class FIREVRKS_API ULaunchSegmentTile : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -37,8 +38,11 @@ class FIREVRKS_API ULaunchSegmentTile : public UDFUIContainer
 	UPROPERTY()
 	TArray<UStackableLaunchInstanceTile*> Tiles;
 
+
+	FOnDFUILayoutChange LayoutChangedDelegate;
+
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	virtual UPanelSlot* Append(UWidget* Widget) override;

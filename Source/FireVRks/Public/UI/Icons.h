@@ -1,14 +1,53 @@
 #pragma once
-#include "UI/lib/Icon.h"
+#include "DFUI/Icon.h"
+#include "Icons.generated.h"
 
-class Icons
+UCLASS()
+class UIcons : public UObject
 {
+	GENERATED_BODY()
 public:
-	inline static Icon LEFT_OFFSET_BORDER = Icon("LeftOffsetBorder", "/Game/FireVRks/UI/Icons/LeftOffsetBorder.LeftOffsetBorder");
-	inline static Icon DEFAULT_EFFECT_ICON = Icon("DefaultEffectIcon", "/Game/FireVRks/UI/Icons/DefaultEffectIcon.DefaultEffectIcon");
-	inline static Icon NOT_SELECTED_EFFECT_ICON = Icon("NotSelectedIcon", "/Game/FireVRks/UI/Icons/DefaultEffectIcon.NotSelected");
-	inline static Icon DELETE_ICON = Icon("DeleteButton", "/Game/FireVRks/UI/Icons/DeleteIcon.DeleteIcon");
-	inline static Icon PLUS_ICON = Icon("PlusButton", "/Game/FireVRks/UI/Icons/Plus.Plus");
-	inline static Icon UP_ICON = Icon("UpButton", "/Game/FireVRks/UI/Icons/Up.Up");
-	inline static Icon DOWN_ICON = Icon("DownButton", "/Game/FireVRks/UI/Icons/Down.Down");
+	UPROPERTY()
+	UIcon* LEFT_OFFSET_BORDER;
+	
+	UPROPERTY()
+	UIcon* DEFAULT_EFFECT_ICON;
+	
+	UPROPERTY()
+	UIcon* CUSTOM_EFFECT_ICON;
+	
+	UPROPERTY()
+	UIcon* NOT_SELECTED_EFFECT_ICON;
+	
+	UPROPERTY()
+	UIcon* DELETE_ICON;
+	
+	UPROPERTY()
+	UIcon* PLUS_ICON;
+	
+	UPROPERTY()
+	UIcon* UP_ICON;
+	
+	UPROPERTY()
+	UIcon* DOWN_ICON;
+
+	void Initialize()
+	{
+		LEFT_OFFSET_BORDER = UIcon::New(this, "/Game/FireVRks/UI/Icons/LeftOffsetBorder.LeftOffsetBorder", true);
+		DEFAULT_EFFECT_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/DefaultEffectIcon.DefaultEffectIcon", true);
+		CUSTOM_EFFECT_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/CustomEffectIcon.CustomEffectIcon", true);
+		NOT_SELECTED_EFFECT_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/DefaultEffectIcon.NotSelected", true);
+		DELETE_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/DeleteIcon.DeleteIcon", true);
+		PLUS_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/Plus.Plus", true);
+		UP_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/Up.Up", true);
+		DOWN_ICON = UIcon::New(this, "/Game/FireVRks/UI/Icons/Down.Down", true);
+	}
+
+	static UIcons* StaticInstance()
+	{
+		auto Instance = NewObject<UIcons>(GetTransientPackage());
+		Instance->AddToRoot();
+		Instance->Initialize();
+		return Instance;
+	}
 };

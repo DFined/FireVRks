@@ -1,8 +1,8 @@
 #include "UI/lib/ValidatedTextBox/ValidatedTextBox.h"
 
 #include "FX/Niagara/v2/ParameterValue/IntParameterValue.h"
-#include "UI/DFUIUtil.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFUI.h"
+#include "DFUI/DFStyleUtil.h"
 #include "Widgets/Input/SEditableTextBox.h"
 
 UValidatedTextBox::UValidatedTextBox(): Validator()

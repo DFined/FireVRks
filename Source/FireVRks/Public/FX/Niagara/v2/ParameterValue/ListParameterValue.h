@@ -3,6 +3,7 @@
 #pragma once
 #include "CoreMinimal.h"
 #include "AbstractParameterValue.h"
+#include "FX/Niagara/v2/ParameterValueContext.h"
 #include "ListParameterValue.generated.h"
 
 UCLASS()
@@ -24,12 +25,16 @@ public:
 		Values.Add(Context);
 	}
 
+	static UAbstractParameterValue* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);
+
 	static UListParameterValue* New(UObject* Outer)
 	{
 		auto Value = NewObject<UListParameterValue>(Outer, StaticClass());
 		Value->Values = TArray<UParameterValueContext*>();
 		return Value;
 	}
-	
-	
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 };

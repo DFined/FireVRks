@@ -8,8 +8,8 @@
 #include "Components/Border.h"
 #include "Components/VerticalBox.h"
 #include "FX/Niagara/v2/System/CustomEffectSystem.h"
-#include "UI/DFUIUtil.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUI.h"
+#include "DFUI/DFUIBase.h"
 #include "OuterParameterCreationWidget.generated.h"
 
 /**
@@ -36,7 +36,7 @@ public:
 	void OnAddParameter();
 	void Draw();
 
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	void SetSystem(UCustomEffectSystem* bSystem);

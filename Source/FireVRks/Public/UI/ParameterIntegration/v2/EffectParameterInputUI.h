@@ -2,7 +2,7 @@
 #include "ParameterInputUI.h"
 #include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "FX/Niagara/v2/System/EffectSystem.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "Util/DFU.h"
 #include "EffectParameterInputUI.generated.h"
 
@@ -26,7 +26,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static UEffectParameterInputUI* Instance(UPanelWidget* Parent, UEffectSystem* bSystem)
 	{
-		auto Widget = UDFUIUtil::AddUserWidget<UEffectParameterInputUI>(Parent);
+		auto Widget = DFUI::AddWidget<UEffectParameterInputUI>(Parent);
 		Widget->SetSystem(bSystem);
 		Widget->Draw(UMapParameterValueContext::Instance(Widget));
 		return Widget;

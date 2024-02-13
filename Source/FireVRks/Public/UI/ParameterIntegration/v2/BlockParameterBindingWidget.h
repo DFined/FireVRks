@@ -30,7 +30,7 @@ class FIREVRKS_API UBlockParameterBindingWidget : public UParameterBindingWidget
 
 	
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	UFUNCTION()
 	void LayoutChangedTab(UExpandableArea* Area, bool bIsExpanded);

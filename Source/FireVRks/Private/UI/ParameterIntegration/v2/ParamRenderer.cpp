@@ -1,4 +1,4 @@
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/ParameterIntegration/v2/BlockParameterBindingWidget.h"
 #include "UI/ParameterIntegration/v2/ListParameterBindingWidget.h"
 #include "UI/ParameterIntegration/v2/ParameterDrawType.h"
@@ -8,15 +8,15 @@
 
 
 UParameterBindingWidget* UParameterRenderer::RenderParam(
-	UDFUIContainer* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter, ParameterDrawType DrawType)
+	UDFUIBase* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter, ParameterDrawType DrawType)
 {
 	UParameterBindingWidget* PBW;
 	switch (Parameter->GetType())
 	{
-		case BLOCK: PBW = UDFUIUtil::AddUserWidget<UBlockParameterBindingWidget>(Container); break;
-		case LIST: PBW = UDFUIUtil::AddUserWidget<UListParameterBindingWidget>(Container); break;
-		case SYSTEM_INSTANTIATION: PBW = UDFUIUtil::AddUserWidget<USystemInstantiationParameterBindingWidget>(Container); break;
-		default: PBW = UDFUIUtil::AddUserWidget<UParameterLineBindingWidget>(Container); 
+		case BLOCK: PBW = DFUI::AddWidget<UBlockParameterBindingWidget>(Container); break;
+		case LIST: PBW = DFUI::AddWidget<UListParameterBindingWidget>(Container); break;
+		case SYSTEM_INSTANTIATION: PBW = DFUI::AddWidget<USystemInstantiationParameterBindingWidget>(Container); break;
+		default: PBW = DFUI::AddWidget<UParameterLineBindingWidget>(Container); 
 	}
 	
 	PBW->Setup(Parameter, ValueContext, DrawType);

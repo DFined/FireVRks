@@ -4,28 +4,29 @@
 #include "UI/ParameterIntegration/v2/ClickableSystemTile.h"
 
 #include "Components/Image.h"
-#include "UI/DFUIUtil.h"
+#include "Components/VerticalBox.h"
+#include "DFUI/DFUI.h"
 
 void UClickableSystemTile::OnClick()
 {
 	OnSystemPressed.Broadcast(this);
 }
 
-UPanelWidget* UClickableSystemTile::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UClickableSystemTile::MakeRootWidget()
 {
-	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::RoundedBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_3, 10);
 
-	Button = UDFUIUtil::AddWidget<UButton>(Tree, RootBorder);
+	Button = DFUI::AddWidget<UButton>(RootBorder);
 	Button->OnPressed.AddUniqueDynamic(this, &UClickableSystemTile::OnClick);
 	DFStyleUtil::TextButtonStyle(Button, DFStyleUtil::GREY_LVL_3);
 	
-	auto Box = UDFUIUtil::MakeWidget<UVerticalBox>(Tree);
+	auto Box = DFUI::MakeWidget<UVerticalBox>(this);
 	Button->SetContent(Box);
 	
 
-	Image = UDFUIUtil::AddWidget<UImage>(Tree, Box);
-	Label = UDFUIUtil::AddWidget<UTextBlock>(WidgetTree, Box);
+	Image = DFUI::AddWidget<UImage>(Box);
+	Label = DFUI::AddWidget<UTextBlock>(Box);
 	DFStyleUtil::SafeSetVBoxSlotAlignment(Label->Slot, HAlign_Center);
 	DFStyleUtil::SafeSetVBoxSlotAlignment(Image->Slot, HAlign_Center);
 	return RootBorder;
@@ -34,7 +35,7 @@ UPanelWidget* UClickableSystemTile::MakeRootWidget(UWidgetTree* Tree)
 void UClickableSystemTile::Initialize(UEffectSystem* System, int Size)
 {
 	Label->SetText(FText::FromString(System->GetDisplayName()));
-	Image->SetBrush(DFStyleUtil::SetupImageBrush(System->GetIcon(), Size));
+	Image->SetBrush(DFStyleUtil::SetupImageBrush(DFStyleUtil::LoadCachedTexture(System->GetIcon()), Size));
 	DFStyleUtil::TextBlockStyle(Label);
 	
 }

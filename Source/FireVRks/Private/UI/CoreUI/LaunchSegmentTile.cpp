@@ -4,35 +4,36 @@
 #include "..\..\..\Public\UI\CoreUI\LaunchSegmentTile.h"
 
 #include "FX/Niagara/v2/MapParameterValueContext.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/DisplayEditorUI.h"
 #include "UI/CoreUI/StackableLaunchInstanceTile.h"
+#include "Util/DFStatics.h"
 #include "Util/DFU.h"
 
-UPanelWidget* ULaunchSegmentTile::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* ULaunchSegmentTile::MakeRootWidget()
 {
-	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_3);
-	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, RootBorder);
+	auto VBox = DFUI::AddWidget<UVerticalBox>(RootBorder);
 
-	auto TimeHBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, VBox);
+	auto TimeHBox = DFUI::AddWidget<UHorizontalBox>(VBox);
 
-	auto TimeLabel = UDFUIUtil::AddWidget<UTextBlock>(Tree, TimeHBox);
+	auto TimeLabel = DFUI::AddWidget<UTextBlock>(TimeHBox);
 	TimeLabel->SetText(FText::FromString("Launch Time: "));
 	DFStyleUtil::TextBlockStyle(TimeLabel);
 	DFStyleUtil::SafeSetHBoxSlotWidth(TimeLabel->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 
-	TimeText = UDFUIUtil::AddWidget<UTextBlock>(Tree, TimeHBox);
+	TimeText = DFUI::AddWidget<UTextBlock>(TimeHBox);
 	DFStyleUtil::TextBlockStyle(TimeText);
 	DFStyleUtil::SafeSetHBoxSlotWidth(TimeText->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 
-	auto DelBtn = UDFUIUtil::MakeImageButton(Tree, TimeHBox, &Icons::DELETE_ICON, 32);
+	auto DelBtn = DFUI::AddImageButton(TimeHBox, UDFStatics::ICONS->DELETE_ICON, 32);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	DelBtn->OnPressed.AddUniqueDynamic(this, &ULaunchSegmentTile::Remove);
 
 
-	Stack = UDFUIUtil::AddUserWidget<UDFUIStack>(VBox);
+	Stack = DFUI::AddWidget<UDFUIStack>(VBox);
 	return RootBorder;
 }
 
@@ -48,7 +49,7 @@ UPanelSlot* ULaunchSegmentTile::Append(UWidget* Widget)
 
 void ULaunchSegmentTile::NewTile(UParameterValueContext* Context)
 {
-	auto Tile = UDFUIUtil::AddUserWidget<UStackableLaunchInstanceTile>(Stack);
+	auto Tile = DFUI::AddWidget<UStackableLaunchInstanceTile>(Stack);
 	Tile->Initialize(Context, this);
 	Tile->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &ULaunchSegmentTile::LayoutChanged);
 	Tiles.Add(Tile);
@@ -105,3 +106,4 @@ void ULaunchSegmentTile::ScheduleLaunch()
 		Tile->ScheduleLaunch(Segment->GetTime());
 	}
 }
+

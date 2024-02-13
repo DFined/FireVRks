@@ -51,4 +51,6 @@ public:
 	{
 		this->Bindings = bBindings;
 	}
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
 };

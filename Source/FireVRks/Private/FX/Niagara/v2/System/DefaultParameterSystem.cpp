@@ -4,6 +4,7 @@
 
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Camera/CameraComponent.h"
 #include "FX/Niagara/Scheduler/CallbackSystemDriver.h"
 #include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "FX/Niagara/v2/ValueEqualsPredicate.h"
@@ -12,13 +13,15 @@
 #include "FX/Niagara/v2/ParameterValue/ListParameterValue.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UI/Icons.h"
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
 #include "Util/DFStatics.h"
 
 void UDefaultParameterSystem::Initialize()
 {
 	if (!IsInit)
 	{
+		SetDescription("The default aerial effect system. The basis for all the others");
+		SetAuthor("#DFined");
 		AddParameter(MAIN_SETTINGS_BLOCK);
 		{
 			MAIN_SETTINGS_BLOCK->Add(EFFECT_SHAPE);
@@ -252,9 +255,9 @@ FString UDefaultParameterSystem::GetName()
 	return "Default System";
 }
 
-UTexture2D* UDefaultParameterSystem::GetIcon()
+UIcon* UDefaultParameterSystem::GetIcon()
 {
-	return DFStyleUtil::LoadCachedTexture(&Icons::DEFAULT_EFFECT_ICON);
+	return UDFStatics::ICONS->DEFAULT_EFFECT_ICON;
 }
 
 

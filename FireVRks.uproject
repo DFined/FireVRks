@@ -13,7 +13,10 @@
 				"SlateCore",
 				"UMG",
 				"Engine",
-				"CoreUObject"
+				"CoreUObject",
+				"Json",
+				"JsonUtilities",
+				"ImageCore"
 			]
 		}
 	],
@@ -44,6 +47,9 @@
 				"Linux"
 			]
 		}
+	],
+	"AdditionalPluginDirectories": [
+		"../Plugins"
 	],
 	"TargetPlatforms": [
 		"Android",

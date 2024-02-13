@@ -1,9 +1,8 @@
 #pragma once
-#include "DFStyleUtil.h"
 #include "Components/ComboBoxString.h"
+#include "DFUI/DFStyleUtil.h"
 #include "FX/Niagara/SystemSettings/Enums/EnumLike.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
-#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
 #include "UI/ParameterIntegration/v2/WidgetWithValue.h"
 #include "ParameterBindingComboBox.generated.h"
 

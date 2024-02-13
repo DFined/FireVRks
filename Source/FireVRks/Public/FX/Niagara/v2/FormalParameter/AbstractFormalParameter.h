@@ -2,7 +2,6 @@
 #include "ParameterType.h"
 #include "FX/Niagara/v2/ParameterPredicate.h"
 #include "FX/Niagara/v2/TruePredicate.h"
-#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
 #include "Util/DFId.h"
 #include "AbstractFormalParameter.generated.h"
 
@@ -34,10 +33,7 @@ protected:
 public:
 	UAbstractParameterValue* DefaultValue() const;
 
-	void SetDefault(UAbstractParameterValue* bDefault)
-	{
-		this->Default = bDefault;
-	}
+	void SetDefault(UAbstractParameterValue* bDefault);
 
 	UDFId* GetId();
 
@@ -59,5 +55,9 @@ public:
 
 	void SetDisplayName(const FString& DisplayName);
 
+	TSharedPtr<FJsonObject> ToJson();
+
 	virtual ~UAbstractFormalParameter() override;
+
+	static UAbstractFormalParameter* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);
 };

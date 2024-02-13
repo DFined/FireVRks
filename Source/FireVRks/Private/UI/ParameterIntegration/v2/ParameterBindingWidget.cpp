@@ -1,6 +1,6 @@
 #include "UI/ParameterIntegration/v2/ParameterBindingWidget.h"
 
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "UI/ParameterIntegration/v2/ParameterDrawType.h"
 #include "UI/ParameterIntegration/v2/ParameterInputUI.h"
 
@@ -25,3 +25,4 @@ UAbstractFormalParameter* UParameterBindingWidget::GetParameter() const
 void UParameterBindingWidget::OnChange()
 {
 }
+

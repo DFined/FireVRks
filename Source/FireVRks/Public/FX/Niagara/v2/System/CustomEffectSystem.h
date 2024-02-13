@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Util/DFId.h"
 #include "CoreMinimal.h"
 #include "EffectSystem.h"
 #include "Event/DFParameterEvent.h"
@@ -20,7 +21,7 @@ class FIREVRKS_API UCustomEffectSystem : public UEffectSystem
 	GENERATED_BODY()
 
 	UPROPERTY()
-	TMap<UDFId*, USubsystemConfig*> SubsystemConfig = TMap<UDFId*, USubsystemConfig*>();
+	TArray<USubsystemConfig*> SubsystemConfig = TArray<USubsystemConfig*>();
 
 	UPROPERTY()
 	TMap<UDFId*, UAbstractFormalParameter*> OuterParameters = TMap<UDFId*, UAbstractFormalParameter*>();
@@ -28,18 +29,22 @@ class FIREVRKS_API UCustomEffectSystem : public UEffectSystem
 	UPROPERTY()
 	TArray<UDFId*> ParameterOrder;
 
+	UPROPERTY()
+	UIcon* Icon;
+
 	FCustomSystemEvent EventCallback;
 
 public:
 	virtual void SpawnSystem(USystemSpawnData* Data) override;
 
-	TMap<UDFId*, USubsystemConfig*>& GetSubsystemConfig();
+	TArray<USubsystemConfig*>& GetSubsystemConfig();
 
 	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override;
 	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override;
 
-	DF_NEW(UCustomEffectSystem);
+	DF_NEW_INIT(UCustomEffectSystem, Initialize);
 
+	virtual void Initialize() override;
 
 	FCustomSystemEvent& GetEventCallback();
 
@@ -49,23 +54,15 @@ public:
 
 	void NewParameter(UAbstractFormalParameter* Parameter);
 
-	void MoveOuterParameterUp(UDFId* bId)
-	{
-		auto Num = ParameterOrder.Find(bId);
-		if (Num > 0)
-		{
-			ParameterOrder.RemoveAt(Num);
-			ParameterOrder.Insert(bId, Num - 1);
-		}
-	}
+	void MoveOuterParameterUp(UDFId* bId);
 
-	void MoveOuterParameterDown(UDFId* bId)
-	{
-		auto Num = ParameterOrder.Find(bId);
-		if (Num < ParameterOrder.Num() - 1)
-		{
-			ParameterOrder.RemoveAt(Num);
-			ParameterOrder.Insert(bId, Num + 1);
-		}
-	}	
+	void MoveOuterParameterDown(UDFId* bId);
+
+	virtual UIcon* GetIcon() override;
+	void SetIcon(UIcon* Icon);
+
+
+	TSharedPtr<FJsonObject> ToJson();
+
+	static UCustomEffectSystem* FromJson(TSharedPtr<FJsonObject> Json, UObject* Parent);
 };

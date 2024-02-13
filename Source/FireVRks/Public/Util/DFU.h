@@ -11,6 +11,22 @@
    return obj;\
   };
 
+#define DF_NEW_INIT(Class, InitName) public: \
+	UFUNCTION(BlueprintCallable)\
+	static Class* Instance(UObject* Outer) {\
+		auto obj = NewObject<Class>(Outer); \
+		obj->InitName(); \
+		return obj;\
+	};
+
+#define DF_NEW_INIT1(Class, Arg1) public: \
+	UFUNCTION(BlueprintCallable)\
+	static Class* Instance(UObject* Outer, Arg1 name1) {\
+		auto obj = NewObject<Class>(Outer); \
+		obj->Initialize(name1); \
+		return obj;\
+	};
+
 #define DF_NEW1(Class, type, name) public:\
  UFUNCTION(BlueprintCallable)\
  static Class* Instance(UObject* Outer, type name) {\

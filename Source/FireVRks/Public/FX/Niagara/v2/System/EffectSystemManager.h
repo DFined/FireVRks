@@ -1,4 +1,5 @@
 #pragma once
+#include "CustomEffectSystem.h"
 #include "EffectSystem.h"
 #include "EffectSystemManager.generated.h"
 
@@ -15,6 +16,9 @@ class FIREVRKS_API UEffectSystemManager : public UObject
 	UPROPERTY()
 	UDefaultParameterSystem* DEFAULT_EFFECT;
 
+	UPROPERTY()
+	UCustomEffectSystem* SystemInEditing;
+
 public:
 	
 	void Initialize();
@@ -27,13 +31,7 @@ public:
 
 	UEffectSystem* Get(UDFId* Id);
 
-	void List(TArray<UEffectSystem*>& Systems)
-	{
-		TArray<UDFId*> Ids = TArray<UDFId*>();
-		Effects.GetKeys(Ids);
-		for(auto Id : Ids)
-		{
-			Systems.Add(*Effects.Find(Id));
-		}
-	}
+	void List(TArray<UEffectSystem*>& Systems);
+
+	UCustomEffectSystem* GetSystemInEditing() const;
 };

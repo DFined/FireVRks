@@ -2,12 +2,12 @@
 
 #include "Blueprint/WidgetTree.h"
 #include "Components/HorizontalBox.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 
 
-UPanelWidget* UDFUILine::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UDFUILine::MakeRootWidget()
 {
-	HBox = UDFUIUtil::MakeWidget<UHorizontalBox>(Tree);
+	HBox = DFUI::MakeWidget<UHorizontalBox>(this);
 	return HBox;
 }
 

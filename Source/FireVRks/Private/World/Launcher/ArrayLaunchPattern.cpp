@@ -1,6 +1,8 @@
 #include "World/Launcher/ArrayLaunchPattern.h"
 
+#include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
 #include "FX/Niagara/Scheduler/LaunchSettings.h"
+#include "FX/Niagara/v2/System/EffectSystemManager.h"
 
 TMap<UDFId*, UAbstractFormalParameter*>* UArrayLaunchPattern::GetOuterParameters()
 {

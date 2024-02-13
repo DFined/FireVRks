@@ -31,3 +31,8 @@ UDFId* UDFId::Random(UObject* Outer)
 	Id->Hash = Id->PreHash(Str);
 	return Id;
 }
+
+FString UDFId::GetId() const
+{
+	return Id;
+}

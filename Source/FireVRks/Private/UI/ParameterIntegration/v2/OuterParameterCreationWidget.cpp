@@ -6,7 +6,8 @@
 #include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "FX/Niagara/v2/ParamUtil.h"
 #include "Kismet/GameplayStatics.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
+#include "UI/EDFUI.h"
 #include "UI/ParameterIntegration/v2/ParameterCreatorInput.h"
 #include "UI/ParameterIntegration/v2/ParameterRenderer.h"
 
@@ -24,7 +25,7 @@ void UOuterParameterCreationWidget::NewParameter(UWidget* Widget)
 void UOuterParameterCreationWidget::OnAddParameter()
 {
 	auto Ctrlr = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-	auto Popup = UDFUIUtil::OpenInputPopup<UParameterCreatorInput>(Ctrlr, "Create the new parameter");
+	auto Popup = EDFUI::OpenInputPopup<UParameterCreatorInput>(Ctrlr, "Create the new parameter");
 
 	Popup->GetOnConfirm()->AddUniqueDynamic(this, &UOuterParameterCreationWidget::NewParameter);
 }
@@ -43,21 +44,21 @@ void UOuterParameterCreationWidget::Draw()
 	}
 }
 
-UPanelWidget* UOuterParameterCreationWidget::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UOuterParameterCreationWidget::MakeRootWidget()
 {
-	RootBorder = UDFUIUtil::MakeWidget<UBorder>(Tree);
+	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 
-	auto OuterBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, RootBorder);
+	auto OuterBox = DFUI::AddWidget<UVerticalBox>(RootBorder);
 
-	auto PanelBorder = UDFUIUtil::AddWidget<UBorder>(Tree, OuterBox);
+	auto PanelBorder = DFUI::AddWidget<UBorder>(OuterBox);
 	DFStyleUtil::BasicBorderStyle(PanelBorder, DFStyleUtil::GREY_LVL_3);
 
-	auto HBox = UDFUIUtil::AddWidget<UHorizontalBox>(Tree, PanelBorder);
-	auto AddParamButton = UDFUIUtil::AddButtonToButtonPanel(HBox, "Add parameter", Tree);
+	auto HBox = DFUI::AddWidget<UHorizontalBox>(PanelBorder);
+	auto AddParamButton = DFUI::AddButtonToButtonPanel(HBox, "Add parameter");
 	AddParamButton->OnPressed.AddUniqueDynamic(this, &UOuterParameterCreationWidget::OnAddParameter);
 
-	Box = UDFUIUtil::AddWidget<UVerticalBox>(Tree, OuterBox);
+	Box = DFUI::AddWidget<UVerticalBox>(OuterBox);
 
 	return RootBorder;
 }
@@ -74,12 +75,12 @@ void UOuterParameterCreationWidget::SetSystem(UCustomEffectSystem* bSystem)
 
 void UOuterParameterCreationWidget::MoveUp(UParameterBindingWidget* Widget)
 {
-	UDFUIUtil::MoveChildUp(this->GetMountingPoint(), Widget);
+	DFUI::MoveChildUp(this->GetMountingPoint(), Widget);
 	System->MoveOuterParameterUp(Widget->GetParameter()->GetId());
 }
 
 void UOuterParameterCreationWidget::MoveDown(UParameterBindingWidget* Widget)
 {
-	UDFUIUtil::MoveChildDown(this->GetMountingPoint(), Widget);
+	DFUI::MoveChildDown(this->GetMountingPoint(), Widget);
 	System->MoveOuterParameterDown(Widget->GetParameter()->GetId());
 }

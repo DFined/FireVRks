@@ -27,4 +27,9 @@ public:
 	{
 		return Value;
 	}
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
+	static float ValueFromJson(TSharedPtr<FJsonObject> Json);
 };

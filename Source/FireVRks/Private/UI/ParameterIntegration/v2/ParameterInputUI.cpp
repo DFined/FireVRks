@@ -1,16 +1,15 @@
 #include "UI/ParameterIntegration/v2/ParameterInputUI.h"
 
+#include "Components/Border.h"
+#include "DFUI/DFUI.h"
 #include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "FX/Niagara/v2/ParamUtil.h"
-#include "UI/DFUIUtil.h"
 #include "UI/ParameterIntegration/v2/ParameterRenderer.h"
-#include "Util/DFU.h"
 
-UPanelWidget* UParameterInputUI::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UParameterInputUI::MakeRootWidget()
 {
-	auto Border = UDFUIUtil::MakeWidget<UBorder>(Tree);
-	VerticalBox = UDFUIUtil::AddWidget<UVerticalBox>(Tree, Border);
-	DFStyleUtil::BasicBorderStyle(Border, DFStyleUtil::GREY_LVL_2);
+	auto Border = DFUI::MakeBorder(this, DFStyleUtil::GREY_LVL_2);
+	VerticalBox = DFUI::AddWidget<UVerticalBox>(Border);
 	return Border;
 }
 
@@ -31,7 +30,13 @@ void UParameterInputUI::WriteToContext(UParameterValueContext* FillContext)
 	UParamUtil::WriteContainerToContext(VerticalBox, FillContext);
 }
 
+
 void UParameterInputUI::Draw(UParameterValueContext* InitialContext)
+{
+	Draw(InitialContext, SYSTEM_INSTANCE_PARAMS);
+}
+
+void UParameterInputUI::Draw(UParameterValueContext* InitialContext, ParameterDrawType DrawType)
 {
 	auto OuterParameters = TArray<UAbstractFormalParameter*>();
 	Provider->GetOuterParametersInOrder(OuterParameters);
@@ -39,7 +44,7 @@ void UParameterInputUI::Draw(UParameterValueContext* InitialContext)
 	{
 		if(Parameter->GetPredicate()->Check(InitialContext))
 		{
-			auto NewParam = UParameterRenderer::RenderParam(this, InitialContext, Parameter, SYSTEM_INSTANCE_PARAMS);
+			auto NewParam = UParameterRenderer::RenderParam(this, InitialContext, Parameter, DrawType);
 			NewParam->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &UParameterInputUI::LayoutChanged);
 		}
 	}

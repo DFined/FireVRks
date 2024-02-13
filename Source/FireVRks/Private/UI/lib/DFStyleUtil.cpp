@@ -1,9 +1,12 @@
-#include "UI/lib/DFStyleUtil.h"
+#include "DFUI/DFStyleUtil.h"
 
+#include "ImageUtils.h"
+#include "Components/Border.h"
 #include "Components/ButtonSlot.h"
+#include "Components/TextBlock.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Engine/Font.h"
-#include "UI/lib/Icon.h"
+#include "DFUI/Icon.h"
 #include "Util/DFStatics.h"
 
 FLinearColor DFStyleUtil::GREY_LVL_N0 = FLinearColor(0.011833f, 0.011833f, 0.011833f);
@@ -17,10 +20,13 @@ FLinearColor DFStyleUtil::GREY_OUTLINE_LVL_0 = FLinearColor(0.015f, 0.015f, 0.01
 FLinearColor DFStyleUtil::SELECTED_LEVEL_3 = FLinearColor(0.020833f, 0.020833f, 0.030833f);
 
 FLinearColor DFStyleUtil::LIGHT_TEXT_1 = FLinearColor(200, 200, 200);
-FSlateFontInfo DFStyleUtil::DEFAULT_FONT = FSlateFontInfo(Cast<UObject>(LoadObject<UFont>(NULL, TEXT("/Game/FireVRks/UI/Font/DefaultFont.DefaultFont"))), 12,
-                                                          "Roboto");
+FSlateFontInfo DFStyleUtil::DEFAULT_FONT = FSlateFontInfo(
+	Cast<UObject>(LoadObject<UFont>(NULL, TEXT("/Game/FireVRks/UI/Font/DefaultFont.DefaultFont"))), 12,
+	"Roboto");
 
-UTexture2D* DFStyleUtil::DEFAULT_TEXTURE = LoadObject<UTexture2D>(UDFStatics::ANCHOR, TEXT("/Game/FireVRks/UI/Icons/UnknownTexture.UnknownTexture"));
+UTexture2D* DFStyleUtil::DEFAULT_TEXTURE = LoadObject<UTexture2D>(UDFStatics::ANCHOR,
+                                                                  TEXT(
+	                                                                  "/Game/FireVRks/UI/Icons/UnknownTexture.UnknownTexture"));
 
 TMap<FString, UTexture2D*> DFStyleUtil::CachedTextures = TMap<FString, UTexture2D*>();
 
@@ -73,20 +79,26 @@ void DFStyleUtil::TextBoxStyle(UEditableTextBox* TextBox)
 	TextBox->SetMinDesiredWidth(100);
 
 	TextBox->WidgetStyle = FEditableTextBoxStyle()
-		.SetBackgroundColor(GREY_LVL_0)
-		.SetPadding(FMargin(2, 0))
-		.SetFont(DEFAULT_FONT)
-		.SetBackgroundImageNormal(NormalBrush)
-		.SetTextStyle(
-			FTextBlockStyle()
-			.SetFont(DEFAULT_FONT)
-			.SetColorAndOpacity(FSlateColor(LIGHT_TEXT_1))
-		);
+	                       .SetBackgroundColor(GREY_LVL_0)
+	                       .SetPadding(FMargin(2, 0))
+	                       .SetFont(DEFAULT_FONT)
+	                       .SetBackgroundImageNormal(NormalBrush)
+	                       .SetTextStyle(
+		                       FTextBlockStyle()
+		                       .SetFont(DEFAULT_FONT)
+		                       .SetColorAndOpacity(FSlateColor(LIGHT_TEXT_1))
+	                       );
 }
 
 void DFStyleUtil::TextBlockStyle(UTextBlock* TextBlock)
 {
 	TextBlock->SetFont(DEFAULT_FONT);
+}
+
+void DFStyleUtil::TextAreaStyle(UMultiLineEditableTextBox* TextBlock)
+{
+	TextBlock->WidgetStyle.SetFont(DEFAULT_FONT);
+	TextBlock->WidgetStyle.SetBackgroundColor(GREY_LVL_0);
 }
 
 void DFStyleUtil::CheckBoxStyle(UCheckBox* TextBlock)
@@ -132,11 +144,11 @@ void DFStyleUtil::ImgButtonStyle(UButton* Button, UTexture2D* Img, float size)
 	Style.SetPressed(Brush);
 	Style.SetHovered(Brush);
 	Style.Hovered.TintColor = FLinearColor(1, 1, 1, 0.5);
-	Style.Pressed.TintColor = FLinearColor(0.2,0.2,0.2);
+	Style.Pressed.TintColor = FLinearColor(0.2, 0.2, 0.2);
 	Button->SetStyle(Style);
 }
 
-void DFStyleUtil::ImgButtonStyle(UButton* Button, Icon* Icon, float size)
+void DFStyleUtil::ImgButtonStyle(UButton* Button, UIcon* Icon, float size)
 {
 	auto Img = LoadCachedTexture(Icon);
 	auto Style = FButtonStyle();
@@ -145,7 +157,7 @@ void DFStyleUtil::ImgButtonStyle(UButton* Button, Icon* Icon, float size)
 	Style.SetPressed(Brush);
 	Style.SetHovered(Brush);
 	Style.Hovered.TintColor = FLinearColor(1, 1, 1, 0.5);
-	Style.Pressed.TintColor = FLinearColor(0.2,0.2,0.2);
+	Style.Pressed.TintColor = FLinearColor(0.2, 0.2, 0.2);
 	Button->SetStyle(Style);
 }
 
@@ -158,19 +170,51 @@ FSlateBrush DFStyleUtil::SetupImageBrush(UTexture2D* Icon, float size)
 	return Brush;
 }
 
-UTexture2D* DFStyleUtil::LoadCachedTexture(Icon* Icon)
+UTexture2D* DFStyleUtil::LoadCachedTexture(UIcon* Icon)
 {
-	auto Texture = CachedTextures.Find(Icon->Path);
+	if (Icon->GetTextureRef())
+	{
+		return Icon->GetTextureRef();
+	}
+	auto Texture = LoadCachedTextureInternal(Icon);
+	Icon->SetTextureRef(Texture);
+	return Texture;
+}
+
+UTexture2D* DFStyleUtil::LoadCachedTextureInternal(UIcon* Icon)
+{
+	auto Texture = CachedTextures.Find(Icon->GetPath());
 	if (Texture)
 	{
 		return *Texture;
 	}
-	auto NewTexture = LoadObject<UTexture2D>(UDFStatics::ANCHOR, *Icon->Path);
+	auto NewTexture = LoadObject<UTexture2D>(UDFStatics::ANCHOR, *Icon->GetPath());
 	if (NewTexture)
 	{
-		CachedTextures.Add(Icon->Name, NewTexture);
+		if (Icon->IsUseCache())
+		{
+			CachedTextures.Add(Icon->GetPath(), NewTexture);
+		}
 		return NewTexture;
 	}
+
+	auto Img = FImage();
+	//Couldn't load image as a resource. Try to load it as a file
+	if (FImageUtils::LoadImage(*Icon->GetPath(), Img))
+	{
+		Img.ChangeFormat(ERawImageFormat::BGRA8, EGammaSpace::Linear);
+		auto RawData = Img.RawData;
+		auto Data = Img.RawData.GetData();
+		auto Size = Img.RawData.Num();
+		NewTexture = UTexture2D::CreateTransient(Img.GetWidth(), Img.GetHeight(), PF_B8G8R8A8);
+		void* TextureData = NewTexture->GetPlatformData()->Mips[0].BulkData.Lock(LOCK_READ_WRITE);
+
+		FMemory::Memcpy(TextureData, Data, Size);
+		NewTexture->GetPlatformData()->Mips[0].BulkData.Unlock();
+		NewTexture->UpdateResource();
+		return NewTexture;
+	}
+
 	return DEFAULT_TEXTURE;
 }
 
@@ -179,8 +223,16 @@ void DFStyleUtil::SafeSetVBoxSlotWidth(TObjectPtr<UPanelSlot> Slot, FSlateChildS
 	if (auto BoxSlot = Cast<UVerticalBoxSlot>(Slot))
 	{
 		BoxSlot->SetSize(SlateChildSize);
-		BoxSlot->SetVerticalAlignment(VAlign_Center);
-		BoxSlot->SetHorizontalAlignment(HAlign_Center);
+		if (SlateChildSize.SizeRule == ESlateSizeRule::Automatic)
+		{
+			BoxSlot->SetVerticalAlignment(VAlign_Center);
+			BoxSlot->SetHorizontalAlignment(HAlign_Center);
+		}
+		else
+		{
+			BoxSlot->SetVerticalAlignment(VAlign_Fill);
+			BoxSlot->SetHorizontalAlignment(HAlign_Fill);
+		}
 	}
 }
 
@@ -190,7 +242,7 @@ void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size)
 	{
 		BoxSlot->SetSize(Size);
 		BoxSlot->SetHorizontalAlignment(HAlign_Fill);
-		if(Size.SizeRule == ESlateSizeRule::Automatic)
+		if (Size.SizeRule == ESlateSizeRule::Automatic)
 		{
 			BoxSlot->SetVerticalAlignment(VAlign_Center);
 		}
@@ -210,7 +262,8 @@ void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, E
 	}
 }
 
-void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, EHorizontalAlignment HAlignment, EVerticalAlignment VAlignment)
+void DFStyleUtil::SafeSetHBoxSlotWidth(UPanelSlot* Slot, FSlateChildSize Size, EHorizontalAlignment HAlignment,
+                                       EVerticalAlignment VAlignment)
 {
 	SafeSetHBoxSlotWidth(Slot, Size, HAlignment);
 	if (auto BoxSlot = Cast<UHorizontalBoxSlot>(Slot))
@@ -225,15 +278,5 @@ void DFStyleUtil::SafeSetVBoxSlotAlignment(UPanelSlot* Slot, EHorizontalAlignmen
 	{
 		BoxSlot->SetHorizontalAlignment(Alignment);
 		BoxSlot->SetVerticalAlignment(VAlign_Center);
-	}
-}
-
-template <class SlotType>
-void DFStyleUtil::SetPadding(UWidget* Widget, FMargin Margin)
-{
-	auto Slot = Cast<SlotType>(Widget->Slot);
-	if (Slot)
-	{
-		Slot->SetPadding(Margin);
 	}
 }

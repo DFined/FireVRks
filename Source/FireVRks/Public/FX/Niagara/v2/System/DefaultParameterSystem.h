@@ -288,6 +288,6 @@ public:
 	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override;
 	FString GetId();
 	FString GetName();
-	virtual UTexture2D* GetIcon() override;
+	virtual UIcon* GetIcon() override;
 	virtual void SpawnSystem(USystemSpawnData* Data) override;
 };

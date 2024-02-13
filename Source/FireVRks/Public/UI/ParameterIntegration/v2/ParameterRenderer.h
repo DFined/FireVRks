@@ -10,6 +10,6 @@ class FIREVRKS_API UParameterRenderer : public UObject
 
 public:
 	static UParameterBindingWidget* RenderParam(
-		UDFUIContainer* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter, ParameterDrawType DrawType
+		UDFUIBase* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter, ParameterDrawType DrawType
 	);
 };

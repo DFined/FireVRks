@@ -8,13 +8,13 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "FX/Niagara/v2/System/EffectSystem.h"
-#include "UI/lib/Container/DFUIContainer.h"
+#include "DFUI/DFUIBase.h"
 #include "ClickableSystemTile.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSystemPressed, UClickableSystemTile*, Tile);
 
 UCLASS()
-class FIREVRKS_API UClickableSystemTile : public UDFUIContainer
+class FIREVRKS_API UClickableSystemTile : public UDFUIBase
 {
 	GENERATED_BODY()
 
@@ -36,7 +36,7 @@ public:
 	UFUNCTION()
 	void OnClick();
 	
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	void Initialize(UEffectSystem* System, int Size);
 	virtual UPanelWidget* GetMountingPoint() override;
 	FOnSystemPressed& GetOnPressed();

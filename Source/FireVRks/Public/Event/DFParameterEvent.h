@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "DFEvent.h"
-#include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
 #include "UObject/Object.h"
 #include "Util/DFU.h"
 #include "DFParameterEvent.generated.h"
+
+class UAbstractFormalParameter;
 
 UCLASS()
 class FIREVRKS_API UDFParameterEvent : public UDFEvent
@@ -21,21 +22,12 @@ class FIREVRKS_API UDFParameterEvent : public UDFEvent
 public:
 	virtual EDFEventType GetType() override;
 
-	UAbstractFormalParameter* GetParameter() const
-	{
-		return Parameter;
-	}
+	UAbstractFormalParameter* GetParameter() const;
 
 private:
-	void SetType(EDFEventType bType)
-	{
-		this->Type = bType;
-	}
+	void SetType(EDFEventType bType);
 
-	void SetParameter(UAbstractFormalParameter* bParameter)
-	{
-		this->Parameter = bParameter;
-	}
+	void SetParameter(UAbstractFormalParameter* bParameter);
 
 public:
 	DF_NEW2(UDFParameterEvent, UAbstractFormalParameter*, Parameter, EDFEventType, Type);

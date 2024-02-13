@@ -4,16 +4,16 @@
 #include "UI/ParameterIntegration/v2/ParameterCreatorInput.h"
 
 #include "FX/Niagara/v2/ParamUtil.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 
-UPanelWidget* UParameterCreatorInput::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UParameterCreatorInput::MakeRootWidget()
 {
-	RootBox = UDFUIUtil::MakeWidget<UVerticalBox>(Tree);
-	ParamNameInput = UDFUIUtil::NamedWidget<UEditableTextBox>(RootBox, Tree, "Parameter Name");
+	RootBox = DFUI::MakeWidget<UVerticalBox>(this);
+	ParamNameInput = DFUI::NamedWidget<UEditableTextBox>(RootBox, "Parameter Name");
 	DFStyleUtil::TextBoxStyle(ParamNameInput);
 	ParamNameInput->SetText(FText::FromString("New Parameter"));
 	
-	ParamTypeInput = UDFUIUtil::NamedWidget<UComboBoxString>(RootBox, Tree, "Parameter Type");
+	ParamTypeInput = DFUI::NamedWidget<UComboBoxString>(RootBox, "Parameter Type");
 	DFStyleUtil::ComboBox(ParamTypeInput);
 	for(ParameterType Type : INSTANTIABLE_TYPES)
 	{
@@ -21,7 +21,7 @@ UPanelWidget* UParameterCreatorInput::MakeRootWidget(UWidgetTree* Tree)
 	}
 	ParamTypeInput->SetSelectedIndex(0);
 	
-	ParamRequiredInput = UDFUIUtil::NamedWidget<UCheckBox>(RootBox, Tree, "Is required");
+	ParamRequiredInput = DFUI::NamedWidget<UCheckBox>(RootBox, "Is required");
 	DFStyleUtil::CheckBoxStyle(ParamRequiredInput);
 	ParamRequiredInput->SetCheckedState(ECheckBoxState::Checked);
 	

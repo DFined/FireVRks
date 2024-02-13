@@ -33,8 +33,9 @@ public:
 	void OnParamBound(FString SelectedItem, ESelectInfo::Type SelectionType);
 	
 	virtual void InitializeBindingWidget() override;
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;
+	void RedrawParentBlock();
 	virtual void OnChange() override;
 };

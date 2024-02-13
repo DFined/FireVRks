@@ -39,4 +39,10 @@ public:
 	{
 		return System;
 	}
+	
+	
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 };

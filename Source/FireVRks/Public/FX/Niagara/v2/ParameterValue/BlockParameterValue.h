@@ -24,5 +24,11 @@ public:
 		return OverridesExpanded;
 	}
 
+	static bool ValueFromJson(TSharedPtr<FJsonObject> Json);
+
 	static UBlockParameterValue* New(UObject* Outer, bool Expanded, bool OverridesExpanded);
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 };

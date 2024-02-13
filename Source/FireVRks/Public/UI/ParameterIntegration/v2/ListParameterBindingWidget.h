@@ -24,10 +24,8 @@ class FIREVRKS_API UListParameterBindingWidget : public UParameterBindingWidget
 	UPROPERTY()
 	UDFUIStack* ListStack;
 
-	ParameterDrawType DrawType;
-
 public:
-	virtual UPanelWidget* MakeRootWidget(UWidgetTree* Tree) override;
+	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 	UFUNCTION()
 	void NewItem();

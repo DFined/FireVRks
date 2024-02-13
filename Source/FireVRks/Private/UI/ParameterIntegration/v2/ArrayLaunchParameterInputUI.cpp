@@ -1,6 +1,6 @@
 #include "UI/ParameterIntegration/v2/ArrayLaunchParameterInputUI.h"
 
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 #include "Util/DFStatics.h"
 #include "World/Launcher/ArrayLaunchPattern.h"
 
@@ -22,7 +22,7 @@ UArrayLaunchParameterInputUI* UArrayLaunchParameterInputUI::Instance(UPanelWidge
 	{
 		return InstanceEmpty(Widget);
 	}
-	auto NewWidget = UDFUIUtil::AddUserWidget<UArrayLaunchParameterInputUI>(Widget);
+	auto NewWidget = DFUI::AddWidget<UArrayLaunchParameterInputUI>(Widget);
 	NewWidget->SetProvider(UDFStatics::ARRAY_LAUNCH_PATTERN);
 	
 	NewWidget->Draw(fContext);

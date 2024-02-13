@@ -1,7 +1,7 @@
 #pragma once
-#include "ParameterValue/AbstractParameterValue.h"
 #include "ParameterValueContext.generated.h"
 
+class UAbstractParameterValue;
 class UBindingParameterValueContext;
 class UAbstractFormalParameter;
 
@@ -15,4 +15,8 @@ public:
 	virtual void SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value) PURE_VIRTUAL("SetValue",);
 
 	static UBindingParameterValueContext* NewContextFrom(UParameterValueContext* Context);
+
+	virtual TSharedPtr<FJsonObject> ToJson() PURE_VIRTUAL("ToJson", return TSharedPtr<FJsonObject>(nullptr););
+
+	static UParameterValueContext* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);	
 };

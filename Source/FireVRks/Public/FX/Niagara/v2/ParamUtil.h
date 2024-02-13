@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Components/PanelWidget.h"
+#include "FormalParameter/ParameterType.h"
+#include "System/SubsystemParameterBindings.h"
 #include "UI/ParameterIntegration/v2/ParameterCreatorInput.h"
-#include "UI/ParameterIntegration/v2/WidgetWithValue.h"
-#include "UObject/Object.h"
+#include "Util/DFId.h"
 #include "Util/DFStatics.h"
 #include "ParamUtil.generated.h"
 
@@ -15,11 +16,31 @@
 #define BOOL_VALUE UBoolParameterValue, bool
 #define ENUM_VALUE UEnumParameterValue, EnumLikeValue*
 
+class UAbstractFormalParameter;
+class UParameterValueContext;
+class UAbstractParameterValue;
+class WidgetWithValue;
+
 UCLASS()
 class FIREVRKS_API UParamUtil : public UObject
 {
 	GENERATED_BODY()
 
+	static TMap<FString, ParameterType> InitTypes()
+	{
+		auto Map = TMap<FString, ParameterType>();
+		Map.Add("INTEGER", INTEGER);
+		Map.Add("BOOLEAN", BOOLEAN);
+		Map.Add("ENUM", ENUM);
+		Map.Add("FLOAT", FLOAT);
+		Map.Add("COLOR", COLOR);
+		Map.Add("BLOCK", BLOCK);
+		Map.Add("LIST", LIST);
+		Map.Add("SYSTEM_INSTANTIATION", SYSTEM_INSTANTIATION);
+		Map.Add("ARRAY_SELECTOR", ARRAY_SELECTOR);
+		return Map;
+	}
+	
 	static inline FString PARAMETER_NAMES[] = {
 		"INTEGER",
 		"BOOLEAN",
@@ -31,6 +52,8 @@ class FIREVRKS_API UParamUtil : public UObject
 		"SYSTEM_INSTANTIATION",
 		"ARRAY_SELECTOR"
 	};
+
+	static inline TMap<FString, ParameterType> TypeNameMap = InitTypes();
 
 	static inline ParameterType TYPES[] = {
 		INTEGER,
@@ -44,11 +67,15 @@ class FIREVRKS_API UParamUtil : public UObject
 		ARRAY_SELECTOR
 	};
 
+
 public:
 	static WidgetWithValue* GetValueWidget(UUserWidget* Outer, ParameterType Type);
 
 	template <class OuterType, typename InnerType>
-	static InnerType GetTypedValue(UAbstractParameterValue* Value);
+	static InnerType GetTypedValue(UAbstractParameterValue* Value)
+	{
+		return Cast<OuterType>(Value)->Get();
+	}
 
 	template <class Type>
 	static Type* Setup(FString Id, FString Name, bool Required, Type* Parameter)
@@ -90,5 +117,10 @@ public:
 		return UParameterCreatorInput::INSTANTIABLE_TYPES[Ordinal];
 	}
 
+	static ParameterType TypeFromName(FString Name){
+		return *TypeNameMap.Find(Name);
+	}
+
 	static UAbstractFormalParameter* NewParam(UObject* Outer, FString Name, bool Required, ParameterType Type);
+	static UAbstractParameterValue* ValueFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);
 };

@@ -23,4 +23,9 @@ public:
 	{
 		return Color;
 	}
+
+	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
+	static FLinearColor ValueFromJson(TSharedPtr<FJsonObject> Json);
 };

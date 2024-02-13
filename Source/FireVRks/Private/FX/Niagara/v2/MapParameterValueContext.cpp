@@ -1,6 +1,7 @@
 #include "FX/Niagara/v2/MapParameterValueContext.h"
 
 #include "FX/Niagara/v2/FormalParameter/AbstractFormalParameter.h"
+#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
 
 UAbstractParameterValue* UMapParameterValueContext::Get(UAbstractFormalParameter* Parameter)
 {
@@ -13,7 +14,7 @@ UAbstractParameterValue* UMapParameterValueContext::Get(UAbstractFormalParameter
 			return *Val;
 		}
 	}
-	auto Val = Parameter->DefaultValue();
+	auto Val = Parameter->DefaultValue()->Clone(Parameter);
 	Map.Add(Id, Val);
 	return Val;
 }
@@ -26,4 +27,17 @@ void UMapParameterValueContext::SetValue(UAbstractFormalParameter* Parameter, UA
 void UMapParameterValueContext::SetValue(UDFId* Parameter, UAbstractParameterValue* Value)
 {
 	Map.Add(Parameter, Value);
+}
+
+TSharedPtr<FJsonObject> UMapParameterValueContext::ToJson()
+{
+	auto Obj = MakeShareable(new FJsonObject());
+	auto Keys = TArray<UDFId*>();
+	Map.GetKeys(Keys);
+	for(auto Id : Keys)
+	{
+		auto Val = *Map.Find(Id);
+		Obj.Object->SetObjectField(Id->GetId(), Val->ToJson());
+	}
+	return Obj;
 }

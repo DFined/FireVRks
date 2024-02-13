@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "ParameterProvider.h"
+#include "DFUI/Icon.h"
 #include "UObject/Object.h"
 #include "EffectSystem.generated.h"
 
@@ -19,6 +20,9 @@ class FIREVRKS_API UEffectSystem : public UObject, public ParameterProvider
 	UDFId* Id;
 
 	FString DisplayName;
+
+	FString Author;
+	FString Description;
 
 public:
 	UDFId* GetId() const
@@ -42,8 +46,13 @@ public:
 	}
 
 	virtual void Initialize() PURE_VIRTUAL("Initialize",)
-	virtual UTexture2D* GetIcon() PURE_VIRTUAL("GetIcon", return nullptr;);
+	virtual UIcon* GetIcon() PURE_VIRTUAL("GetIcon", return nullptr;);
 	virtual void SpawnSystem(USystemSpawnData* Data) PURE_VIRTUAL("SpawnSystem",);
 	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override PURE_VIRTUAL("GetOuterParameters", return nullptr;);
 	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override PURE_VIRTUAL("GetOuterParameters", ;);
+
+	FString GetAuthor() const;
+	void SetAuthor(const FString& Author);
+	FString GetDescription() const;
+	void SetDescription(const FString& Description);
 };

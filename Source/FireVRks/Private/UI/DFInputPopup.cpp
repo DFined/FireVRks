@@ -3,13 +3,14 @@
 
 #include "UI/DFInputPopup.h"
 
+#include "Components/Border.h"
 #include "Components/BorderSlot.h"
 #include "Components/VerticalBox.h"
-#include "UI/DFUIUtil.h"
+#include "DFUI/DFUI.h"
 
-UPanelWidget* UDFInputPopup::MakeRootWidget(UWidgetTree* Tree)
+UPanelWidget* UDFInputPopup::MakeRootWidget()
 {
-	RootBox = UDFUIUtil::MakeWidget<UVerticalBox>(Tree);
+	RootBox = DFUI::MakeWidget<UVerticalBox>(this);
 	return RootBox;
 }
 
@@ -32,8 +33,8 @@ void UDFInputPopup::Cancel()
 
 void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 {
-	auto BaseBorder = UDFUIUtil::AddWidget<UBorder>(WidgetTree, RootBox);
-	auto RootBorder = UDFUIUtil::AddWidget<UBorder>(WidgetTree, BaseBorder);
+	auto BaseBorder = DFUI::AddWidget<UBorder>(RootBox);
+	auto RootBorder = DFUI::AddWidget<UBorder>(BaseBorder);
 	DFStyleUtil::RoundedBorderStyle(BaseBorder, DFStyleUtil::GREY_LVL_3, 10);
 	DFStyleUtil::RoundedBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2, 10);
 	DFStyleUtil::SetPadding<UBorderSlot>(RootBorder, FMargin(5, 5, 5, 5));
@@ -41,8 +42,8 @@ void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 	DFStyleUtil::SafeSetVBoxSlotAlignment(BaseBorder->Slot, HAlign_Center);
 	DFStyleUtil::SafeSetVBoxSlotWidth(BaseBorder->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 
-	auto VBox = UDFUIUtil::AddWidget<UVerticalBox>(WidgetTree, RootBorder);
-	auto Text = UDFUIUtil::AddWidget<UTextBlock>(WidgetTree, VBox);
+	auto VBox = DFUI::AddWidget<UVerticalBox>(RootBorder);
+	auto Text = DFUI::AddWidget<UTextBlock>(VBox);
 	Text->SetText(FText::FromString(TooltipText));
 	DFStyleUtil::SafeSetVBoxSlotAlignment(Text->Slot, HAlign_Center);
 	DFStyleUtil::TextBlockStyle(Text);
@@ -51,12 +52,12 @@ void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 	VBox->AddChildToVerticalBox(Input);
 	DFStyleUtil::SafeSetVBoxSlotAlignment(InputWidget->Slot, HAlign_Center);
 
-	auto HBox = UDFUIUtil::AddWidget<UHorizontalBox>(WidgetTree, VBox);
+	auto HBox = DFUI::AddWidget<UHorizontalBox>(VBox);
 	DFStyleUtil::SafeSetVBoxSlotAlignment(HBox->Slot, HAlign_Center);
-	auto OkBtn = UDFUIUtil::AddWidget<UButton>(WidgetTree, HBox);
-	auto CancelBtn = UDFUIUtil::AddWidget<UButton>(WidgetTree, HBox);
+	auto OkBtn = DFUI::AddWidget<UButton>(HBox);
+	auto CancelBtn = DFUI::AddWidget<UButton>(HBox);
 
-	auto OkText = UDFUIUtil::MakeWidget<UTextBlock>(WidgetTree);
+	auto OkText = DFUI::MakeWidget<UTextBlock>(this);
 	OkText->SetText(FText::FromString("Ok"));
 	OkBtn->SetContent(OkText);
 	OkBtn->OnPressed.AddUniqueDynamic(this, &UDFInputPopup::Confirm);
@@ -64,7 +65,7 @@ void UDFInputPopup::InitializePopup(UWidget* Input, FString TooltipText)
 	DFStyleUtil::TextBlockStyle(OkText);
 	DFStyleUtil::TextButtonStyle(OkBtn, DFStyleUtil::GREY_LVL_2);
 
-	auto CancelText = UDFUIUtil::MakeWidget<UTextBlock>(WidgetTree);
+	auto CancelText = DFUI::MakeWidget<UTextBlock>(this);
 	CancelText->SetText(FText::FromString("Cancel"));
 	CancelBtn->SetContent(CancelText);
 	DFStyleUtil::TextBlockStyle(CancelText);

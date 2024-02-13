@@ -5,6 +5,7 @@
 
 #include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "Util/DFStatics.h"
+#include "World/Launcher/GenericFireworkLauncher.h"
 
 void UEffectSpawnCoordinator::TickTesting(float DeltaSeconds)
 {
