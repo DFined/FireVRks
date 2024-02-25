@@ -3,11 +3,10 @@
 
 #include "UI/CoreUI/SystemPicker.h"
 
-#include "Components/UniformGridSlot.h"
 #include "FX/Niagara/v2/System/EffectSystemManager.h"
 #include "DFUI/DFUI.h"
 #include "UI/ParameterIntegration/v2/ClickableSystemTile.h"
-#include "Util/DFStatics.h"
+#include "UI/ParameterIntegration/v2/SystemDisplayTile.h"
 
 UPanelWidget* USystemPicker::MakeRootWidget()
 {
@@ -29,9 +28,8 @@ void USystemPicker::OnSelectSystem(UClickableSystemTile* Tile)
 	{
 		Cast<UClickableSystemTile>(Child)->DeSelect();
 	}
-	auto TileSlot = Cast<UUniformGridSlot>(Tile->Slot);
-	this->SelectedX = TileSlot->GetColumn();
-	this->SelectedY = TileSlot->GetRow();
+	
+	SelectedSystem = Tile->GetEffectSystem();
 
 	Tile->Select();
 }
@@ -41,12 +39,12 @@ void USystemPicker::SetSystems()
 	Grid->ClearChildren();
 	Systems.Empty();
 	
-	UDFStatics::EFFECT_SYSTEM_MANAGER->List(Systems);
+	UEffectSystemManager::GetInstance()->List(Systems);
 	int x = 0;
 	int y = 0;
 	for(UEffectSystem* System : Systems)
 	{
-		auto Tile = DFUI::MakeUserWidget<UClickableSystemTile>(this);
+		auto Tile = DFUI::MakeWidget<UClickableSystemTile>(this);
 		Grid->AddChildToUniformGrid(Tile, x, y);
 		Tile->Initialize(System, TileSize);
 		Tile->GetOnPressed().AddUniqueDynamic(this, &USystemPicker::OnSelectSystem);
@@ -58,6 +56,27 @@ void USystemPicker::SetSystems()
 			y++;
 		}
 	}
+}
+
+void USystemPicker::OnSelected(UWidget* Widget)
+{
+	auto Picker = Cast<USystemPicker>(Widget);
+	this->OnSelectComplete.Broadcast(Picker->SelectedSystem);
+}
+
+USystemPicker* USystemPicker::SelectSystem(UObject* Object)
+{
+	auto Ctrlr = UGameplayStatics::GetPlayerController(Object->GetWorld(), 0);
+	auto Popup = EDFUI::OpenInputPopup<USystemPicker>(Ctrlr, "Select an effect system");
+	auto Picker = Popup->GetWidget<USystemPicker>();
+	Picker->SetSystems();
+	Popup->GetOnConfirm()->AddUniqueDynamic(Picker, &USystemPicker::OnSelected);
+	return Picker;
+}
+
+FOnSelectSystemDelegate& USystemPicker::GetOnSelectComplete()
+{
+	return OnSelectComplete;
 }
 
 

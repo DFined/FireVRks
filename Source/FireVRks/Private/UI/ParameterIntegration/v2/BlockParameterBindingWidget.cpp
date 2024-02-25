@@ -49,15 +49,16 @@ void UBlockParameterBindingWidget::InitializeBindingWidget()
 	BaseTab = DFUI::MakeExpandableTab(OuterBorder, HeaderBox, ListWrapper, State->IsExpanded());
 	BaseTab->OnExpansionChanged.AddUniqueDynamic(this, &UBlockParameterBindingWidget::LayoutChangedTab);
 
+	auto RequiredBox = DFUI::AddWidget<UVerticalBox>(ListWrapper);
 	RequiredParamsStack = DFUI::AddWidget<UDFUIStack>(ListWrapper);
 
-	DFStyleUtil::SetPadding<UVerticalBoxSlot>(RequiredParamsStack, FMargin(6, 0, 0, 0));
+	DFStyleUtil::SetPadding<UVerticalBoxSlot>(RequiredBox, FMargin(6, 0, 0, 0));
 
 	auto OverridesBorder = DFUI::AddWidget<UBorder>(ListWrapper);
 
 	DFStyleUtil::BasicBorderStyle(OverridesBorder, DFStyleUtil::GREY_LVL_1);
 
-	OverrideParamsStack = DFUI::MakeUserWidget<UDFUIStack>(OverridesBorder);
+	OverrideParamsStack = DFUI::MakeWidget<UDFUIStack>(OverridesBorder);
 
 	for (UAbstractFormalParameter* ChildParam : ParamsBlock->GetChildParameters())
 	{

@@ -19,6 +19,8 @@ class FIREVRKS_API USubsystemParameterBindings : public UObject
 	GENERATED_BODY()
 	
 	inline static const char* ConstantsFieldName = "ConstantValues";
+	inline static const char* SubsystemsFieldName = "Bindings";
+
 	
 	UPROPERTY()
 	TMap<UDFId*, UAbstractFormalParameter*> Bindings = TMap<UDFId*, UAbstractFormalParameter*>();

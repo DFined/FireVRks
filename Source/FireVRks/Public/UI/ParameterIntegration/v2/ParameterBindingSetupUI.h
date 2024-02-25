@@ -45,8 +45,9 @@ public:
 	
 	UFUNCTION()
 	void MoveDown();
-	
-	void Setup();
+
+	UFUNCTION()
+	void Setup(UEffectSystem* bSystem);
 	void SetSystem(UEffectSystem* bSystem);
 	virtual UPanelWidget* GetMountingPoint() override;
 

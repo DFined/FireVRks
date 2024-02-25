@@ -8,6 +8,7 @@
 #include "FX/Niagara/v2/System/EffectSystemManager.h"
 #include "FX/Niagara/v2/System/SubsystemConfig.h"
 #include "DFUI/DFUI.h"
+#include "UI/CoreUI/SystemPicker.h"
 #include "UI/ParameterIntegration/v2/EffectSystemSavingWidget.h"
 #include "UI/ParameterIntegration/v2/OuterParameterCreationWidget.h"
 #include "UI/ParameterIntegration/v2/ParameterBindingSetupUI.h"
@@ -16,7 +17,7 @@ void UEffectEditorUI::OnNewSystem()
 {
 	auto Config = USubsystemConfig::Instance(System, UDFStatics::DEFAULT_SYSTEM_ID);
 	Config->InitBindings();
-	auto Subsystem = UDFStatics::EFFECT_SYSTEM_MANAGER->GetDefaultEffect();
+	auto Subsystem = UEffectSystemManager::GetInstance()->GetDefaultEffect();
 	System->GetSubsystemConfig().Add(Config);
 	UParameterBindingSetupUI::InstanceFrom(SubsystemsVBox, Subsystem, Config);
 }
@@ -32,9 +33,9 @@ UPanelWidget* UEffectEditorUI::GetMountingPoint()
 	return SubsystemsVBox;
 }
 
-void UEffectEditorUI::Init(UTextureRenderTarget2D* RenderTarget)
+void UEffectEditorUI::SetupSystem()
 {
-	MaterialInterface = RenderTarget;
+	RootHBox->ClearChildren();
 	auto OuterWidget = DFUI::AddWidget<UOuterParameterCreationWidget>(RootHBox);
 	OuterWidget->SetSystem(System);
 
@@ -72,9 +73,16 @@ void UEffectEditorUI::Init(UTextureRenderTarget2D* RenderTarget)
 	for (USubsystemConfig* Config : System->GetSubsystemConfig())
 	{
 		//TODO DF_HANDLE
-		auto bSystem = UDFStatics::EFFECT_SYSTEM_MANAGER->Get(Config->GetId());
+		auto bSystem = UEffectSystemManager::GetInstance()->Get(Config->GetId());
 		UParameterBindingSetupUI::InstanceFrom(SubsystemsVBox, bSystem, Config);
 	}
+}
+
+void UEffectEditorUI::Init(UTextureRenderTarget2D* RenderTarget, UCustomEffectSystem* bSystem)
+{
+	MaterialInterface = RenderTarget;
+	SetSystem(bSystem);
+	SetupSystem();
 }
 
 void UEffectEditorUI::MoveSystemUp(UParameterBindingSetupUI* ParameterBindingSetupUI)
@@ -90,8 +98,7 @@ void UEffectEditorUI::MoveSystemDown(UParameterBindingSetupUI* ParameterBindingS
 UEffectEditorUI* UEffectEditorUI::Instance(UPanelWidget* Parent, UTextureRenderTarget2D* MaterialForViewport)
 {
 	auto UI = DFUI::AddWidget<UEffectEditorUI>(Parent);
-	UI->SetSystem(UDFStatics::EFFECT_SYSTEM_MANAGER->GetSystemInEditing());
-	UI->Init(MaterialForViewport);
+	UI->Init(MaterialForViewport, UEffectSystemManager::GetInstance()->GetSystemInEditing());
 	return UI;
 }
 
@@ -107,6 +114,22 @@ void UEffectEditorUI::SaveAs()
 	Switcher->SetActiveWidget(SavingWidget);	
 }
 
+void UEffectEditorUI::LoadSystem(UEffectSystem* bSystem)
+{
+	if(auto CustomSystem = Cast<UCustomEffectSystem>(bSystem))
+	{
+		UEffectSystemManager::GetInstance()->SetSystemInEditing(CustomSystem);
+		this->SetSystem(CustomSystem);
+		this->SetupSystem();
+	}
+}
+
+void UEffectEditorUI::BeginLoadSystem()
+{
+	auto Picker = USystemPicker::SelectSystem(this);
+	Picker->GetOnSelectComplete().AddUniqueDynamic(this, &UEffectEditorUI::LoadSystem);
+}
+
 void UEffectEditorUI::BuildToolbar(UHorizontalBox* Parent)
 {
 	LoadButton = DFUI::AddButtonToButtonPanel(Parent, "Load");
@@ -114,6 +137,7 @@ void UEffectEditorUI::BuildToolbar(UHorizontalBox* Parent)
 	SaveAsButton = DFUI::AddButtonToButtonPanel(Parent, "Save as");
 
 	SaveAsButton->OnPressed.AddUniqueDynamic(this, &UEffectEditorUI::SaveAs);
+	LoadButton->OnPressed.AddUniqueDynamic(this, &UEffectEditorUI::BeginLoadSystem);
 }
 
 void UEffectEditorUI::SetSystem(UCustomEffectSystem* bSystem)

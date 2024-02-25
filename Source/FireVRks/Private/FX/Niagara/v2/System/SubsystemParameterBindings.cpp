@@ -14,7 +14,7 @@ void USubsystemParameterBindings::AddToJson(FJsonObject* Obj)
 	{
 		BindingsJson->SetStringField(bId->GetId(), (*GetBindings().Find(bId))->GetId()->GetId());
 	}
-	Obj->SetObjectField("Bindings", MakeShareable(BindingsJson));
+	Obj->SetObjectField(SubsystemsFieldName, MakeShareable(BindingsJson));
 
 	auto ConstantsJson = new FJsonObject();
 	auto ConstantKeys = TArray<UDFId*>();
@@ -36,7 +36,7 @@ USubsystemParameterBindings* USubsystemParameterBindings::GetFromJson(TSharedPtr
 		auto Value = UParamUtil::ValueFromJson(Json, Bindings);
 		Bindings->ConstantValues.Add(Key, Value);
 	}
-	for(auto Entry : Json->Values)
+	for(auto Entry : Json->GetObjectField(SubsystemsFieldName)->Values)
 	{
 		auto Key = UDFId::Named(Bindings, Entry.Key);
 		auto Value = UAbstractFormalParameter::FromJson(Json, Outer);

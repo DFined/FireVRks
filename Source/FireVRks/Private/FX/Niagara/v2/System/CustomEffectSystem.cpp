@@ -29,7 +29,7 @@ void UCustomEffectSystem::SpawnSystem(USystemSpawnData* Data)
 			Data->GetUpwardVector()
 		);
 		SubData->AddToRoot();
-		UDFStatics::EFFECT_SYSTEM_MANAGER->Get(Configs->GetId())->SpawnSystem(SubData);
+		UEffectSystemManager::GetInstance()->Get(Configs->GetId())->SpawnSystem(SubData);
 		SubData->RemoveFromRoot();
 	}
 }
@@ -147,7 +147,7 @@ TSharedPtr<FJsonObject> UCustomEffectSystem::ToJson()
 	return MakeShareable(Obj);
 }
 
-UCustomEffectSystem* UCustomEffectSystem::FromJson(TSharedPtr<FJsonObject> Json, UObject* Parent)
+UCustomEffectSystem* UCustomEffectSystem::FromJson(TSharedPtr<FJsonObject> Json, UObject* Parent) 
 {
 	auto System = Instance(Parent);
 

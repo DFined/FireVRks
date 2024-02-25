@@ -11,8 +11,10 @@
 #include "DFUI/DFUIBase.h"
 #include "UI/EDFUI.h"
 #include "UI/ParameterIntegration/v2/ClickableSystemTile.h"
+#include "UI/ParameterIntegration/v2/SystemDisplayTile.h"
 #include "SystemPicker.generated.h"
 
+class FOnSelectSystemDelegate;
 /**
  * 
  */
@@ -30,11 +32,14 @@ class FIREVRKS_API USystemPicker : public UDFUIBase
 	UPROPERTY()
 	TArray<UEffectSystem*> Systems = TArray<UEffectSystem*>();
 
+	FOnSelectSystemDelegate OnSelectComplete;
+
+	UEffectSystem* SelectedSystem;
+
 	int Columns = 8;
 	int TileSize = 96;
 
-	int SelectedX;
-	int SelectedY;
+	
 
 public:
 	virtual UPanelWidget* MakeRootWidget() override;
@@ -44,11 +49,9 @@ public:
 	void OnSelectSystem(UClickableSystemTile* Tile);
 	void SetSystems();
 
-	static void SelectSystem(UObject* Object)
-	{
-		auto Ctrlr = UGameplayStatics::GetPlayerController(Object->GetWorld(), 0);
-		auto Popup = EDFUI::OpenInputPopup<USystemPicker>(Ctrlr, "Select an effect system");
-		Popup->GetWidget<USystemPicker>()->SetSystems();
-		
-	}
+	UFUNCTION()
+	void OnSelected(UWidget* Widget);
+	static USystemPicker* SelectSystem(UObject* Object);
+
+	FOnSelectSystemDelegate& GetOnSelectComplete();
 };

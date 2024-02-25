@@ -27,7 +27,7 @@ class FIREVRKS_API UCustomEffectSystem : public UEffectSystem
 	TMap<UDFId*, UAbstractFormalParameter*> OuterParameters = TMap<UDFId*, UAbstractFormalParameter*>();
 
 	UPROPERTY()
-	TArray<UDFId*> ParameterOrder;
+	TArray<UDFId*> ParameterOrder = TArray<UDFId*>();
 
 	UPROPERTY()
 	UIcon* Icon;

@@ -13,7 +13,7 @@
 UPanelWidget* UDFUIStack::MakeRootWidget()
 {
 	auto Border = DFUI::MakeWidget<UBorder>(this);
-	VerticalBox = DFUI::MakeWidget<UVerticalBox>(Border);
+	VerticalBox = DFUI::AddWidget<UVerticalBox>(Border);
 	FSlateBrush Brush = FSlateBrush();
 	Brush.Margin = FMargin(0.3f, 0.0f, 0.0f, 0.0f);
 	Brush.DrawAs = ESlateBrushDrawType::Box;

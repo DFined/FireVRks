@@ -15,17 +15,13 @@
 #include "Components/WidgetSwitcherSlot.h"
 #include "DFUI/DFStyleUtil.h"
 #include "DFUI/DFUI.h"
+#include "FX/Niagara/v2/System/EffectSystemManager.h"
 #include "Util/DFStatics.h"
 #include "Util/FileHelper.h"
 
 void UEffectSystemSavingWidget::Save()
 {
-	FString JsonSaveData;
-	TSharedPtr<FJsonObject> SaveObj = System->ToJson();
-	FJsonSerializer::Serialize(SaveObj.ToSharedRef(), TJsonWriterFactory<>::Create(&JsonSaveData), true);
-
-	FString DataPath = FPaths::Combine(UDFStatics::FILE_HELPER->GetSystemsContentPath(), System->GetId()->GetId() + ".fvks.json");
-	FFileHelper::SaveStringToFile(JsonSaveData, *DataPath);
+	UEffectSystemManager::GetInstance()->SaveEffect(System);
 }
 
 void UEffectSystemSavingWidget::ChooseIcon()
@@ -38,7 +34,7 @@ void UEffectSystemSavingWidget::FinishSavingIcon()
 {
 	FImage Image = FImage();
 	FImageUtils::GetRenderTargetImage(RenderTarget, Image);
-	FString IconPath = FPaths::Combine(UDFStatics::FILE_HELPER->GetIconsContentPath(), System->GetId()->GetId() + ".png");
+	FString IconPath = FPaths::Combine(UFileHelper::GetInstance()->GetIconsContentPath(), System->GetId()->GetId() + ".png");
 	FImageUtils::SaveImageByExtension(*IconPath, Image, 0);
 	
 	System->SetIcon(

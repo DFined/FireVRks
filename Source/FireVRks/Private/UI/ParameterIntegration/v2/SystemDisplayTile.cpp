@@ -5,7 +5,14 @@
 
 void USystemDisplayTile::OpenSystemSelection(UClickableSystemTile* Tile)
 {
-	USystemPicker::SelectSystem(Tile);
+	auto Picker = USystemPicker::SelectSystem(Tile);
+	Picker->GetOnSelectComplete().AddUniqueDynamic(this, &USystemDisplayTile::OnSelectComplete);
+}
+
+void USystemDisplayTile::OnSelectComplete(UEffectSystem* System)
+{
+	SetSystem(System, 96);
+	OnSelectionChanged.Broadcast(System);
 }
 
 UPanelWidget* USystemDisplayTile::MakeRootWidget()
@@ -15,10 +22,15 @@ UPanelWidget* USystemDisplayTile::MakeRootWidget()
 	
 	SystemTile = DFUI::AddWidget<UClickableSystemTile>(OuterBorder);
 	SystemTile->GetOnPressed().AddUniqueDynamic(this, &USystemDisplayTile::OpenSystemSelection);
-	return OuterBorder; 
+	return OuterBorder;
 }
 
 void USystemDisplayTile::SetSystem(UEffectSystem* System, int Size)
 {
 	SystemTile->Initialize(System, Size);
+}
+
+FOnSelectSystemDelegate& USystemDisplayTile::GetOnSelectionChanged()
+{
+	return OnSelectionChanged;
 }

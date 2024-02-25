@@ -3,7 +3,6 @@
 #include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "FX/Niagara/v2/System/EffectSystem.h"
 #include "DFUI/DFUI.h"
-#include "Util/DFU.h"
 #include "EffectParameterInputUI.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)

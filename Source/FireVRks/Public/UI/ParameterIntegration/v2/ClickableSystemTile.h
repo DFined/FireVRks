@@ -30,6 +30,9 @@ class FIREVRKS_API UClickableSystemTile : public UDFUIBase
 	UPROPERTY()
 	UImage* Image;
 
+	UPROPERTY()
+	UEffectSystem* EffectSystem;
+
 	FOnSystemPressed OnSystemPressed;
 
 public:
@@ -40,6 +43,8 @@ public:
 	void Initialize(UEffectSystem* System, int Size);
 	virtual UPanelWidget* GetMountingPoint() override;
 	FOnSystemPressed& GetOnPressed();
+
+	UEffectSystem*& GetEffectSystem();
 
 	void Select();
 	void DeSelect();

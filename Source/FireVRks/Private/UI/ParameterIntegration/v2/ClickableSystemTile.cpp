@@ -34,6 +34,7 @@ UPanelWidget* UClickableSystemTile::MakeRootWidget()
 
 void UClickableSystemTile::Initialize(UEffectSystem* System, int Size)
 {
+	EffectSystem = System;
 	Label->SetText(FText::FromString(System->GetDisplayName()));
 	Image->SetBrush(DFStyleUtil::SetupImageBrush(DFStyleUtil::LoadCachedTexture(System->GetIcon()), Size));
 	DFStyleUtil::TextBlockStyle(Label);
@@ -50,12 +51,21 @@ FOnSystemPressed& UClickableSystemTile::GetOnPressed()
 	return this->OnSystemPressed;
 }
 
+UEffectSystem*& UClickableSystemTile::GetEffectSystem()
+{
+	return EffectSystem;
+}
+
 void UClickableSystemTile::Select()
 {
+	Button->WidgetStyle.Normal.TintColor = FLinearColor(0.1,0.3,0.7,0.4);
+	Button->WidgetStyle.Hovered.TintColor = FLinearColor(0.1,0.3,0.7,0.4);
 	DFStyleUtil::RoundedBorderStyle(RootBorder, DFStyleUtil::SELECTED_LEVEL_3, 10);
 }
 
 void UClickableSystemTile::DeSelect()
 {
+	Button->WidgetStyle.Normal.TintColor = FLinearColor(0,0,0,0);
+	Button->WidgetStyle.Hovered.TintColor = FLinearColor(0,0,0,0);
 	DFStyleUtil::RoundedBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_3, 10);
 }

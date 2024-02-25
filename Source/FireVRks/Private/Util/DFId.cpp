@@ -5,14 +5,9 @@ bool UDFId::operator==(const UDFId& Other) const
 	return this->Hash == Other.Hash ? this->Id.Equals(Other.Id): false;
 }
 
-uint32 UDFId::GetTypeHash(const UDFId* fId)
-{
-	return fId->Hash;
-}
-
 uint32 UDFId::PreHash(const FString& Fid)
 {
-	return FCrc::MemCrc32(&Fid, sizeof(FGuid));
+	return TextKeyUtil::HashString(Fid);
 }
 
 UDFId* UDFId::Named(UObject* Outer, const FString& Fid)
@@ -35,4 +30,9 @@ UDFId* UDFId::Random(UObject* Outer)
 FString UDFId::GetId() const
 {
 	return Id;
+}
+
+uint32 GetTypeHash(const UDFId* fId)
+{
+	return fId->Hash;
 }

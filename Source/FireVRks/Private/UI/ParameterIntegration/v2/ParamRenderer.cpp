@@ -10,13 +10,13 @@
 UParameterBindingWidget* UParameterRenderer::RenderParam(
 	UDFUIBase* Container, UParameterValueContext* ValueContext, UAbstractFormalParameter* Parameter, ParameterDrawType DrawType)
 {
-	UParameterBindingWidget* PBW;
+	UParameterBindingWidget* PBW = nullptr;
 	switch (Parameter->GetType())
 	{
 		case BLOCK: PBW = DFUI::AddWidget<UBlockParameterBindingWidget>(Container); break;
 		case LIST: PBW = DFUI::AddWidget<UListParameterBindingWidget>(Container); break;
 		case SYSTEM_INSTANTIATION: PBW = DFUI::AddWidget<USystemInstantiationParameterBindingWidget>(Container); break;
-		default: PBW = DFUI::AddWidget<UParameterLineBindingWidget>(Container); 
+		default: PBW = DFUI::AddWidget<UParameterLineBindingWidget>(Container);
 	}
 	
 	PBW->Setup(Parameter, ValueContext, DrawType);

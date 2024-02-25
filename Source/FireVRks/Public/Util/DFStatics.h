@@ -29,7 +29,6 @@ public:
 	static USlateBrushAsset* const EFFECT_TESTING_SLATE_BRUSH;
 	static ULauncherManager* const LAUNCHER_MANAGER;
 	static UArrayLaunchPattern* const ARRAY_LAUNCH_PATTERN;
-	static UEffectSystemManager* const EFFECT_SYSTEM_MANAGER;
 	static UEffectSpawnCoordinator* const EFFECT_SPAWN_COORDINATOR;
 	static AActor* Player;
 	static UCameraComponent* PlayerCamera;
@@ -65,8 +64,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	static UCameraComponent* GetPlayerCamera();
-
-	static UEffectSystem* GetDefaultEffectSystem();
 };
 
 template <class Type>

@@ -15,13 +15,12 @@ class FIREVRKS_API UFileHelper : public UObject
 	FString UserContentPath;
 	FString IconsContentPath;
 	FString SystemsContentPath;
-public:
-	DF_NEW_INIT(UFileHelper, Initialize)
 
-	void Initialize()
+public:
+	void Init()
 	{
 		AddToRoot();
-		UserContentPath = FPaths::Combine(FPaths::ProjectContentDir(),"user_save");
+		UserContentPath = FPaths::Combine(FPaths::ProjectContentDir(), "user_save");
 		IconsContentPath = FPaths::Combine(UserContentPath, "icons");
 		SystemsContentPath = FPaths::Combine(UserContentPath, "systems");
 	}
@@ -40,4 +39,31 @@ public:
 	{
 		return SystemsContentPath;
 	}
+
+	FString IconPath(FString& ChildPath)
+	{
+		return FPaths::Combine(GetIconsContentPath(), ChildPath);
+	}
+
+	FString SystemPath(FString& ChildPath)
+	{
+		return FPaths::Combine(GetSystemsContentPath(), ChildPath);
+	}
+
+	void ListFilesInDir(FString Path, TArray<FString>& Result);
+
+	UFUNCTION(BlueprintCallable)
+	static UFileHelper* GetInstance()
+	{
+		if (!SingleInstance.IsValid())
+		{
+			SingleInstance = NewObject<UFileHelper>();
+			SingleInstance->AddToRoot();
+			SingleInstance->Init();
+		}
+		return SingleInstance.Get();
+	}
+
+private:
+	inline static TWeakObjectPtr<UFileHelper> SingleInstance = nullptr;
 };

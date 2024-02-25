@@ -18,7 +18,7 @@ public:
 	/**
 	 * Calculates the hash for a DFId.
 	 */
-	FORCEINLINE uint32 GetTypeHash(const UDFId* Id);
+	friend uint32 GetTypeHash(const UDFId* Id);
 
 	static uint32 PreHash(const FString& Fid);
 	static UDFId* Named(UObject* Outer, const FString& Fid);

@@ -5,7 +5,6 @@
 #include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
 #include "FX/Niagara/v2/System/EffectSystemManager.h"
 #include "UI/Icons.h"
-#include "Util/FileHelper.h"
 #include "World/Launcher/ArrayLaunchPattern.h"
 #include "World/Launcher/LauncherManager.h"
 #include "Niagara/Classes/NiagaraSystem.h"
@@ -21,11 +20,9 @@ UNiagaraSystem* const UDFStatics::TRAIL_SYSTEM = LoadObject<UNiagaraSystem>(ANCH
 USlateBrushAsset* const UDFStatics::EFFECT_TESTING_SLATE_BRUSH = LoadObject<USlateBrushAsset>(ANCHOR, TEXT("/Game/FireVRks/UI/EffectTestBrush.EffectTestBrush"));
 ULauncherManager* const UDFStatics::LAUNCHER_MANAGER = ULauncherManager::MakeInstance();
 UArrayLaunchPattern* const UDFStatics::ARRAY_LAUNCH_PATTERN = UArrayLaunchPattern::MakeInstance();
-UEffectSystemManager* const UDFStatics::EFFECT_SYSTEM_MANAGER = UEffectSystemManager::Instance();
 UEffectSpawnCoordinator* const UDFStatics::EFFECT_SPAWN_COORDINATOR = UEffectSpawnCoordinator::New();
 AActor* UDFStatics::Player = nullptr;
 UCameraComponent* UDFStatics::PlayerCamera = nullptr;
-UFileHelper* const UDFStatics::FILE_HELPER = UFileHelper::Instance(GetTransientPackage());
 
 ULauncherManager* UDFStatics::GetLauncherManager()
 {
@@ -90,9 +87,4 @@ void UDFStatics::SetPlayerCamera(UCameraComponent* bCamera)
 UCameraComponent* UDFStatics::GetPlayerCamera()
 {
 	return PlayerCamera;
-}
-
-UEffectSystem* UDFStatics::GetDefaultEffectSystem()
-{
-	return EFFECT_SYSTEM_MANAGER->GetDefaultEffect();
 }

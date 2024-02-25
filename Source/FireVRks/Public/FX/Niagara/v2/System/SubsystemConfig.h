@@ -66,7 +66,7 @@ public:
 	{
 		auto Config = Instance(Outer, UDFId::Named(Outer, Json->GetStringField("Id")));
 		Config->SetSubsystemName(Json->GetStringField("DisplayName"));
-		Config->Bindings = USubsystemParameterBindings::GetFromJson(Json, Config); 
+		Config->Bindings = USubsystemParameterBindings::GetFromJson(Json, Config);
 		return Config;
 	}
 };

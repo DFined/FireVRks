@@ -90,6 +90,40 @@
   return obj;\
  };
 
+// Macro definition for the singleton pattern
+#define DF_SINGLETON(SingletonClassName) \
+public: \
+	UFUNCTION(BlueprintCallable)\
+	static SingletonClassName* GetInstance() \
+	{ \
+		if (!SingleInstance.IsValid()) \
+		{ \
+			SingleInstance = NewObject<SingletonClassName>(); \
+			SingleInstance->AddToRoot(); \
+		} \
+		return SingleInstance.Get(); \
+	} \
+private: \
+	inline static TWeakObjectPtr<SingletonClassName> SingleInstance = nullptr;
+
+// Macro definition for the singleton pattern
+#define DF_INITIALIZING_SINGLETON(SingletonClassName) \
+public: \
+	UFUNCTION(BlueprintCallable)\
+	static SingletonClassName* GetInstance() \
+	{ \
+		if (!SingleInstance.IsValid()) \
+		{ \
+			SingleInstance = NewObject<SingletonClassName>(); \
+			SingleInstance->AddToRoot(); \
+			SingleInstance->Init(); \
+		} \
+		return SingleInstance.Get(); \
+	} \
+private: \
+	inline static TWeakObjectPtr<SingletonClassName> SingleInstance = nullptr;
+
+
 #define DF_CHILD_MEMBER(Class, Name)\
  void Init##Name() {\
   this->Name = NewObject<Class>(this, Class::StaticClass());\

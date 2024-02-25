@@ -27,7 +27,7 @@ UPanelWidget* USystemInstantiationParameterBindingWidget::GetMountingPoint()
 void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
 {
 	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
-	System = UDFStatics::EFFECT_SYSTEM_MANAGER->Get(Value->GetSystem());
+	System = UEffectSystemManager::GetInstance()->Get(Value->GetSystem());
 
 	//Kind of a hack, but when in binding mode, we need to replace the default value with a custom default
 	//complete with a binding context, as well as adding it to constants straight away

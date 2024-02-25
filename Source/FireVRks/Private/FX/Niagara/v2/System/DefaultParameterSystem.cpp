@@ -435,7 +435,7 @@ void UDefaultParameterSystem::SpawnSystem(USystemSpawnData* Data)
 			//
 			// 	auto SpawnData = ULaunchSettings::Make(
 			// 		Data->GetWorldObject(),
-			// 		UDFStatics::EFFECT_SYSTEM_MANAGER->Get (SystemInstanceParams->GetSystem()),
+			// 		UEffectSystemManager::GetInstance()->Get (SystemInstanceParams->GetSystem()),
 			// 		SystemInstanceParams->GetContext(),
 			// 		Data->GetSpawnTarget(),
 			// 		0,

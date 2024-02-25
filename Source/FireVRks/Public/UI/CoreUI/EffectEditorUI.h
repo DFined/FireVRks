@@ -56,8 +56,9 @@ public:
 	
 	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
+	void SetupSystem();
 
-	void Init(UTextureRenderTarget2D* Material);
+	void Init(UTextureRenderTarget2D* RenderTarget, UCustomEffectSystem* bSystem);
 	void MoveSystemUp(UParameterBindingSetupUI* ParameterBindingSetupUI);
 	void MoveSystemDown(UParameterBindingSetupUI* ParameterBindingSetupUI);
 
@@ -69,7 +70,11 @@ public:
 
 	UFUNCTION()
 	void SaveAs();
-	
+
+	UFUNCTION()
+	void LoadSystem(UEffectSystem* bSystem);
+	UFUNCTION()
+	void BeginLoadSystem();
 	UFUNCTION(BlueprintCallable)
 	void BuildToolbar(UHorizontalBox* Parent);
 

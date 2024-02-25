@@ -43,16 +43,20 @@ UPanelWidget* UParameterBindingSetupUI::MakeRootWidget()
 	auto VBox = DFUI::MakeWidget<UVerticalBox>(this);
 	
 	DFUI::MakeExpandableTab(RootBorder, HeaderBox, VBox, true);
-
+	
 	SystemDisplayTile = DFUI::AddWidget<USystemDisplayTile>(VBox);
+	SystemDisplayTile->GetOnSelectionChanged().AddUniqueDynamic(this, &UParameterBindingSetupUI::Setup);
 
 	ParamsBox = DFUI::AddWidget<UVerticalBox>(VBox);
 	return RootBorder;
 }
 
 
-void UParameterBindingSetupUI::Setup()
+void UParameterBindingSetupUI::Setup(UEffectSystem* bSystem)
 {
+	this->System = bSystem;
+	ParamsBox->ClearChildren();
+	HeaderBox->ClearChildren();
 	auto Label = DFUI::AddLabel(HeaderBox, SubsystemConfig->GetSubsystemName());
 	DFStyleUtil::SafeSetHBoxSlotWidth(Label->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 
@@ -70,11 +74,8 @@ void UParameterBindingSetupUI::Setup()
 	auto DelBtn = DFUI::AddImageButton(HeaderBox, UDFStatics::ICONS->DELETE_ICON, 24);
 	DelBtn->OnPressed.AddUniqueDynamic(this, &UParameterBindingSetupUI::Delete);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
-
-	
 	auto Context = UBindingParameterValueContext::New(SubsystemConfig);
 	Context->SetBindings(SubsystemConfig->GetBindings());
-	this->SetSystem(System);
 	auto OuterParams = TArray<UAbstractFormalParameter*>();
 	System->GetOuterParametersInOrder(OuterParams);
 	for (auto Param : OuterParams)
@@ -86,7 +87,6 @@ void UParameterBindingSetupUI::Setup()
 void UParameterBindingSetupUI::SetSystem(UEffectSystem* bSystem)
 {
 	System = bSystem;
-	SystemDisplayTile->SetSystem(System, 96);
 }
 
 UPanelWidget* UParameterBindingSetupUI::GetMountingPoint()
@@ -97,8 +97,7 @@ UPanelWidget* UParameterBindingSetupUI::GetMountingPoint()
 UParameterBindingSetupUI* UParameterBindingSetupUI::InstanceFrom(UPanelWidget* Parent, UEffectSystem* System, USubsystemConfig* Bindings)
 {
 	auto SetupUI = DFUI::AddWidget<UParameterBindingSetupUI>(Parent);
-	SetupUI->System = System;
 	SetupUI->SubsystemConfig = Bindings;
-	SetupUI->Setup();
+	SetupUI->Setup(System);
 	return SetupUI;
 }

@@ -49,7 +49,7 @@ void UArrayLaunchPattern::Launch(UParameterValueContext* Context, float CommonDe
 
 				auto SpawnData = ULaunchSettings::Make(
 					Launcher,
-					UDFStatics::EFFECT_SYSTEM_MANAGER->Get(SystemInstanceParams->GetSystem()),
+					UEffectSystemManager::GetInstance()->Get(SystemInstanceParams->GetSystem()),
 					SystemInstanceParams->GetContext(),
 					Launcher,
 					CommonDelay + Delay * i,
