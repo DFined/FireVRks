@@ -24,7 +24,7 @@ void UMapParameterValueContext::SetValue(UAbstractFormalParameter* Parameter, UA
 	Map.Add(Parameter->GetId(), Value);
 }
 
-void UMapParameterValueContext::SetValue(UDFId* Parameter, UAbstractParameterValue* Value)
+void UMapParameterValueContext::SetValue(FDFId Parameter, UAbstractParameterValue* Value)
 {
 	Map.Add(Parameter, Value);
 }
@@ -32,12 +32,12 @@ void UMapParameterValueContext::SetValue(UDFId* Parameter, UAbstractParameterVal
 TSharedPtr<FJsonObject> UMapParameterValueContext::ToJson()
 {
 	auto Obj = MakeShareable(new FJsonObject());
-	auto Keys = TArray<UDFId*>();
+	auto Keys = TArray<FDFId>();
 	Map.GetKeys(Keys);
 	for(auto Id : Keys)
 	{
 		auto Val = *Map.Find(Id);
-		Obj.Object->SetObjectField(Id->GetId(), Val->ToJson());
+		Obj.Object->SetObjectField(Id.GetId(), Val->ToJson());
 	}
 	return Obj;
 }

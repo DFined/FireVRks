@@ -11,9 +11,10 @@ UBindingParameterValueContext* UParameterValueContext::NewContextFrom(UParameter
 	return ResContext;
 }
 
-UParameterValueContext* UParameterValueContext::FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer)
+UParameterValueContext* UParameterValueContext::FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*> Outers)
 {
 	auto Context = UBindingParameterValueContext::New(Outer);
-	Context->SetBindings(USubsystemParameterBindings::GetFromJson(Json, Outer));
+	Context->SetBindings(USubsystemParameterBindings::GetFromJson(Json, Outer, Outers));
+	
 	return Context;
 }

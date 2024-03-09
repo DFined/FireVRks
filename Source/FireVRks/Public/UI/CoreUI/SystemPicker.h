@@ -32,9 +32,10 @@ class FIREVRKS_API USystemPicker : public UDFUIBase
 	UPROPERTY()
 	TArray<UEffectSystem*> Systems = TArray<UEffectSystem*>();
 
-	FOnSelectSystemDelegate OnSelectComplete;
-
+	UPROPERTY()
 	UEffectSystem* SelectedSystem;
+
+	FOnSelectSystemDelegate OnSelectComplete;
 
 	int Columns = 8;
 	int TileSize = 96;

@@ -24,10 +24,10 @@ class FIREVRKS_API UCustomEffectSystem : public UEffectSystem
 	TArray<USubsystemConfig*> SubsystemConfig = TArray<USubsystemConfig*>();
 
 	UPROPERTY()
-	TMap<UDFId*, UAbstractFormalParameter*> OuterParameters = TMap<UDFId*, UAbstractFormalParameter*>();
+	TMap<FDFId, UAbstractFormalParameter*> OuterParameters = TMap<FDFId, UAbstractFormalParameter*>();
 
 	UPROPERTY()
-	TArray<UDFId*> ParameterOrder = TArray<UDFId*>();
+	TArray<FDFId> ParameterOrder = TArray<FDFId>();
 
 	UPROPERTY()
 	UIcon* Icon;
@@ -39,7 +39,7 @@ public:
 
 	TArray<USubsystemConfig*>& GetSubsystemConfig();
 
-	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override;
+	virtual TMap<FDFId, UAbstractFormalParameter*>* GetOuterParameters() override;
 	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override;
 
 	DF_NEW_INIT(UCustomEffectSystem, Initialize);
@@ -54,9 +54,9 @@ public:
 
 	void NewParameter(UAbstractFormalParameter* Parameter);
 
-	void MoveOuterParameterUp(UDFId* bId);
+	void MoveOuterParameterUp(FDFId bId);
 
-	void MoveOuterParameterDown(UDFId* bId);
+	void MoveOuterParameterDown(FDFId bId);
 
 	virtual UIcon* GetIcon() override;
 	void SetIcon(UIcon* Icon);

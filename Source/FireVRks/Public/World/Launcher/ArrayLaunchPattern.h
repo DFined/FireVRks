@@ -21,7 +21,7 @@ class FIREVRKS_API UArrayLaunchPattern : public UObject, public ParameterProvide
 	bool IsInit = false;
 
 	UPROPERTY()
-	TMap<UDFId*, UAbstractFormalParameter*> Parameters;
+	TMap<FDFId, UAbstractFormalParameter*> Parameters;
 
 public:
 	UPROPERTY()
@@ -45,11 +45,11 @@ public:
 	UPROPERTY()
 	UIntFormalParameter* SHELL_VELOCITY = UParamUtil::Global<UIntFormalParameter, int>("Shell Velocity", true, 6500);
 	UPROPERTY()
-	USystemInstantiationFormalParameter* SYSTEM_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, UDFId*>(
+	USystemInstantiationFormalParameter* SYSTEM_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, FDFId>(
 		"System", true, UDFStatics::DEFAULT_SYSTEM_ID
 	);
 
-	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override;
+	virtual TMap<FDFId, UAbstractFormalParameter*>* GetOuterParameters() override;
 
 	void Init();
 	

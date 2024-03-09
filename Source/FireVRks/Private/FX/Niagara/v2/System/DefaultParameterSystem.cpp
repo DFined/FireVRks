@@ -1,6 +1,5 @@
 #include "FX/Niagara/v2/System/DefaultParameterSystem.h"
 
-#include <corecrt_math_defines.h>
 
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
@@ -13,7 +12,6 @@
 #include "FX/Niagara/v2/ParameterValue/ListParameterValue.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "UI/Icons.h"
-#include "DFUI/DFStyleUtil.h"
 #include "Util/DFStatics.h"
 
 void UDefaultParameterSystem::Initialize()
@@ -235,7 +233,7 @@ void UDefaultParameterSystem::AddParameter(UAbstractFormalParameter* Parameter)
 	Parameters.Add(Parameter->GetId(), Parameter);
 }
 
-TMap<UDFId*, UAbstractFormalParameter*>* UDefaultParameterSystem::GetOuterParameters()
+TMap<FDFId, UAbstractFormalParameter*>* UDefaultParameterSystem::GetOuterParameters()
 {
 	return &Parameters;
 }

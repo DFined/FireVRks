@@ -11,7 +11,7 @@ class UEffectSystemManager;
 class ULauncherManager;
 class USlateBrushAsset;
 class UNiagaraSystem;
-class UDFId;
+struct FDFId;
 class UArrayLaunchPattern;
 
 UCLASS()
@@ -22,7 +22,7 @@ class FIREVRKS_API UDFStatics : public UObject
 public:
 	static UDFAnchor* const ANCHOR;
 
-	static UDFId* const DEFAULT_SYSTEM_ID;
+	static FDFId const DEFAULT_SYSTEM_ID;
 	static UStaticMesh* const SPHERE_MESH;
 	static UNiagaraSystem* const DEFAULT_SYSTEM;
 	static UNiagaraSystem* const TRAIL_SYSTEM;

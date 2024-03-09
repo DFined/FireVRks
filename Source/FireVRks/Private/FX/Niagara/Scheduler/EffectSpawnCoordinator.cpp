@@ -52,18 +52,14 @@ void UEffectSpawnCoordinator::SpawnEffect(ULaunchSettings* Data)
 	if (auto Launcher = Cast<AGenericFireworkLauncher>(Target))
 	{
 		Launcher->Fire(Data);
+		return;
 	}
-	else if (Target)
+	FVector Location = FVector(0, 0, 0);
+	if (Target)
 	{
-		Data->GetSystem()->SpawnSystem(
-			USystemSpawnData::New(
-				Data->GetSpawnTarget(),
-				Data->GetContext(),
-				Data->GetSpawnTarget()->GetActorLocation(),
-				FVector(1,0,0)
-			)
-		);
+		Location = Target->GetActorLocation();
 	}
+	Data->GetSystem()->SpawnSystem(USystemSpawnData::New(Data, Data->GetContext(), Location, FVector(1, 0, 0)));
 }
 
 void UEffectSpawnCoordinator::EnqueueDisplay(ULaunchSettings* Data)

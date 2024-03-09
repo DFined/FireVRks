@@ -25,7 +25,7 @@ public:
 		Values.Add(Context);
 	}
 
-	static UAbstractParameterValue* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);
+	static UAbstractParameterValue* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*>& Outers);
 
 	static UListParameterValue* New(UObject* Outer)
 	{

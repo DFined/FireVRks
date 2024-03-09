@@ -21,7 +21,7 @@ protected:
 	UAbstractParameterValue* Default;
 
 	UPROPERTY()
-	UDFId* Id;
+	FDFId Id;
 
 	ParameterType Type;
 
@@ -35,7 +35,7 @@ public:
 
 	void SetDefault(UAbstractParameterValue* bDefault);
 
-	UDFId* GetId();
+	FDFId GetId();
 
 	ParameterPredicate* GetPredicate() const;
 	
@@ -45,7 +45,7 @@ public:
 	
 	FString GetDisplayName();
 
-	void SetId(UDFId* Id);
+	void SetId(FDFId Id);
 
 	void SetPredicate(ParameterPredicate* Predicate);
 

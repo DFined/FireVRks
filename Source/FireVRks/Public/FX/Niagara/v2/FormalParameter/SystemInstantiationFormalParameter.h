@@ -14,13 +14,5 @@ class FIREVRKS_API USystemInstantiationFormalParameter : public UAbstractFormalP
 	GENERATED_BODY()
 
 public:
-	static USystemInstantiationFormalParameter* New(UObject* Outer, UDFId* System)
-	{
-		auto Param = NewObject<USystemInstantiationFormalParameter>(Outer, StaticClass());
-		Param->Default = USystemInstantiationParameterValue::New(
-			Param, NewObject<UMapParameterValueContext>(Outer, UMapParameterValueContext::StaticClass()), System
-		);
-		Param->Type = SYSTEM_INSTANTIATION;
-		return Param;
-	}
+	static USystemInstantiationFormalParameter* New(UObject* Outer, FDFId System);
 };

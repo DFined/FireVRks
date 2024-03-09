@@ -13,7 +13,7 @@
 UDFAnchor* const UDFStatics::ANCHOR = UDFAnchor::Instance();
 
 UIcons* const UDFStatics::ICONS = UIcons::StaticInstance();
-UDFId* const UDFStatics::DEFAULT_SYSTEM_ID = UDFId::Named(ANCHOR, "{BUILTIN}-DEFAULT_SYSTEM");
+FDFId const UDFStatics::DEFAULT_SYSTEM_ID = *FDFId::Named("{BUILTIN}-DEFAULT_SYSTEM");
 UStaticMesh* const UDFStatics::SPHERE_MESH = LoadObject<UStaticMesh>(ANCHOR, TEXT("/Engine/EngineMeshes/Sphere.Sphere"));
 UNiagaraSystem* const UDFStatics::DEFAULT_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/FibonacciSphere.FibonacciSphere"));
 UNiagaraSystem* const UDFStatics::TRAIL_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/Trail.Trail"));

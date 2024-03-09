@@ -12,6 +12,8 @@ class FIREVRKS_API USystemDisplayTile : public UDFUIBase
 {
 	GENERATED_BODY()
 
+	inline static int DEFAULT_TILE_SIZE = 160;
+	
 	UPROPERTY()
 	UBorder* OuterBorder;
 
@@ -20,7 +22,8 @@ class FIREVRKS_API USystemDisplayTile : public UDFUIBase
 
 	UPROPERTY()
 	FOnSelectSystemDelegate OnSelectionChanged;
-	
+
+
 public:
 	UFUNCTION()
 	void OpenSystemSelection(UClickableSystemTile* Tile);
@@ -28,7 +31,7 @@ public:
 	void OnSelectComplete(UEffectSystem* System);
 	virtual UPanelWidget* MakeRootWidget() override;
 
-	void SetSystem(UEffectSystem* System, int IconSize);
+	void SetSystem(UEffectSystem* System);
 
 	FOnSelectSystemDelegate& GetOnSelectionChanged();
 };

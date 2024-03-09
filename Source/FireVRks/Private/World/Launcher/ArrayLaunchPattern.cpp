@@ -4,7 +4,7 @@
 #include "FX/Niagara/Scheduler/LaunchSettings.h"
 #include "FX/Niagara/v2/System/EffectSystemManager.h"
 
-TMap<UDFId*, UAbstractFormalParameter*>* UArrayLaunchPattern::GetOuterParameters()
+TMap<FDFId, UAbstractFormalParameter*>* UArrayLaunchPattern::GetOuterParameters()
 {
 	return &Parameters;
 }
@@ -13,7 +13,7 @@ void UArrayLaunchPattern::Init()
 {
 	if (!IsInit)
 	{
-		Parameters = TMap<UDFId*, UAbstractFormalParameter*>();
+		Parameters = TMap<FDFId, UAbstractFormalParameter*>();
 		Add(ARRAY_LAUNCH_SETTING);
 		Add(ARRAY_NAME);
 		Add(SYSTEMS);

@@ -24,26 +24,10 @@ UPanelWidget* USystemInstantiationParameterBindingWidget::GetMountingPoint()
 	return OuterBorder;
 }
 
-void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
+void USystemInstantiationParameterBindingWidget::SetupSystem(UEffectSystem* bSystem)
 {
-	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
-	System = UEffectSystemManager::GetInstance()->Get(Value->GetSystem());
-
-	//Kind of a hack, but when in binding mode, we need to replace the default value with a custom default
-	//complete with a binding context, as well as adding it to constants straight away
-	if (DrawType == INNER_SYSTEM_BINDING && !Cast<UBindingParameterValueContext>(Value->GetContext()))
-	{
-		auto SubContext = UBindingParameterValueContext::New(Context);
-		SubContext->SetOuterContext(UMapParameterValueContext::Instance(SubContext));
-		SubContext->SetBindings(USubsystemParameterBindings::Instance(SubContext));
-		Value = USystemInstantiationParameterValue::New(Context, SubContext, System->GetId());
-		if (auto BindingContext = Cast<UBindingParameterValueContext>(Context))
-		{
-			BindingContext->GetBindings()->GetConstantValues().Add(Parameter->GetId(), Value);
-		}
-	}
-
-
+	this->System = bSystem;
+	OuterBorder->ClearChildren();
 	auto VBox = DFUI::AddWidget<UVerticalBox>(OuterBorder);
 	auto Box = DFUI::AddWidget<UHorizontalBox>(VBox);
 
@@ -51,13 +35,27 @@ void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
 	DFStyleUtil::SafeSetHBoxSlotWidth(ParamName->Slot, FSlateChildSize(ESlateSizeRule::Fill));
 
 	auto SysSelector = DFUI::AddWidget<USystemDisplayTile>(Box);
+	SysSelector->GetOnSelectionChanged().AddUniqueDynamic(this, &USystemInstantiationParameterBindingWidget::SetupSystem);
 	DFStyleUtil::SafeSetHBoxSlotWidth(SysSelector->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
-	SysSelector->SetSystem(System, 96);
+	SysSelector->SetSystem(System);
 
+	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
 	InstanceParamUI = DFUI::AddWidget<UEffectParameterInputUI>(VBox);
 	InstanceParamUI->SetSystem(System);
 	InstanceParamUI->Draw(Value->GetContext(), DrawType);
 	InstanceParamUI->GetLayoutChangeDelegate()->AddUniqueDynamic(this, &USystemInstantiationParameterBindingWidget::LayoutChanged);
+}
+
+void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
+{
+	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
+	System = UEffectSystemManager::GetInstance()->Get(Value->GetSystem());
+
+	if (auto BindingContext = Cast<UBindingParameterValueContext>(Context))
+	{
+		BindingContext->GetBindings()->GetConstantValues().Add(Parameter->GetId(), Value);
+	}
+	SetupSystem(System);
 }
 
 void USystemInstantiationParameterBindingWidget::WriteToContext(UParameterValueContext* bContext)

@@ -1,38 +1,36 @@
 #include "Util/DFId.h"
 
-bool UDFId::operator==(const UDFId& Other) const
+bool FDFId::operator==(const FDFId& Other) const
 {
 	return this->Hash == Other.Hash ? this->Id.Equals(Other.Id): false;
 }
 
-uint32 UDFId::PreHash(const FString& Fid)
+TSharedPtr<FDFId> FDFId::Named(FString Fidd)
 {
-	return TextKeyUtil::HashString(Fid);
+	auto Ptr = MakeShared<FDFId>();
+	Ptr->SetId(Fidd);
+	return Ptr;
 }
 
-UDFId* UDFId::Named(UObject* Outer, const FString& Fid)
+TSharedPtr<FDFId> FDFId::Random()
 {
-	auto Id = NewObject<UDFId>(Outer, StaticClass());
-	Id->Id = Fid;
-	Id->Hash = Id->PreHash(Fid);
-	return Id;
+	auto Ptr = MakeShared<FDFId>();
+	Ptr->SetId(FGuid::NewGuid().ToString());
+	return Ptr;
 }
 
-UDFId* UDFId::Random(UObject* Outer)
-{
-	auto Id = NewObject<UDFId>(Outer, StaticClass());
-	auto Str = FGuid::NewGuid().ToString();
-	Id->Id = Str;
-	Id->Hash = Id->PreHash(Str);
-	return Id;
-}
-
-FString UDFId::GetId() const
+FString FDFId::GetId() const
 {
 	return Id;
 }
 
-uint32 GetTypeHash(const UDFId* fId)
+void FDFId::SetId(FString Fid)
 {
-	return fId->Hash;
+	this->Id = Fid;
+	this->Hash = TextKeyUtil::HashString(Fid);
+}
+
+uint32 GetTypeHash(const FDFId fId)
+{
+	return fId.Hash;
 }

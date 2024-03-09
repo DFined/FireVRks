@@ -19,7 +19,7 @@ void UAbstractFormalParameter::SetDefault(UAbstractParameterValue* bDefault)
 	this->Default = bDefault;
 }
 
-UDFId* UAbstractFormalParameter::GetId()
+FDFId UAbstractFormalParameter::GetId()
 {
 	return Id;
 }
@@ -49,7 +49,7 @@ ParameterType UAbstractFormalParameter::GetType() const
 	return Type;
 }
 
-void UAbstractFormalParameter::SetId(UDFId* fId)
+void UAbstractFormalParameter::SetId(FDFId fId)
 {
 	this->Id = fId;
 }
@@ -67,7 +67,7 @@ void UAbstractFormalParameter::SetDisplayName(const FString& fDisplayName)
 TSharedPtr<FJsonObject> UAbstractFormalParameter::ToJson()
 {
 	auto Obj = new FJsonObject();
-	Obj->SetStringField("Id", GetId()->GetId());
+	Obj->SetStringField("Id", GetId().GetId());
 	Obj->SetStringField("DisplayName", GetDisplayName());
 	Obj->SetStringField("Type", UParamUtil::Name(GetType()));
 	Obj->SetObjectField("DefaultValue", Default->ToJson());
@@ -81,7 +81,8 @@ UAbstractFormalParameter::~UAbstractFormalParameter()
 
 UAbstractFormalParameter* UAbstractFormalParameter::FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer)
 {
-	auto Type = UParamUtil::TypeFromName(Json->GetStringField("Type"));
+	auto TypeName = Json->GetStringField("Type");
+	auto Type = UParamUtil::TypeFromName(TypeName);
 	auto Value = Json->GetObjectField("DefaultValue");
 	UAbstractFormalParameter* Param;
 	switch (Type)
@@ -98,7 +99,7 @@ UAbstractFormalParameter* UAbstractFormalParameter::FromJson(TSharedPtr<FJsonObj
 		break;
 	default: throw std::invalid_argument("Non basic parameter type cannot be deserialized");
 	}
-	Param->SetId(UDFId::Named(Param, Json->GetStringField("Id")));
+	Param->SetId(*FDFId::Named(Json->GetStringField("Id")));
 	Param->SetDisplayName(Json->GetStringField("DisplayName"));
 	return Param;
 }

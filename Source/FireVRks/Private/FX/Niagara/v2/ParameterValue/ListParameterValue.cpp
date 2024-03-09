@@ -4,12 +4,14 @@
 #include "FX/Niagara/v2/ParameterValue/ListParameterValue.h"
 
 #include "FX/Niagara/v2/ParamUtil.h"
-#include "Util/DFJsonUtil.h"
 
-UAbstractParameterValue* UListParameterValue::FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer)
+UAbstractParameterValue* UListParameterValue::FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer,  TMap<FDFId, UAbstractFormalParameter*>& Outers)
 {
 	auto Value = New(Outer);
-	DFJsonUtil::GetArrayField<UParameterValueContext>(Json, "Value", Value, Value->Values);
+	for(TSharedPtr<FJsonValue> MPtr : Json->GetArrayField("Value"))
+	{
+		Value->Values.Add(UParameterValueContext::FromJson(MPtr->AsObject(), Outer, Outers));
+	}
 	return Value;
 }
 

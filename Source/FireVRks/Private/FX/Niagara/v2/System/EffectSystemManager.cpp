@@ -7,7 +7,7 @@
 
 void UEffectSystemManager::Init()
 {
-	Effects = TMap<UDFId*, UEffectSystem*>();
+	Effects = TMap<FDFId, UEffectSystem*>();
 	Effects.Empty();
 	DEFAULT_EFFECT = UDefaultParameterSystem::Make();
 	Register(DEFAULT_EFFECT);
@@ -33,7 +33,7 @@ UEffectSystemManager* UEffectSystemManager::Instance()
 	return Manager;
 }
 
-UEffectSystem* UEffectSystemManager::Get(UDFId* Id)
+UEffectSystem* UEffectSystemManager::Get(FDFId Id)
 {
 	if (auto Res = Effects.Find(Id))
 	{
@@ -44,7 +44,7 @@ UEffectSystem* UEffectSystemManager::Get(UDFId* Id)
 
 void UEffectSystemManager::List(TArray<UEffectSystem*>& Systems)
 {
-	TArray<UDFId*> Ids = TArray<UDFId*>();
+	TArray<FDFId> Ids = TArray<FDFId>();
 	Effects.GetKeys(Ids);
 	for (auto Id : Ids)
 	{
@@ -93,7 +93,7 @@ void UEffectSystemManager::SaveEffect(UCustomEffectSystem* System)
 	TSharedPtr<FJsonObject> SaveObj = System->ToJson();
 	FJsonSerializer::Serialize(SaveObj.ToSharedRef(), TJsonWriterFactory<>::Create(&JsonSaveData), true);
 
-	FString DataPath = FPaths::Combine(UFileHelper::GetInstance()->GetSystemsContentPath(), System->GetId()->GetId() + ".json");
+	FString DataPath = FPaths::Combine(UFileHelper::GetInstance()->GetSystemsContentPath(), System->GetId().GetId() + ".json");
 	FFileHelper::SaveStringToFile(JsonSaveData, *DataPath);
 }
 

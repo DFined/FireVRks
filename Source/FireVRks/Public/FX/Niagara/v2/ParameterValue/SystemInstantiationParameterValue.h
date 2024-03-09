@@ -20,9 +20,9 @@ class FIREVRKS_API USystemInstantiationParameterValue : public UAbstractParamete
 	UParameterValueContext* Context;
 
 	UPROPERTY()
-	UDFId* System;
+	FDFId System;
 public:
-	static USystemInstantiationParameterValue* New(UObject* Outer, UParameterValueContext* Context, UDFId* System)
+	static USystemInstantiationParameterValue* New(UObject* Outer, UParameterValueContext* Context, FDFId System)
 	{
 		auto Val = NewObject<USystemInstantiationParameterValue>(Outer, StaticClass());
 		Val->Context = Context;
@@ -35,7 +35,7 @@ public:
 		return Context;
 	}
 
-	UDFId* GetSystem() const
+	FDFId GetSystem() const
 	{
 		return System;
 	}

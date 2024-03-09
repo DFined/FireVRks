@@ -17,7 +17,7 @@ class FIREVRKS_API UEffectSystem : public UObject, public ParameterProvider
 	GENERATED_BODY()
 
 	UPROPERTY()
-	UDFId* Id;
+	FDFId Id;
 
 	FString DisplayName;
 
@@ -25,12 +25,12 @@ class FIREVRKS_API UEffectSystem : public UObject, public ParameterProvider
 	FString Description;
 
 public:
-	UDFId* GetId() const
+	FDFId GetId() const
 	{
 		return Id;
 	}
 
-	void SetId(UDFId* fId)
+	void SetId(FDFId fId)
 	{
 		this->Id = fId;
 	}
@@ -48,7 +48,7 @@ public:
 	virtual void Initialize() PURE_VIRTUAL("Initialize",)
 	virtual UIcon* GetIcon() PURE_VIRTUAL("GetIcon", return nullptr;);
 	virtual void SpawnSystem(USystemSpawnData* Data) PURE_VIRTUAL("SpawnSystem",);
-	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override PURE_VIRTUAL("GetOuterParameters", return nullptr;);
+	virtual TMap<FDFId, UAbstractFormalParameter*>* GetOuterParameters() override PURE_VIRTUAL("GetOuterParameters", return nullptr;);
 	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override PURE_VIRTUAL("GetOuterParameters", ;);
 
 	FString GetAuthor() const;

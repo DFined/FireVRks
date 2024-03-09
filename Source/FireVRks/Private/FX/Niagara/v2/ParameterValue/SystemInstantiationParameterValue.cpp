@@ -9,7 +9,7 @@ TSharedPtr<FJsonObject> USystemInstantiationParameterValue::ToJson()
 {
 	auto Obj = new FJsonObject();
 	Obj->SetStringField("Type", UParamUtil::Name(SYSTEM_INSTANTIATION));
-	Obj->SetStringField("SystemId", System->GetId());
+	Obj->SetStringField("SystemId", System.GetId());
 	Obj->SetObjectField("Context", Context->ToJson());
 	return MakeShareable(Obj);
 }

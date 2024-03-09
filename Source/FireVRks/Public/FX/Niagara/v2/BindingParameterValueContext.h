@@ -9,9 +9,6 @@
 #include "Util/DFId.h"
 #include "BindingParameterValueContext.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class FIREVRKS_API UBindingParameterValueContext : public UParameterValueContext
 {
@@ -27,7 +24,7 @@ public:
 	virtual UAbstractParameterValue* Get(UAbstractFormalParameter* Parameter) override;
 	virtual void SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value) override;
 
-	UAbstractFormalParameter* FindBinding(UDFId* Id)
+	UAbstractFormalParameter* FindBinding(FDFId Id)
 	{
 		auto Bind = Bindings->GetBindings().Find(Id);
 		return Bind ? *Bind : nullptr;

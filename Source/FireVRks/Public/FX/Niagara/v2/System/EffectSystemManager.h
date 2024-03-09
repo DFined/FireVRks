@@ -11,7 +11,7 @@ class FIREVRKS_API UEffectSystemManager : public UObject
 	GENERATED_BODY()
 
 	UPROPERTY()
-	TMap<UDFId*, UEffectSystem*> Effects;
+	TMap<FDFId, UEffectSystem*> Effects;
 
 	UPROPERTY()
 	UDefaultParameterSystem* DEFAULT_EFFECT;
@@ -28,7 +28,7 @@ public:
 
 	static UEffectSystemManager* Instance();
 
-	UEffectSystem* Get(UDFId* Id);
+	UEffectSystem* Get(FDFId Id);
 
 	void List(TArray<UEffectSystem*>& Systems);
 

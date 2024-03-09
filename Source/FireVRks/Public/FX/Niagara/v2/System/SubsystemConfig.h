@@ -21,10 +21,10 @@ class FIREVRKS_API USubsystemConfig : public UObject
 	USubsystemParameterBindings* Bindings;
 	
 	UPROPERTY()
-	UDFId* Id;
+	FDFId Id;
 
 public:
-	DF_NEW1(USubsystemConfig, UDFId*, Id)
+	DF_NEW1(USubsystemConfig, FDFId, Id)
 
 	FString GetSubsystemName() const
 	{
@@ -36,12 +36,12 @@ public:
 		this->DisplayName = bSubsystemName;
 	}
 
-	UDFId* GetId() const
+	FDFId GetId() const
 	{
 		return Id;
 	}
 
-	void SetId(UDFId* bId)
+	void SetId(FDFId bId)
 	{
 		this->Id = bId;
 	}
@@ -56,17 +56,17 @@ public:
 	TSharedPtr<FJsonObject> ToJson()
 	{
 		auto Obj = new FJsonObject();
-		Obj->SetStringField("Id", Id->GetId());
+		Obj->SetStringField("Id", Id.GetId());
 		Obj->SetStringField("DisplayName", DisplayName);
 		Bindings->AddToJson(Obj);
 		return MakeShareable(Obj);
 	}
 
-	static USubsystemConfig* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer)
+	static USubsystemConfig* FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*>& OuterParams)
 	{
-		auto Config = Instance(Outer, UDFId::Named(Outer, Json->GetStringField("Id")));
+		auto Config = Instance(Outer, *FDFId::Named(Json->GetStringField("Id")));
 		Config->SetSubsystemName(Json->GetStringField("DisplayName"));
-		Config->Bindings = USubsystemParameterBindings::GetFromJson(Json, Config);
+		Config->Bindings = USubsystemParameterBindings::GetFromJson(Json, Config, OuterParams);
 		return Config;
 	}
 };

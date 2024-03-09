@@ -14,7 +14,7 @@
 
 void UCustomEffectSystem::SpawnSystem(USystemSpawnData* Data)
 {
-	TArray<UDFId*> SystemIds = TArray<UDFId*>();
+	TArray<FDFId> SystemIds = TArray<FDFId>();
 
 	for (auto Configs : SubsystemConfig)
 	{
@@ -39,14 +39,14 @@ TArray<USubsystemConfig*>& UCustomEffectSystem::GetSubsystemConfig()
 	return SubsystemConfig;
 }
 
-TMap<UDFId*, UAbstractFormalParameter*>* UCustomEffectSystem::GetOuterParameters()
+TMap<FDFId, UAbstractFormalParameter*>* UCustomEffectSystem::GetOuterParameters()
 {
 	return &OuterParameters;
 }
 
 void UCustomEffectSystem::GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result)
 {
-	for (UDFId* bId : ParameterOrder)
+	for (FDFId bId : ParameterOrder)
 	{
 		Result.Add(*OuterParameters.Find(bId));
 	}
@@ -58,7 +58,7 @@ void UCustomEffectSystem::Initialize()
 	this->SetDescription("A new effect system");
 	this->SetAuthor("Player");
 	this->SetIcon(UDFStatics::ICONS->CUSTOM_EFFECT_ICON);
-	this->SetId(UDFId::Random(this));
+	this->SetId(*FDFId::Random());
 }
 
 FCustomSystemEvent& UCustomEffectSystem::GetEventCallback()
@@ -92,7 +92,7 @@ void UCustomEffectSystem::NewParameter(UAbstractFormalParameter* Parameter)
 	EventCallback.Broadcast(UDFParameterEvent::Instance(this, Parameter, CUSTOM_SYSTEM_PARAMETER_CREATED));
 }
 
-void UCustomEffectSystem::MoveOuterParameterUp(UDFId* bId)
+void UCustomEffectSystem::MoveOuterParameterUp(FDFId bId)
 {
 	auto Num = ParameterOrder.Find(bId);
 	if (Num > 0)
@@ -102,7 +102,7 @@ void UCustomEffectSystem::MoveOuterParameterUp(UDFId* bId)
 	}
 }
 
-void UCustomEffectSystem::MoveOuterParameterDown(UDFId* bId)
+void UCustomEffectSystem::MoveOuterParameterDown(FDFId bId)
 {
 	auto Num = ParameterOrder.Find(bId);
 	if (Num < ParameterOrder.Num() - 1)
@@ -125,7 +125,7 @@ void UCustomEffectSystem::SetIcon(UIcon* bIcon)
 TSharedPtr<FJsonObject> UCustomEffectSystem::ToJson()
 {
 	auto Obj = new FJsonObject();
-	Obj->SetStringField("Id", GetId()->GetId());
+	Obj->SetStringField("Id", GetId().GetId());
 	Obj->SetStringField("DisplayName", GetDisplayName());
 	Obj->SetStringField("Author", GetAuthor());
 	Obj->SetStringField("Description", GetDescription());
@@ -156,11 +156,14 @@ UCustomEffectSystem* UCustomEffectSystem::FromJson(TSharedPtr<FJsonObject> Json,
 	DFJsonUtil::GetArrayField<UAbstractFormalParameter>(Json, "OuterParameters", System, OuterParams);
 	for(auto Param : OuterParams)
 	{
-		System->GetOuterParameters()->Add(Param->GetId(), Param);
+		System->NewParameter(Param);
 	}
-
-	DFJsonUtil::GetArrayField(Json, "Subsystems", System, System->GetSubsystemConfig());
-	System->SetId(UDFId::Named(System,Json->GetStringField("Id")));
+	
+	for(TSharedPtr<FJsonValue> MPtr : Json->GetArrayField("Subsystems"))
+	{
+		System->GetSubsystemConfig().Add(USubsystemConfig::FromJson(MPtr->AsObject(), System, *System->GetOuterParameters()));
+	}
+	System->SetId(*FDFId::Named(Json->GetStringField("Id")));
 	System->SetDisplayName(Json->GetStringField("DisplayName"));
 	System->SetDisplayName(Json->GetStringField("Author"));
 	System->SetDisplayName(Json->GetStringField("Description"));

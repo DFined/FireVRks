@@ -18,7 +18,7 @@ class FIREVRKS_API UDefaultParameterSystem : public UEffectSystem
 	GENERATED_BODY()
 
 	UPROPERTY()
-	TMap<UDFId*, UAbstractFormalParameter*> Parameters = TMap<UDFId*, UAbstractFormalParameter*>();
+	TMap<FDFId, UAbstractFormalParameter*> Parameters = TMap<FDFId, UAbstractFormalParameter*>();
 
 	bool IsInit = false;
 
@@ -118,7 +118,7 @@ public:
 	UPROPERTY()
 	UCompoundableFormalParameter* SOS_EFFECT_TIME = UCompoundableFormalParameter::New<UFloatFormalParameter, float>(UDFStatics::ANCHOR, "Sos effect time", true, 2.0f);
 	UPROPERTY()
-	USystemInstantiationFormalParameter* SOS_EFFECT_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, UDFId*>("Child effect", true, UDFStatics::DEFAULT_SYSTEM_ID);
+	USystemInstantiationFormalParameter* SOS_EFFECT_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, FDFId>("Child effect", true, UDFStatics::DEFAULT_SYSTEM_ID);
 	UPROPERTY()
 	UCompoundableFormalParameter* SOS_SHAPE_SCALE = UCompoundableFormalParameter::New<UIntFormalParameter, int>(UDFStatics::ANCHOR, "Shape scale", true, 8000);
 	UPROPERTY()
@@ -270,7 +270,7 @@ public:
 
 	void AddParameter(UAbstractFormalParameter* Parameter);
 
-	TMap<UDFId*, UAbstractFormalParameter*> GetParameters() const
+	TMap<FDFId, UAbstractFormalParameter*> GetParameters() const
 	{
 		return Parameters;
 	}
@@ -284,7 +284,7 @@ public:
 		return Sys;
 	}
 	
-	virtual TMap<UDFId*, UAbstractFormalParameter*>* GetOuterParameters() override;
+	virtual TMap<FDFId, UAbstractFormalParameter*>* GetOuterParameters() override;
 	virtual void GetOuterParametersInOrder(TArray<UAbstractFormalParameter*>& Result) override;
 	FString GetId();
 	FString GetName();

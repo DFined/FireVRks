@@ -62,6 +62,7 @@ void UBlockParameterBindingWidget::InitializeBindingWidget()
 
 	for (UAbstractFormalParameter* ChildParam : ParamsBlock->GetChildParameters())
 	{
+		//CLUSTER_SIZE DA506
 		if (ChildParam->GetPredicate()->Check(Context))
 		{
 			UDFUIBase* Container = ChildParam->IsRequired() ? RequiredParamsStack : OverrideParamsStack;

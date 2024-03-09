@@ -82,7 +82,7 @@ public:
 	{
 		Parameter->SetRequired(Required);
 		Parameter->SetDisplayName(Name);
-		Parameter->SetId(UDFId::Named(UDFStatics::ANCHOR, Id));
+		Parameter->SetId(*FDFId::Named(Id));
 		return Parameter;
 	}
 
@@ -95,14 +95,14 @@ public:
 	template <class Param, typename Value>
 	static Param* Global(FString Name, bool Required, Value DefaultValue)
 	{
-		return Setup<Param>(Name, Required, Param::New(UDFStatics::ANCHOR, DefaultValue));
+		return Setup<Param>("{BUILTINS_PARAMETER_NAME}" + Name, Name, Required, Param::New(UDFStatics::ANCHOR, DefaultValue));
 	}
 
 
 	template <class Param>
 	static Param* Global(FString Name, bool Required)
 	{
-		return Setup<Param>(Name, Required, Param::New(UDFStatics::ANCHOR));
+		return Setup<Param>("{BUILTINS_PARAMETER_NAME}" + Name, Name, Required, Param::New(UDFStatics::ANCHOR));
 	}
 
 	static void WriteContainerToContext(UPanelWidget* Container, UParameterValueContext* Context);

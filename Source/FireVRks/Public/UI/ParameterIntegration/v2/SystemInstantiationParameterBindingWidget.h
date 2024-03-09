@@ -6,6 +6,7 @@
 #include "EffectParameterInputUI.h"
 #include "ParameterBindingWidget.h"
 #include "Components/Border.h"
+#include "FX/Niagara/v2/ParameterValue/SystemInstantiationParameterValue.h"
 #include "SystemInstantiationParameterBindingWidget.generated.h"
 
 UCLASS()
@@ -25,6 +26,8 @@ class FIREVRKS_API USystemInstantiationParameterBindingWidget : public UParamete
 public:
 	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
+	UFUNCTION()
+	void SetupSystem(UEffectSystem* bSystem);
 	virtual void InitializeBindingWidget() override;
 	virtual void WriteToContext(UParameterValueContext* Context) override;
 };

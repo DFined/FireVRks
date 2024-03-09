@@ -19,23 +19,23 @@ class FIREVRKS_API USubsystemParameterBindings : public UObject
 	GENERATED_BODY()
 	
 	inline static const char* ConstantsFieldName = "ConstantValues";
-	inline static const char* SubsystemsFieldName = "Bindings";
+	inline static const char* BindingsFieldName = "Bindings";
 
 	
 	UPROPERTY()
-	TMap<UDFId*, UAbstractFormalParameter*> Bindings = TMap<UDFId*, UAbstractFormalParameter*>();
+	TMap<FDFId, UAbstractFormalParameter*> Bindings = TMap<FDFId, UAbstractFormalParameter*>();
 
 	UPROPERTY()
-	TMap<UDFId*, UAbstractParameterValue*> ConstantValues = TMap<UDFId*, UAbstractParameterValue*>();
+	TMap<FDFId, UAbstractParameterValue*> ConstantValues = TMap<FDFId, UAbstractParameterValue*>();
 	
 
 public:	
-	TMap<UDFId*, UAbstractFormalParameter*>& GetBindings() 
+	TMap<FDFId, UAbstractFormalParameter*>& GetBindings() 
 	{
 		return Bindings;
 	}
 
-	TMap<UDFId*, UAbstractParameterValue*>& GetConstantValues() 
+	TMap<FDFId, UAbstractParameterValue*>& GetConstantValues() 
 	{
 		return ConstantValues;
 	}
@@ -44,5 +44,5 @@ public:
 
 	void AddToJson(FJsonObject* Obj);
 
-	static USubsystemParameterBindings* GetFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);
+	static USubsystemParameterBindings* GetFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*>& Outers);
 };

@@ -11,7 +11,7 @@ void USystemDisplayTile::OpenSystemSelection(UClickableSystemTile* Tile)
 
 void USystemDisplayTile::OnSelectComplete(UEffectSystem* System)
 {
-	SetSystem(System, 96);
+	SetSystem(System);
 	OnSelectionChanged.Broadcast(System);
 }
 
@@ -25,9 +25,9 @@ UPanelWidget* USystemDisplayTile::MakeRootWidget()
 	return OuterBorder;
 }
 
-void USystemDisplayTile::SetSystem(UEffectSystem* System, int Size)
+void USystemDisplayTile::SetSystem(UEffectSystem* System)
 {
-	SystemTile->Initialize(System, Size);
+	SystemTile->Initialize(System, DEFAULT_TILE_SIZE);
 }
 
 FOnSelectSystemDelegate& USystemDisplayTile::GetOnSelectionChanged()

@@ -103,8 +103,10 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 			auto Default = Constants.Find(Parameter->GetId());
 			ChildWidget->Initialize(Default ? *Default : Parameter->DefaultValue());
 		}
+		break;
 	case PARAMETER_CREATION:
 		ChildWidget->Initialize(Parameter->DefaultValue());
+		break;
 	}
 
 	Line->Append(ChildWidget->AsWidget());

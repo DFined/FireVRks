@@ -55,6 +55,7 @@ UPanelWidget* UParameterBindingSetupUI::MakeRootWidget()
 void UParameterBindingSetupUI::Setup(UEffectSystem* bSystem)
 {
 	this->System = bSystem;
+	SystemDisplayTile->SetSystem(bSystem);
 	ParamsBox->ClearChildren();
 	HeaderBox->ClearChildren();
 	auto Label = DFUI::AddLabel(HeaderBox, SubsystemConfig->GetSubsystemName());

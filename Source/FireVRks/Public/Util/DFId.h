@@ -4,25 +4,23 @@
 /**
  * A class which generalizes object ids to both randomizable FGuidS as well as manually specified strings and provides hash-based fast comparison  
  */
-UCLASS()
-class FIREVRKS_API UDFId : public UObject
+USTRUCT()
+struct FIREVRKS_API FDFId
 {
 	GENERATED_BODY()
 	FString Id;
 	uint32 Hash;
-	
-public:
-
-	bool operator==(const UDFId& Other) const;
+	bool operator==(const FDFId& Other) const;
 
 	/**
 	 * Calculates the hash for a DFId.
 	 */
-	friend uint32 GetTypeHash(const UDFId* Id);
+	friend uint32 GetTypeHash(const FDFId Id);
 
-	static uint32 PreHash(const FString& Fid);
-	static UDFId* Named(UObject* Outer, const FString& Fid);
-	static UDFId* Random(UObject* Outer);
+	static TSharedPtr<FDFId> Named(FString Fid);
+	static TSharedPtr<FDFId> Random();
 
 	FString GetId() const;
+
+	void SetId(FString Id);
 };
