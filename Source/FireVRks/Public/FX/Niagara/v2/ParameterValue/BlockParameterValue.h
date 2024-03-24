@@ -31,4 +31,7 @@ public:
 	virtual TSharedPtr<FJsonObject> ToJson() override;
 
 	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
+
+	void SetExpanded(bool bExpanded);
+	void SetOverridesExpanded(bool bOverridesExpanded);
 };

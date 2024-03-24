@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "ParameterBindingWidget.h"
 #include "Components/Border.h"
-#include "FX/Niagara/v2/FormalParameter/BlockFormalParameter.h"
 #include "FX/Niagara/v2/FormalParameter/ListFormalParameter.h"
 #include "UI/lib/Container/DFUIStack.h"
 #include "ListParameterBindingWidget.generated.h"

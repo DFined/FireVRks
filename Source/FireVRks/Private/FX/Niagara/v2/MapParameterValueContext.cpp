@@ -34,10 +34,17 @@ TSharedPtr<FJsonObject> UMapParameterValueContext::ToJson()
 	auto Obj = MakeShareable(new FJsonObject());
 	auto Keys = TArray<FDFId>();
 	Map.GetKeys(Keys);
-	for(auto Id : Keys)
+	for (auto Id : Keys)
 	{
 		auto Val = *Map.Find(Id);
 		Obj.Object->SetObjectField(Id.GetId(), Val->ToJson());
 	}
 	return Obj;
+}
+
+UParameterValueContext* UMapParameterValueContext::Clone(UObject* Parent)
+{
+	auto Context = NewObject<UMapParameterValueContext>(Parent);
+	DFU::CloneMap(this->Map, Context->Map);
+	return Context;
 }

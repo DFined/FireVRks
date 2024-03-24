@@ -26,3 +26,8 @@ void UParameterBindingWidget::OnChange()
 {
 }
 
+UParameterValueContext*& UParameterBindingWidget::GetContext()
+{
+	return Context;
+}
+

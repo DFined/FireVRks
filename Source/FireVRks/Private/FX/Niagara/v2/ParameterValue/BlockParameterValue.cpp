@@ -31,3 +31,13 @@ UAbstractParameterValue* UBlockParameterValue::Clone(UAbstractFormalParameter* P
 {
 	return New(Param, Expanded, OverridesExpanded);
 }
+
+void UBlockParameterValue::SetExpanded(bool bExpanded)
+{
+	Expanded = bExpanded;
+}
+
+void UBlockParameterValue::SetOverridesExpanded(bool bOverridesExpanded)
+{
+	OverridesExpanded = bOverridesExpanded;
+}

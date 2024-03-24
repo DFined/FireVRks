@@ -3,6 +3,7 @@
 #include "EffectSystem.h"
 #include "EffectSystemManager.generated.h"
 
+class UGroundEffectParameterSystem;
 class UDefaultParameterSystem;
 
 UCLASS()
@@ -15,6 +16,9 @@ class FIREVRKS_API UEffectSystemManager : public UObject
 
 	UPROPERTY()
 	UDefaultParameterSystem* DEFAULT_EFFECT;
+
+	UPROPERTY()
+	UGroundEffectParameterSystem* GROUND_EFFECT;
 
 	UPROPERTY()
 	UCustomEffectSystem* SystemInEditing;

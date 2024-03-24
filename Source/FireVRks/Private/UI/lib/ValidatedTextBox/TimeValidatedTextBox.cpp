@@ -38,10 +38,16 @@ float UTimeValidatedTextBox::GetSeconds()
 
 void UTimeValidatedTextBox::OnChange()
 {
+	OnTimeChanged.Broadcast(this->GetSeconds());
 }
 
 void UTimeValidatedTextBox::SetSeconds(float SecondsIn)
 {
 	this->SetText(FText::FromString(DFU::SecondsToTimeCode(SecondsIn)));
 	this->PrevText = DFU::SecondsToTimeCode(SecondsIn);
+}
+
+FOnTimeChanged& UTimeValidatedTextBox::GetOnTimeChanged()
+{
+	return OnTimeChanged;
 }

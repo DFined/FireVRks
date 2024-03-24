@@ -50,4 +50,6 @@ public:
 	}
 
 	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UParameterValueContext* Clone(UObject* Parent) override;
 };

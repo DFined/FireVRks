@@ -7,6 +7,7 @@
 #include "FX/Niagara/v2/ParameterValue/BlockParameterValue.h"
 #include "DFUI/DFUI.h"
 #include "DFUI/DFStyleUtil.h"
+#include "FX/Niagara/v2/BindingParameterValueContext.h"
 #include "UI/lib/Container/DFUIStack.h"
 
 UPanelWidget* UBlockParameterBindingWidget::MakeRootWidget()
@@ -23,6 +24,10 @@ UPanelWidget* UBlockParameterBindingWidget::GetMountingPoint()
 void UBlockParameterBindingWidget::LayoutChangedTab(UExpandableArea* Area, bool bIsExpanded)
 {
 	Area->SetIsExpanded(bIsExpanded);
+	auto BlockVal = Cast<UBlockParameterValue>(Context->Get(Parameter));
+	BlockVal->SetExpanded(BaseTab->GetIsExpanded());
+	Context->SetValue(Parameter, BlockVal);
+	BlockVal->SetOverridesExpanded(OverridesTab->GetIsExpanded());
 	this->ForceLayoutPrepass();
 	LayoutChanged();
 }
@@ -62,7 +67,6 @@ void UBlockParameterBindingWidget::InitializeBindingWidget()
 
 	for (UAbstractFormalParameter* ChildParam : ParamsBlock->GetChildParameters())
 	{
-		//CLUSTER_SIZE DA506
 		if (ChildParam->GetPredicate()->Check(Context))
 		{
 			UDFUIBase* Container = ChildParam->IsRequired() ? RequiredParamsStack : OverrideParamsStack;
@@ -92,40 +96,27 @@ void UBlockParameterBindingWidget::WriteToContext(UParameterValueContext* bConte
 
 void UBlockParameterBindingWidget::RedrawParameters(bool Required)
 {
-	int WidgetNum = 0;
 	UBlockFormalParameter* BlockParameter = Cast<UBlockFormalParameter>(Parameter);
 	UDFUIBase* Stack = Required ? RequiredParamsStack : OverrideParamsStack;
 	TArray<UWidget*> ChildWidgets = TArray<UWidget*>();
+	TArray<UWidget*> WidgetsToDelete = TArray<UWidget*>();
 	auto Children = Stack->GetMountingPoint()->GetAllChildren();
+	Stack->GetMountingPoint()->ClearChildren();
 	for (UAbstractFormalParameter* ChildParameter : BlockParameter->GetChildParameters())
 	{
 		if (ChildParameter->IsRequired() == Required)
 		{
 			bool ShouldBeVisible = ChildParameter->GetPredicate()->Check(Context);
-			auto BindingWidget = Children.Num() > WidgetNum ? Cast<UParameterBindingWidget>(Children[WidgetNum]) : nullptr;
-			if (BindingWidget && BindingWidget->GetParameter()->GetId() == ChildParameter->GetId())
+			
+			if(ShouldBeVisible)
 			{
-				if (ShouldBeVisible)
-				{
-					ChildWidgets.Add(Children[WidgetNum]);
-				}
-				WidgetNum++;
-			}
-			else
-			{
-				if (ShouldBeVisible)
-				{
-					auto Widget = UParameterRenderer::RenderParam(Stack, Context, ChildParameter, DrawType);
-					ChildWidgets.Add(Widget);
-				}
+				UParameterRenderer::RenderParam(Stack, Context, ChildParameter, DrawType);
 			}
 		}
 	}
-	Stack->GetMountingPoint()->ClearChildren();
-	for (UWidget* ChildWidget : ChildWidgets)
-	{
-		Stack->Append(ChildWidget);
-	}
+	auto Value = Cast<UBlockParameterValue>(Context->Get(Parameter));
+	this->BaseTab->SetIsExpanded(Value->IsExpanded());
+	this->OverridesTab->SetIsExpanded(Value->IsOverridesExpanded());
 }
 
 void UBlockParameterBindingWidget::Redraw()

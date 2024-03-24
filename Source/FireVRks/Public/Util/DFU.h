@@ -174,4 +174,15 @@ public:
 		}
 		return nullptr;
 	}
+
+	template <class K, class V>
+	static void CloneMap(TMap<K,V>& Source, TMap<K,V>& Target)
+	{
+		auto Keys = TArray<K>();
+		Source.GetKeys(Keys);
+		for (auto Key : Keys)
+		{
+			Target.Add(Key, *Source.Find(Key));
+		}
+	}
 };

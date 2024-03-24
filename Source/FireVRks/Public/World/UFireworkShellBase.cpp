@@ -62,7 +62,7 @@ AFireworkShellBase* AFireworkShellBase::MakeShell(UObject* ContextObject, FVecto
 	Shell->Component = Cast<UProjectileMovementComponent>(
 		Shell->AddComponentByClass(UProjectileMovementComponent::StaticClass(), false, FTransform(), false)
 	);
-	Shell->Component->SetVelocityInLocalSpace(Rotation->RotateVector(FVector(0,0,1)) * Settings->GetShellVelocity());
+	Shell->Component->SetVelocityInLocalSpace(Rotation->RotateVector(FVector(1,0,0)) * Settings->GetShellVelocity());
 	Shell->Settings = Settings;
 	return Shell;
 }

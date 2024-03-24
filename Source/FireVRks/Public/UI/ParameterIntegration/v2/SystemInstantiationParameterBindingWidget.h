@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "EffectParameterInputUI.h"
 #include "ParameterBindingWidget.h"
-#include "Components/Border.h"
 #include "FX/Niagara/v2/ParameterValue/SystemInstantiationParameterValue.h"
 #include "SystemInstantiationParameterBindingWidget.generated.h"
 

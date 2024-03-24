@@ -27,7 +27,7 @@ UPanelWidget* USystemDisplayTile::MakeRootWidget()
 
 void USystemDisplayTile::SetSystem(UEffectSystem* System)
 {
-	SystemTile->Initialize(System, DEFAULT_TILE_SIZE);
+	SystemTile->Initialize(System);
 }
 
 FOnSelectSystemDelegate& USystemDisplayTile::GetOnSelectionChanged()

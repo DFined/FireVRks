@@ -35,7 +35,7 @@ void UEffectSystemSavingWidget::ChooseIcon()
 	
 	IconSelectSwitcher->SetActiveWidgetIndex(1);
 
-	UDFStatics::EFFECT_SPAWN_COORDINATOR->SpawnEffect(ULaunchSettings::Make(this, System, UMapParameterValueContext::Instance(this), nullptr, 0, 0, 0));
+	UDFStatics::EFFECT_SPAWN_COORDINATOR->SpawnEffect(ULaunchSettings::Make(this, System, UMapParameterValueContext::Instance(this), nullptr, 0, 0, 0, 0));
 }
 
 void UEffectSystemSavingWidget::FinishSavingIcon()

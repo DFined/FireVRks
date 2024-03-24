@@ -5,6 +5,11 @@
 
 #include "FX/Niagara/v2/ParamUtil.h"
 
+void USystemInstantiationParameterValue::SetSystem(const FDFId& bSystem)
+{
+	this->System = bSystem;
+}
+
 TSharedPtr<FJsonObject> USystemInstantiationParameterValue::ToJson()
 {
 	auto Obj = new FJsonObject();
@@ -16,5 +21,5 @@ TSharedPtr<FJsonObject> USystemInstantiationParameterValue::ToJson()
 
 UAbstractParameterValue* USystemInstantiationParameterValue::Clone(UAbstractFormalParameter* Param)
 {
-	return New(Param, Context, System);
+	return New(Param, Context->Clone(this), System);
 }

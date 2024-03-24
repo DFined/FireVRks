@@ -7,9 +7,8 @@
 #include "ParameterControlWidget.h"
 #include "Components/Border.h"
 #include "Components/VerticalBox.h"
+#include "DFUI/Upgrade/DFVBoxEx.h"
 #include "FX/Niagara/v2/System/CustomEffectSystem.h"
-#include "DFUI/DFUI.h"
-#include "DFUI/DFUIBase.h"
 #include "OuterParameterCreationWidget.generated.h"
 
 /**
@@ -24,7 +23,7 @@ class FIREVRKS_API UOuterParameterCreationWidget : public UParameterControlWidge
 	UBorder* RootBorder;
 
 	UPROPERTY()
-	UVerticalBox* Box;
+	UDFVBoxEx* Box;
 
 	UPROPERTY()
 	UCustomEffectSystem* System;

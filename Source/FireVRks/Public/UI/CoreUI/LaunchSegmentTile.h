@@ -8,6 +8,7 @@
 #include "DFUI/DFUI.h"
 #include "DFUI/DFUIBase.h"
 #include "UI/lib/Container/DFUIStack.h"
+#include "UI/lib/ValidatedTextBox/TimeValidatedTextBox.h"
 #include "UI/ParameterIntegration/v2/ParameterBindingWidget.h"
 #include "LaunchSegmentTile.generated.h"
 
@@ -27,7 +28,7 @@ class FIREVRKS_API ULaunchSegmentTile : public UDFUIBase
 	UDFUIStack* Stack;
 
 	UPROPERTY()
-	UTextBlock* TimeText;
+	UTimeValidatedTextBox* TimeText;
 
 	UPROPERTY()
 	UDisplayLaunchSegment* Segment;
@@ -42,6 +43,8 @@ class FIREVRKS_API ULaunchSegmentTile : public UDFUIBase
 	FOnDFUILayoutChange LayoutChangedDelegate;
 
 public:
+	UFUNCTION()
+	void OnTimeChanged(float NewTime);
 	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 

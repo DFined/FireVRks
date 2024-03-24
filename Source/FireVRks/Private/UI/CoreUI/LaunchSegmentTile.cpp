@@ -11,6 +11,11 @@
 #include "Util/DFStatics.h"
 #include "Util/DFU.h"
 
+void ULaunchSegmentTile::OnTimeChanged(float NewTime)
+{
+	this->Segment->SetTime(NewTime);
+}
+
 UPanelWidget* ULaunchSegmentTile::MakeRootWidget()
 {
 	RootBorder = DFUI::MakeWidget<UBorder>(this);
@@ -22,11 +27,11 @@ UPanelWidget* ULaunchSegmentTile::MakeRootWidget()
 	auto TimeLabel = DFUI::AddWidget<UTextBlock>(TimeHBox);
 	TimeLabel->SetText(FText::FromString("Launch Time: "));
 	DFStyleUtil::TextBlockStyle(TimeLabel);
-	DFStyleUtil::SafeSetHBoxSlotWidth(TimeLabel->Slot, FSlateChildSize(ESlateSizeRule::Fill));
+	DFStyleUtil::SafeSetHBoxSlotWidth(TimeLabel->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Fill, VAlign_Center);
 
-	TimeText = DFUI::AddWidget<UTextBlock>(TimeHBox);
-	DFStyleUtil::TextBlockStyle(TimeText);
-	DFStyleUtil::SafeSetHBoxSlotWidth(TimeText->Slot, FSlateChildSize(ESlateSizeRule::Fill));
+	TimeText = DFUI::AddWidget<UTimeValidatedTextBox>(TimeHBox);
+	TimeText->GetOnTimeChanged().AddUniqueDynamic(this, &ULaunchSegmentTile::OnTimeChanged);
+	DFStyleUtil::SafeSetHBoxSlotWidth(TimeText->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Fill, VAlign_Center);
 
 	auto DelBtn = DFUI::AddImageButton(TimeHBox, UDFStatics::ICONS->DELETE_ICON, 32);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
@@ -74,7 +79,7 @@ void ULaunchSegmentTile::Initialize(UDisplayLaunchSegment* fSegment, UDisplayEdi
 		NewTile(Context);
 	}
 
-	TimeText->SetText(FText::FromString(DFU::SecondsToTimeCode(Segment->GetTime())));
+	TimeText->SetValue(DFU::SecondsToTimeCode(Segment->GetTime()));
 	this->Parent = EditorParent;
 }
 

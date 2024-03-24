@@ -14,8 +14,10 @@ UDFAnchor* const UDFStatics::ANCHOR = UDFAnchor::Instance();
 
 UIcons* const UDFStatics::ICONS = UIcons::StaticInstance();
 FDFId const UDFStatics::DEFAULT_SYSTEM_ID = *FDFId::Named("{BUILTIN}-DEFAULT_SYSTEM");
+FDFId const UDFStatics::GROUND_SYSTEM_ID = *FDFId::Named("{BUILTIN}-GROUND_SYSTEM");
 UStaticMesh* const UDFStatics::SPHERE_MESH = LoadObject<UStaticMesh>(ANCHOR, TEXT("/Engine/EngineMeshes/Sphere.Sphere"));
 UNiagaraSystem* const UDFStatics::DEFAULT_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/FibonacciSphere.FibonacciSphere"));
+UNiagaraSystem* const UDFStatics::GROUND_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/GroundEffect.GroundEffect"));
 UNiagaraSystem* const UDFStatics::TRAIL_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/Trail.Trail"));
 USlateBrushAsset* const UDFStatics::EFFECT_TESTING_SLATE_BRUSH = LoadObject<USlateBrushAsset>(ANCHOR, TEXT("/Game/FireVRks/UI/EffectTestBrush.EffectTestBrush"));
 ULauncherManager* const UDFStatics::LAUNCHER_MANAGER = ULauncherManager::MakeInstance();

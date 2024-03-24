@@ -12,7 +12,8 @@ class FIREVRKS_API UParameterValueContext : public UObject
 	GENERATED_BODY()
 
 public:
-	virtual UAbstractParameterValue* Get(UAbstractFormalParameter* Parameter) PURE_VIRTUAL("Get", return nullptr;);
+	virtual UAbstractParameterValue* Get(UAbstractFormalParameter* Parameter) PURE_VIRTUAL("Get", return nullptr;)
+	virtual UParameterValueContext* Clone(UObject* Parent) PURE_VIRTUAL("Clone", return nullptr;);
 	virtual void SetValue(UAbstractFormalParameter* Parameter, UAbstractParameterValue* Value) PURE_VIRTUAL("SetValue",);
 
 	static UBindingParameterValueContext* NewContextFrom(UParameterValueContext* Context);

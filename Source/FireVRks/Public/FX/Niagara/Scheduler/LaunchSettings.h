@@ -23,13 +23,14 @@ class FIREVRKS_API ULaunchSettings : public UObject
 
 	float ShellLifetime;
 	float ShellVelocity;
+	int DegressRoll;
 
 	bool Used = false;
 
 public:
 	UFUNCTION(BlueprintCallable)
 	static ULaunchSettings* Make(
-		UObject* Outer, UEffectSystem* fSystem, UParameterValueContext* fContext, AActor* bSpawnTarget, float fDelay, float fLifetime, float fVelocity
+		UObject* Outer, UEffectSystem* fSystem, UParameterValueContext* fContext, AActor* bSpawnTarget, float fDelay, float fLifetime, float fVelocity, int Roll
 	);
 
 	void SetSpawnTarget(AActor* fSpawnTarget)
@@ -56,6 +57,8 @@ public:
 	{
 		return SpawnIn;
 	}
+
+	int GetDegressRoll();
 
 	void SetSpawnIn(float FSpawnIn)
 	{

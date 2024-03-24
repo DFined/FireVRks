@@ -7,11 +7,15 @@
 #include "DFUI/DFStyleUtil.h"
 #include "TimeValidatedTextBox.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnTimeChanged, float, NewTime);
+
 UCLASS(Blueprintable, BlueprintType)
 class FIREVRKS_API UTimeValidatedTextBox : public UValidatedTextBox
 {
 	GENERATED_BODY()
 
+	FOnTimeChanged OnTimeChanged = FOnTimeChanged();
+	
 public:
 	static bool ValidateTime(FString Value);
 	UTimeValidatedTextBox(const FObjectInitializer& Initializer) : UValidatedTextBox(Initializer, ValidateTime)
@@ -28,4 +32,6 @@ public:
 	virtual void OnChange() override;
 
 	void SetSeconds(float seconds);
+
+	FOnTimeChanged& GetOnTimeChanged();
 };

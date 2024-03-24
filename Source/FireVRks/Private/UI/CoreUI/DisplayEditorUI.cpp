@@ -7,6 +7,7 @@
 #include "Components/ScrollBoxSlot.h"
 #include "Kismet/GameplayStatics.h"
 #include "DFUI/DFUI.h"
+#include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
 #include "UI/EDFUI.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/LaunchSegmentTile.h"
@@ -96,7 +97,7 @@ void UDisplayEditorUI::ReTile()
 		Button->RemoveFromParent();
 	}
 	Buttons.Empty();
-
+	
 	auto Offset = 0;
 	for (int i = 0; i < Children.Num(); ++i)
 	{
@@ -138,6 +139,7 @@ void UDisplayEditorUI::ScheduleDisplay()
 {
 	auto Segments = Data->GetLaunchSegments();
 
+	UDFStatics::EFFECT_SPAWN_COORDINATOR->Reset();
 	for(int i = 0; i < Segments->Num(); i++)
 	{
 		auto LaunchSettings = *(*Segments)[i]->GetLaunchSettings();

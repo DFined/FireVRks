@@ -37,13 +37,31 @@ public:
 	UPROPERTY()
 	UFloatFormalParameter* DELAY_BETWEEN_SHOTS = UParamUtil::Global<UFloatFormalParameter, float>("Delay between shots", true, 0.5f);
 	UPROPERTY()
-	UBlockFormalParameter* LAUNCHER_SETTING = UParamUtil::Global<UBlockFormalParameter, bool>("Launch settings", true, true);
+	UBlockFormalParameter* LAUNCHER_ARRAY_SETTING = UParamUtil::Global<UBlockFormalParameter, bool>("Array settings", true, true);
 	UPROPERTY()
-	UListFormalParameter* SYSTEMS = UParamUtil::Global<UListFormalParameter, UAbstractFormalParameter*>("Systems", true, LAUNCHER_SETTING);
+	UListFormalParameter* SYSTEMS = UParamUtil::Global<UListFormalParameter, UAbstractFormalParameter*>("Systems", true, LAUNCHER_ARRAY_SETTING);
 	UPROPERTY()
 	UFloatFormalParameter* SHELL_LIFETIME = UParamUtil::Global<UFloatFormalParameter, float>("Shell Lifetime", true, 2.0f);
 	UPROPERTY()
+	UFloatFormalParameter* SHELL_LIFETIME_VARIANCE = UParamUtil::Global<UFloatFormalParameter, float>("Shell Lifetime Variance", true, 0.15f);
+	UPROPERTY()
 	UIntFormalParameter* SHELL_VELOCITY = UParamUtil::Global<UIntFormalParameter, int>("Shell Velocity", true, 6500);
+
+	UPROPERTY()
+	UBlockFormalParameter* LAUNCHER_SETTING = UParamUtil::Global<UBlockFormalParameter, bool>("Launcher settings", true, true);
+	UPROPERTY()
+	UEnumFormalParameter* LAUNCHER_TRAVERSAL_TYPE = UParamUtil::Global<UEnumFormalParameter, EnumLikeValue*>(
+		"Array traversal direction", true, &EnumLikeValue::END_TO_END
+	);
+	UPROPERTY()
+	UIntFormalParameter* NUMBER_OF_SHOTS = UParamUtil::Global<UIntFormalParameter, int>("Number of shots", true, 1);
+	UPROPERTY()
+	UFloatFormalParameter* TIME_STEP = UParamUtil::Global<UFloatFormalParameter, float>("LauncherDelayBetweenShots", "Delay between shots", true, 0.5);
+	UPROPERTY()
+	UIntFormalParameter* ANGLE_STEP = UParamUtil::Global<UIntFormalParameter, int>("Angle between shots", true, 10);
+	UPROPERTY()
+	UIntFormalParameter* STARTING_ANGLE = UParamUtil::Global<UIntFormalParameter, int>("Starting angle", true, 0);
+	
 	UPROPERTY()
 	USystemInstantiationFormalParameter* SYSTEM_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, FDFId>(
 		"System", true, UDFStatics::DEFAULT_SYSTEM_ID
@@ -52,7 +70,9 @@ public:
 	virtual TMap<FDFId, UAbstractFormalParameter*>* GetOuterParameters() override;
 
 	void Init();
-	
+	void QueueNewSystem(float Delay, bool IsTest, UParameterValueContext* SystemContext, AGenericFireworkLauncher* Launcher,
+		USystemInstantiationParameterValue* SystemInstanceParams, float Roll) const;
+
 	void Launch(UParameterValueContext* Context, float Delay, bool IsTest) const;
 
 	static UArrayLaunchPattern* MakeInstance();

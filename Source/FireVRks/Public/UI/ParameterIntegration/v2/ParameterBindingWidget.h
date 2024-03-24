@@ -37,4 +37,5 @@ public:
 
 	virtual void OnChange();
 
+	UParameterValueContext*& GetContext();
 };

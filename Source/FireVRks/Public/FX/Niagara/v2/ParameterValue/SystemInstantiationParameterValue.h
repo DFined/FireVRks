@@ -39,8 +39,8 @@ public:
 	{
 		return System;
 	}
-	
-	
+
+	void SetSystem(const FDFId& bSystem);
 
 	virtual TSharedPtr<FJsonObject> ToJson() override;
 

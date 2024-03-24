@@ -23,8 +23,10 @@ public:
 	static UDFAnchor* const ANCHOR;
 
 	static FDFId const DEFAULT_SYSTEM_ID;
+	static FDFId const GROUND_SYSTEM_ID;
 	static UStaticMesh* const SPHERE_MESH;
 	static UNiagaraSystem* const DEFAULT_SYSTEM;
+	static UNiagaraSystem* const GROUND_SYSTEM;
 	static UNiagaraSystem* const TRAIL_SYSTEM;
 	static USlateBrushAsset* const EFFECT_TESTING_SLATE_BRUSH;
 	static ULauncherManager* const LAUNCHER_MANAGER;

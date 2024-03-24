@@ -17,7 +17,8 @@ AGenericFireworkLauncher::AGenericFireworkLauncher()
 void AGenericFireworkLauncher::Fire(ULaunchSettings* LaunchSettings)
 {
 	FVector Vector = this->GetActorLocation();
-	FRotator Rotator = this->GetActorRotation();
+	auto LauncherUp = this->GetActorUpVector();
+	FRotator Rotator = LauncherUp.RotateAngleAxis(LaunchSettings->GetDegressRoll(), this->GetActorRightVector()).Rotation();
 	AFireworkShellBase::MakeShell(
 		this,
 		&Vector,

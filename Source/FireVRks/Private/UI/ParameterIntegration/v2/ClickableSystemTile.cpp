@@ -6,6 +6,7 @@
 #include "Components/Image.h"
 #include "Components/VerticalBox.h"
 #include "DFUI/DFUI.h"
+#include "UI/ParameterIntegration/v2/SystemDisplayTile.h"
 
 void UClickableSystemTile::OnClick()
 {
@@ -32,11 +33,11 @@ UPanelWidget* UClickableSystemTile::MakeRootWidget()
 	return RootBorder;
 }
 
-void UClickableSystemTile::Initialize(UEffectSystem* System, int Size)
+void UClickableSystemTile::Initialize(UEffectSystem* System)
 {
 	EffectSystem = System;
 	Label->SetText(FText::FromString(System->GetDisplayName()));
-	Image->SetBrush(DFStyleUtil::SetupImageBrush(DFStyleUtil::LoadCachedTexture(System->GetIcon()), Size));
+	Image->SetBrush(DFStyleUtil::SetupImageBrush(DFStyleUtil::LoadCachedTexture(System->GetIcon()), USystemDisplayTile::DEFAULT_TILE_SIZE));
 	DFStyleUtil::TextBlockStyle(Label);
 	
 }

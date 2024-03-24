@@ -1,7 +1,6 @@
 #pragma once
 #include "ValidatedTextBox.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
-#include "FX/Niagara/v2/ParameterValue/AbstractParameterValue.h"
 #include "IntTextBox.generated.h"
 
 UCLASS(Blueprintable, BlueprintType)

@@ -2,6 +2,7 @@
 
 #include "FX/Niagara/v2/System/DefaultParameterSystem.h"
 #include "FX/Niagara/v2/System/EffectSystem.h"
+#include "FX/Niagara/v2/System/GroundEffectParameterSystem.h"
 #include "Util/FileHelper.h"
 
 
@@ -11,6 +12,8 @@ void UEffectSystemManager::Init()
 	Effects.Empty();
 	DEFAULT_EFFECT = UDefaultParameterSystem::Make();
 	Register(DEFAULT_EFFECT);
+	GROUND_EFFECT = UGroundEffectParameterSystem::Make();
+	Register(GROUND_EFFECT);
 	SystemInEditing = UCustomEffectSystem::Instance(this);
 
 	TraverseAndLoadSystems();

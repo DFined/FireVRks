@@ -46,7 +46,7 @@ void USystemPicker::SetSystems()
 	{
 		auto Tile = DFUI::MakeWidget<UClickableSystemTile>(this);
 		Grid->AddChildToUniformGrid(Tile, x, y);
-		Tile->Initialize(System, TileSize);
+		Tile->Initialize(System);
 		Tile->GetOnPressed().AddUniqueDynamic(this, &USystemPicker::OnSelectSystem);
 		
 		x++;

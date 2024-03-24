@@ -20,4 +20,6 @@ public:
 	DF_NEW(UMapParameterValueContext)
 
 	virtual TSharedPtr<FJsonObject> ToJson() override;
+
+	virtual UParameterValueContext* Clone(UObject* Parent) override;
 };

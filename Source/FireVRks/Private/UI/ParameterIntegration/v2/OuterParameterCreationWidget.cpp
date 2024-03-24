@@ -58,7 +58,7 @@ UPanelWidget* UOuterParameterCreationWidget::MakeRootWidget()
 	auto AddParamButton = DFUI::AddButtonToButtonPanel(HBox, "Add parameter");
 	AddParamButton->OnPressed.AddUniqueDynamic(this, &UOuterParameterCreationWidget::OnAddParameter);
 
-	Box = DFUI::AddWidget<UVerticalBox>(OuterBox);
+	Box = DFUI::AddWidget<UDFVBoxEx>(OuterBox);
 
 	return RootBorder;
 }
@@ -75,12 +75,12 @@ void UOuterParameterCreationWidget::SetSystem(UCustomEffectSystem* bSystem)
 
 void UOuterParameterCreationWidget::MoveUp(UParameterBindingWidget* Widget)
 {
-	DFUI::MoveChildUp(this->GetMountingPoint(), Widget);
+	Box->MoveUp(Widget);
 	System->MoveOuterParameterUp(Widget->GetParameter()->GetId());
 }
 
 void UOuterParameterCreationWidget::MoveDown(UParameterBindingWidget* Widget)
 {
-	DFUI::MoveChildDown(this->GetMountingPoint(), Widget);
+	Box->MoveDown(Widget);
 	System->MoveOuterParameterDown(Widget->GetParameter()->GetId());
 }

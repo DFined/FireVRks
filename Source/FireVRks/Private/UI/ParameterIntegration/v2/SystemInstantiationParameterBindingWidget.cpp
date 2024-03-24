@@ -10,7 +10,6 @@
 #include "DFUI/DFUI.h"
 #include "UI/ParameterIntegration/v2/EffectParameterInputUI.h"
 #include "UI/ParameterIntegration/v2/SystemDisplayTile.h"
-#include "Util/DFStatics.h"
 
 UPanelWidget* USystemInstantiationParameterBindingWidget::MakeRootWidget()
 {
@@ -26,6 +25,9 @@ UPanelWidget* USystemInstantiationParameterBindingWidget::GetMountingPoint()
 
 void USystemInstantiationParameterBindingWidget::SetupSystem(UEffectSystem* bSystem)
 {
+	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
+	Value->SetSystem(bSystem->GetId());
+	
 	this->System = bSystem;
 	OuterBorder->ClearChildren();
 	auto VBox = DFUI::AddWidget<UVerticalBox>(OuterBorder);
@@ -39,7 +41,6 @@ void USystemInstantiationParameterBindingWidget::SetupSystem(UEffectSystem* bSys
 	DFStyleUtil::SafeSetHBoxSlotWidth(SysSelector->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 	SysSelector->SetSystem(System);
 
-	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
 	InstanceParamUI = DFUI::AddWidget<UEffectParameterInputUI>(VBox);
 	InstanceParamUI->SetSystem(System);
 	InstanceParamUI->Draw(Value->GetContext(), DrawType);
@@ -51,10 +52,11 @@ void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
 	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
 	System = UEffectSystemManager::GetInstance()->Get(Value->GetSystem());
 
-	if (auto BindingContext = Cast<UBindingParameterValueContext>(Context))
-	{
-		BindingContext->GetBindings()->GetConstantValues().Add(Parameter->GetId(), Value);
-	}
+	//TODO Figure out why I thought this bit was necessary and comment the result here. Might be related to the crash on creating a new subsystem in binding mode
+	// if (auto BindingContext = Cast<UBindingParameterValueContext>(Context))
+	// {
+	// 	BindingContext->GetBindings()->GetConstantValues().Add(Parameter->GetId(), Value);
+	// }
 	SetupSystem(System);
 }
 

@@ -40,7 +40,7 @@ public:
 	void OnClick();
 	
 	virtual UPanelWidget* MakeRootWidget() override;
-	void Initialize(UEffectSystem* System, int Size);
+	void Initialize(UEffectSystem* System);
 	virtual UPanelWidget* GetMountingPoint() override;
 	FOnSystemPressed& GetOnPressed();
 

@@ -95,7 +95,14 @@ public:
 	template <class Param, typename Value>
 	static Param* Global(FString Name, bool Required, Value DefaultValue)
 	{
-		return Setup<Param>("{BUILTINS_PARAMETER_NAME}" + Name, Name, Required, Param::New(UDFStatics::ANCHOR, DefaultValue));
+		auto IdPostfix =  Name.Replace(*FString(" "), *FString(""));
+		return Setup<Param>("{BUILTINS_PARAMETER_NAME}" + IdPostfix, Name, Required, Param::New(UDFStatics::ANCHOR, DefaultValue));
+	}
+	
+	template <class Param, typename Value>
+	static Param* Global(FString IdPostfix, FString Name, bool Required, Value DefaultValue)
+	{
+		return Setup<Param>("{BUILTINS_PARAMETER_NAME}" + IdPostfix, Name, Required, Param::New(UDFStatics::ANCHOR, DefaultValue));
 	}
 
 
