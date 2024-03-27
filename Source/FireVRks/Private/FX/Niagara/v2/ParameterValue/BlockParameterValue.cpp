@@ -23,7 +23,7 @@ TSharedPtr<FJsonObject> UBlockParameterValue::ToJson()
 	auto Obj = new FJsonObject();
 	Obj->SetStringField("Type", UParamUtil::Name(BLOCK));
 	Obj->SetBoolField("Expanded", Expanded);
-	Obj->SetBoolField("OverridsExpanded", OverridesExpanded);
+	Obj->SetBoolField("OverridesExpanded", OverridesExpanded);
 	return MakeShareable(Obj);
 }
 

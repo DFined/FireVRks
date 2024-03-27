@@ -165,8 +165,8 @@ UCustomEffectSystem* UCustomEffectSystem::FromJson(TSharedPtr<FJsonObject> Json,
 	}
 	System->SetId(*FDFId::Named(Json->GetStringField("Id")));
 	System->SetDisplayName(Json->GetStringField("DisplayName"));
-	System->SetDisplayName(Json->GetStringField("Author"));
-	System->SetDisplayName(Json->GetStringField("Description"));
+	System->SetAuthor(Json->GetStringField("Author"));
+	System->SetDescription(Json->GetStringField("Description"));
 	
 	return System;
 }

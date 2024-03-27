@@ -6,7 +6,7 @@ UCLASS()
 class FIREVRKS_API UAbstractParameterValue : public UObject
 {
 	GENERATED_BODY()
-	
+
 public:
 	virtual TSharedPtr<FJsonObject> ToJson()
 	{
@@ -14,4 +14,6 @@ public:
 	}
 
 	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) PURE_VIRTUAL("Clone", return nullptr;);
+
+	virtual bool IsSerializable();
 };

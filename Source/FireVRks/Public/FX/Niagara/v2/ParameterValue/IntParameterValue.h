@@ -29,4 +29,6 @@ public:
 	static int ValueFromJson(TSharedPtr<FJsonObject> Obj);
 
 	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
+
+	virtual bool IsSerializable() override;
 };

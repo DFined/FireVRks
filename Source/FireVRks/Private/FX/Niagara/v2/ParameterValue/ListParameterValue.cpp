@@ -37,3 +37,8 @@ UAbstractParameterValue* UListParameterValue::Clone(UAbstractFormalParameter* Pa
 	}
 	return Res;
 }
+
+bool UListParameterValue::IsSerializable()
+{
+	return true;
+}

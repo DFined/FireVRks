@@ -9,13 +9,20 @@ UAbstractParameterValue* UBindingParameterValueContext::Get(UAbstractFormalParam
 {
 	if (auto BoundTo = Bindings->GetBindings().Find(Parameter->GetId()))
 	{
-		return OuterContext->Get(*BoundTo);
+		if (OuterContext)
+		{
+			return OuterContext->Get(*BoundTo);
+		}
+		else
+		{
+			return (*BoundTo)->DefaultValue();
+		}
 	}
 	if (auto Constant = Bindings->GetConstantValues().Find(Parameter->GetId()))
 	{
 		return *Constant;
 	}
-	
+
 	return Parameter->DefaultValue()->Clone(Parameter);
 }
 

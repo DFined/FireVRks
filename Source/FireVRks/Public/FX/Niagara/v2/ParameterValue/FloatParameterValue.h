@@ -32,4 +32,6 @@ public:
 
 	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 	static float ValueFromJson(TSharedPtr<FJsonObject> Json);
+
+	virtual bool IsSerializable() override;
 };

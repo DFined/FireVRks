@@ -22,8 +22,9 @@ public:
 
 	void SetSelectedParam(UAbstractFormalParameter* Parameter);
 
-	void RemoveOptionParam(UAbstractFormalParameter* Parameter);
+	bool RemoveOptionParam(UAbstractFormalParameter* Parameter);
 
 	UFUNCTION()
 	void ReInit(TArray<UAbstractFormalParameter*>& Options);
+	void RenameOptionParam(UAbstractFormalParameter* Param);
 };

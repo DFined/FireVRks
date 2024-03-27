@@ -75,6 +75,7 @@ void UParameterBindingSetupUI::Setup(UEffectSystem* bSystem)
 	auto DelBtn = DFUI::AddImageButton(HeaderBox, UDFStatics::ICONS->DELETE_ICON, 24);
 	DelBtn->OnPressed.AddUniqueDynamic(this, &UParameterBindingSetupUI::Delete);
 	DFStyleUtil::SafeSetHBoxSlotWidth(DelBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
+	
 	auto Context = UBindingParameterValueContext::New(SubsystemConfig);
 	Context->SetBindings(SubsystemConfig->GetBindings());
 	auto OuterParams = TArray<UAbstractFormalParameter*>();

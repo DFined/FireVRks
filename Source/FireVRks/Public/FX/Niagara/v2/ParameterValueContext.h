@@ -1,9 +1,9 @@
 #pragma once
 #include "ParameterValueContext.generated.h"
 
+class UBindingParameterValueContext;
 struct FDFId;
 class UAbstractParameterValue;
-class UBindingParameterValueContext;
 class UAbstractFormalParameter;
 
 UCLASS(Abstract)

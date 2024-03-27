@@ -22,3 +22,8 @@ float UFloatParameterValue::ValueFromJson(TSharedPtr<FJsonObject> Json)
 {
 	return Json->GetNumberField("Value");
 }
+
+bool UFloatParameterValue::IsSerializable()
+{
+	return true;
+}

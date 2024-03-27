@@ -35,3 +35,8 @@ bool UBoolParameterValue::ValueFromJson(TSharedPtr<FJsonObject> Json)
 	return Json->GetBoolField("Value");
 }
 
+bool UBoolParameterValue::IsSerializable()
+{
+	return true;
+}
+

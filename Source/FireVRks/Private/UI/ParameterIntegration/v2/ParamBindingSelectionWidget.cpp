@@ -14,11 +14,11 @@ void UParamBindingSelectionWidget::AddOptionParam(UAbstractFormalParameter* Para
 
 UAbstractFormalParameter* UParamBindingSelectionWidget::GetSelectedParam()
 {
-	if(GetSelectedOption().Equals("None"))
+	if (GetSelectedOption().Equals("None"))
 	{
 		return nullptr;
 	}
-	return Parameters[this->GetSelectedIndex()-1];
+	return Parameters[this->GetSelectedIndex() - 1];
 }
 
 void UParamBindingSelectionWidget::SetSelectedParam(UAbstractFormalParameter* Parameter)
@@ -27,26 +27,55 @@ void UParamBindingSelectionWidget::SetSelectedParam(UAbstractFormalParameter* Pa
 	{
 		auto Num = Parameters.Find(Parameter);
 		this->SetSelectedIndex(Num);
-	} else
+	}
+	else
 	{
 		this->SetSelectedIndex(0);
 	}
 }
 
-void UParamBindingSelectionWidget::RemoveOptionParam(UAbstractFormalParameter* Parameter)
+bool UParamBindingSelectionWidget::RemoveOptionParam(UAbstractFormalParameter* Parameter)
 {
 	auto Num = Parameters.Find(Parameter);
-	Parameters.RemoveAt(Num);
-	SetSelectedParam(nullptr);
+	if (Num != INDEX_NONE)
+	{
+		auto SelectedNum = GetSelectedIndex();
+		Parameters.RemoveAt(Num);
+		Num++;
+		Options.RemoveAt(Num);
+		RefreshOptions();
+		if(Num == SelectedNum)
+		{
+			SetSelectedIndex(0);			
+		}
+	}
+	return false;
 }
 
 void UParamBindingSelectionWidget::ReInit(TArray<UAbstractFormalParameter*>& bOptions)
 {
 	ClearOptions();
 	AddOption("None");
-	for(auto Param : bOptions)
+	for (auto Param : bOptions)
 	{
 		AddOptionParam(Param);
 	}
 }
 
+void UParamBindingSelectionWidget::RenameOptionParam(UAbstractFormalParameter* Param)
+{
+	auto Num = Parameters.Find(Param);
+	if(Num != INDEX_NONE)
+	{
+		Num++;
+		auto SelectedNum = GetSelectedIndex();
+		Options[Num] = MakeShareable(new FString(Param->GetDisplayName()));
+		RefreshOptions();
+		if(SelectedNum == Num)
+		{
+			//If the option is already selected, it doesnt automatically update in the display, so we need to explicitly reset it
+			SetSelectedOption(Param->GetDisplayName());
+		}
+	}
+	
+}

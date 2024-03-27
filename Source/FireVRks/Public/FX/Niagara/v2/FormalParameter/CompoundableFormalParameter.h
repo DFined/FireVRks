@@ -48,10 +48,12 @@ public:
 	static void CommonInit(UObject* Outer, UCompoundableFormalParameter* Param, FString ValueName, bool Required,
 						   ValueType Min, ValueType Max, bool Expanded)
 	{
+		auto IdPostfix =  ValueName.Replace(*FString(" "), *FString(""));
+
 		Param->BlockParam = UParamUtil::Setup(ValueName, Required, UBlockFormalParameter::New(Outer, true));
-		Param->DefaultParam = UParamUtil::Setup(ValueName, true, ParamType::New(Outer, Min));
-		Param->MinParam = UParamUtil::Setup("Minimum " + ValueName, true, ParamType::New(Outer, Min));
-		Param->MaxParam = UParamUtil::Setup("Maximum " + ValueName, true, ParamType::New(Outer, Max));
+		Param->DefaultParam = UParamUtil::Setup("{BUILTINS_PARAMETER_NAME}_" + IdPostfix, ValueName, true, ParamType::New(Outer, Min));
+		Param->MinParam = UParamUtil::Setup("{BUILTINS_PARAMETER_NAME}_MIN_" + IdPostfix, "Minimum " + ValueName, true, ParamType::New(Outer, Min));
+		Param->MaxParam = UParamUtil::Setup("{BUILTINS_PARAMETER_NAME}_MAX_" + IdPostfix, "Maximum " + ValueName, true, ParamType::New(Outer, Max));
 		Param->SelectorParam = UParamUtil::Global<UBoolFormalParameter, bool>("Randomize " + ValueName, true, Expanded);
 
 		Param->MinParam->SetPredicate(new ValueEqualsPredicate<BOOL_VALUE>(Param->SelectorParam, true));

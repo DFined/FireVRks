@@ -26,12 +26,15 @@ public:
 	void MoveUp();
 	UFUNCTION()
 	void MoveDown();
+	void UnbindParameter();
 	UFUNCTION()
 	void ProcessSystemEvent(UDFEvent* Event);
 
 	UFUNCTION()
 	void OnParamBound(FString SelectedItem, ESelectInfo::Type SelectionType);
-	
+
+	UFUNCTION()
+	void OnParameterNameChanged(const FText& Text, ETextCommit::Type CommitMethod);
 	virtual void InitializeBindingWidget() override;
 	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;

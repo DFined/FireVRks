@@ -37,3 +37,8 @@ UAbstractParameterValue* UIntParameterValue::Clone(UAbstractFormalParameter* Par
 {
 	return New(Param, this->Value);
 }
+
+bool UIntParameterValue::IsSerializable()
+{
+	return true;
+}

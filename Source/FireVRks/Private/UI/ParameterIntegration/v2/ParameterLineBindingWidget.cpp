@@ -30,6 +30,12 @@ void UParameterLineBindingWidget::MoveDown()
 	OuterWidget->MoveDown(this);
 }
 
+void UParameterLineBindingWidget::UnbindParameter()
+{
+	this->BindSelector->SetSelectedParam(nullptr);
+	this->ChildWidget->AsWidget()->SetVisibility(ESlateVisibility::Visible);
+}
+
 void UParameterLineBindingWidget::ProcessSystemEvent(UDFEvent* Event)
 {
 	switch (Event->GetType())
@@ -41,18 +47,23 @@ void UParameterLineBindingWidget::ProcessSystemEvent(UDFEvent* Event)
 			{
 				this->BindSelector->AddOptionParam(Param);
 			}
-			break;
 		}
+		break;
 	case CUSTOM_SYSTEM_PARAMETER_DELETED:
 		{
 			auto Param = Cast<UDFParameterEvent>(Event)->GetParameter();
-			if (this->BindSelector->GetSelectedIndex() > 0)
+			if (this->BindSelector->RemoveOptionParam(Param))
 			{
-				this->BindSelector->RemoveOptionParam(Param);
-				this->ChildWidget->AsWidget()->SetVisibility(ESlateVisibility::Visible);
+				UnbindParameter();
 			}
-			break;
 		}
+		break;
+	case CUSTOM_SYSTEM_PARAMETER_RENAMED:
+		{
+			auto Param = Cast<UDFParameterEvent>(Event)->GetParameter();
+			this->BindSelector->RenameOptionParam(Param);
+		}
+		break;
 	default: ;
 	}
 }
@@ -76,6 +87,13 @@ void UParameterLineBindingWidget::OnParamBound(FString SelectedItem, ESelectInfo
 	}
 }
 
+void UParameterLineBindingWidget::OnParameterNameChanged(const FText& Text, ETextCommit::Type CommitMethod)
+{
+	Parameter->SetDisplayName(Text.ToString());
+	auto System = DFU::AttemptFindObjectByType<UCustomEffectSystem>(Parameter);
+	System->GetEventCallback().Broadcast(UDFParameterEvent::Instance(this, Parameter, CUSTOM_SYSTEM_PARAMETER_RENAMED));
+}
+
 void UParameterLineBindingWidget::InitializeBindingWidget()
 {
 	auto BindingContext = Cast<UBindingParameterValueContext>(Context);
@@ -87,9 +105,20 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 
 	auto Line = DFUI::AddWidget<UDFUILine>(Border);
 
-	auto NameBox = DFUI::AddLabel(Line->GetMountingPoint(), Parameter->GetDisplayName());
-	Cast<UHorizontalBoxSlot>(NameBox->Slot)->SetPadding(FMargin(0, 0, 30, 0));
-	DFStyleUtil::SafeSetHBoxSlotWidth(NameBox->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Fill, VAlign_Center);
+	if (DrawType == PARAMETER_CREATION)
+	{
+		auto NameInput = DFUI::AddWidget<UEditableTextBox>(Line);
+		DFStyleUtil::TextBoxStyle(NameInput);
+		NameInput->SetText(FText::FromString(Parameter->GetDisplayName()));
+		NameInput->OnTextCommitted.AddUniqueDynamic(this, &UParameterLineBindingWidget::OnParameterNameChanged);
+		DFStyleUtil::SafeSetHBoxSlotWidth(NameInput->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Fill, VAlign_Center);
+	}
+	else
+	{
+		auto NameBox = DFUI::AddLabel(Line->GetMountingPoint(), Parameter->GetDisplayName());
+		Cast<UHorizontalBoxSlot>(NameBox->Slot)->SetPadding(FMargin(0, 0, 30, 0));
+		DFStyleUtil::SafeSetHBoxSlotWidth(NameBox->Slot, FSlateChildSize(ESlateSizeRule::Fill), HAlign_Fill, VAlign_Center);
+	}
 
 	ChildWidget = UParamUtil::GetValueWidget(this, Parameter->GetType());
 	switch (DrawType)
@@ -123,12 +152,12 @@ void UParameterLineBindingWidget::InitializeBindingWidget()
 		UpBtn->OnPressed.AddUniqueDynamic(this, &UParameterLineBindingWidget::MoveUp);
 
 		auto DownBtn = DFUI::AddImageButton(Line->GetMountingPoint(), UDFStatics::ICONS->DOWN_ICON,
-		                                          24);
+		                                    24);
 		DFStyleUtil::SafeSetHBoxSlotWidth(DownBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 		DownBtn->OnPressed.AddUniqueDynamic(this, &UParameterLineBindingWidget::MoveDown);
 
 		auto DeleteBtn = DFUI::AddImageButton(Line->GetMountingPoint(),
-		                                            UDFStatics::ICONS->DELETE_ICON, 32);
+		                                      UDFStatics::ICONS->DELETE_ICON, 32);
 		DFStyleUtil::SafeSetHBoxSlotWidth(DeleteBtn->Slot, FSlateChildSize(ESlateSizeRule::Automatic));
 		DeleteBtn->OnPressed.AddUniqueDynamic(this, &UParameterLineBindingWidget::OnDelete);
 	}

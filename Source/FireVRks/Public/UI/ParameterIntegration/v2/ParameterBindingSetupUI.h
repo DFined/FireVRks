@@ -52,5 +52,5 @@ public:
 	virtual UPanelWidget* GetMountingPoint() override;
 
 	UFUNCTION(BlueprintCallable)
-	static UParameterBindingSetupUI* InstanceFrom(UPanelWidget* Parent, UEffectSystem* bSystem, USubsystemConfig* bBindings);	
+	static UParameterBindingSetupUI* InstanceFrom(UPanelWidget* bParent, UEffectSystem* bSystem, USubsystemConfig* bBindings);	
 };

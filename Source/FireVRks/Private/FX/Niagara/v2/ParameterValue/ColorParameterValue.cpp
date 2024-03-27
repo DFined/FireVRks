@@ -31,3 +31,8 @@ FLinearColor UColorParameterValue::ValueFromJson(TSharedPtr<FJsonObject> Json)
 	return FLinearColor(Json->GetNumberField("R"), Json->GetNumberField("G"), Json->GetNumberField("B"));
 }
 
+bool UColorParameterValue::IsSerializable()
+{
+	return true;
+}
+

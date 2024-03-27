@@ -28,4 +28,6 @@ public:
 
 	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
 	static FLinearColor ValueFromJson(TSharedPtr<FJsonObject> Json);
+
+	virtual bool IsSerializable() override;
 };
