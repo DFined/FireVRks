@@ -1,8 +1,8 @@
 #include "World/Launcher/GenericFireworkLauncher.h"
 
+#include "FX/Niagara/Scheduler/SystemSpawnData.h"
 #include "Util/DFStatics.h"
 #include "World/UFireworkShellBase.h"
-#include "World/Launcher/LauncherManager.h"
 
 void AGenericFireworkLauncher::OpenUI()
 {
@@ -11,23 +11,37 @@ void AGenericFireworkLauncher::OpenUI()
 
 AGenericFireworkLauncher::AGenericFireworkLauncher()
 {
-	UDFStatics::LAUNCHER_MANAGER->AddLauncher(this);
+	auto Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Mesh->SetStaticMesh(UDFStatics::SPHERE_MESH);
+	Mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	Mesh->RegisterComponent();
+	Mesh->SetRelativeScale3D(FVector(0.2, 0.2, 0.2));
+	SetRootComponent(Mesh);
 }
 
 void AGenericFireworkLauncher::Fire(ULaunchSettings* LaunchSettings)
 {
 	FVector Vector = this->GetActorLocation();
 	auto LauncherUp = this->GetActorUpVector();
-	FRotator Rotator = LauncherUp.RotateAngleAxis(LaunchSettings->GetDegressRoll(), this->GetActorRightVector()).Rotation();
-	AFireworkShellBase::MakeShell(
-		this,
-		&Vector,
-		&Rotator,
-		LaunchSettings
-	);
+	auto UpVector = LauncherUp.RotateAngleAxis(LaunchSettings->GetDegressRoll(), this->GetActorRightVector());
+	FRotator Rotator = UpVector.Rotation();
+	//Bit of a hack, but honestly, you wont even get 100 fps in this sim ever, so lifetimes below .01s are meaningless anyway
+	if (LaunchSettings->GetShellLifetime() > 0.01)
+	{
+		AFireworkShellBase::MakeShell(
+			this,
+			&Vector,
+			&Rotator,
+			LaunchSettings
+		);
+	}
+	else
+	{
+		auto SpawnData = USystemSpawnData::New(this, LaunchSettings->GetContext(), Vector, UpVector);
+		LaunchSettings->GetSystem()->SpawnSystem(SpawnData);
+	}
 }
 
 void AGenericFireworkLauncher::DoOpenUI_Implementation()
 {
-	
 }

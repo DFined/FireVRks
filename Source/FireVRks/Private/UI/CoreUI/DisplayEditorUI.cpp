@@ -3,23 +3,56 @@
 
 #include "UI/CoreUI/DisplayEditorUI.h"
 
+#include "SaveGameManager.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/ScrollBoxSlot.h"
 #include "Kismet/GameplayStatics.h"
 #include "DFUI/DFUI.h"
+#include "Display/DisplayManager.h"
 #include "FX/Niagara/Scheduler/EffectSpawnCoordinator.h"
+#include "FX/Niagara/v2/MapParameterValueContext.h"
 #include "UI/EDFUI.h"
 #include "UI/Icons.h"
 #include "UI/CoreUI/LaunchSegmentTile.h"
 #include "UI/lib/ValidatedTextBox/TimeValidatedTextBox.h"
 #include "Util/DFStatics.h"
 
+void UDisplayEditorUI::OnSaveDisplay()
+{
+	if (UDisplayManager::GetInstance()->GetDisplayInEditing())
+	{
+		USaveGameManager::GetInstance()->SaveGame(GetWorld());
+	}
+}
+
+void UDisplayEditorUI::OnLoadDisplay()
+{
+	USaveGameManager::GetInstance()->LoadGame(this);
+}
+
+void UDisplayEditorUI::ReloadDisplay()
+{
+	Canvas->ClearChildren();
+	InitializeDFWidget(UDisplayManager::GetInstance()->GetDisplayInEditing());
+}
+
 UPanelWidget* UDisplayEditorUI::MakeRootWidget()
 {
 	RootBorder = DFUI::MakeWidget<UBorder>(this);
 	DFStyleUtil::BasicBorderStyle(RootBorder, DFStyleUtil::GREY_LVL_2);
 
-	Canvas = DFUI::AddWidget<UCanvasPanel>(RootBorder);
+	auto VBox = DFUI::AddWidget<UVerticalBox>(RootBorder);
+	auto ButtonPanel = DFUI::AddBorderedHBox(VBox, DFStyleUtil::GREY_LVL_3);
+	auto SaveButton = DFUI::AddButtonToButtonPanel(ButtonPanel, "Save");
+	auto LoadButton = DFUI::AddButtonToButtonPanel(ButtonPanel, "Load");
+
+	SaveButton->OnPressed.AddUniqueDynamic(this, &UDisplayEditorUI::OnSaveDisplay);
+	LoadButton->OnPressed.AddUniqueDynamic(this, &UDisplayEditorUI::OnLoadDisplay);
+	
+
+	Canvas = DFUI::AddWidget<UCanvasPanel>(VBox);
+
+	UDisplayManager::GetInstance()->GetOnDisplayLoaded().AddUniqueDynamic(this, &UDisplayEditorUI::ReloadDisplay);
 
 	return RootBorder;
 }
@@ -37,7 +70,7 @@ void UDisplayEditorUI::InitializeDFWidget(UDisplayData* fData)
 	{
 		bSlot->SetSize(FSlateChildSize(ESlateSizeRule::Fill));
 	}
-	for (auto Segment : *Data->GetLaunchSegments())
+	for (auto Segment : Data->GetLaunchSegments())
 	{
 		auto SegmentUI = DFUI::AddWidget<ULaunchSegmentTile>(Canvas);
 		auto bSlot = Cast<UCanvasPanelSlot>(SegmentUI->Slot);
@@ -54,7 +87,8 @@ void UDisplayEditorUI::NewSegment(UWidget* Input)
 	auto TimeBox = Cast<UTimeValidatedTextBox>(Input);
 
 	auto Segment = UDisplayLaunchSegment::New(Data);
-	Data->GetLaunchSegments()->Add(Segment);
+	Segment->GetLaunchSettings()->Add(UMapParameterValueContext::Instance(Segment));
+	Data->GetLaunchSegments().Add(Segment);
 	Segment->SetTime(TimeBox->GetSeconds());
 
 	auto SegmentUI = DFUI::AddWidget<ULaunchSegmentTile>(Canvas);
@@ -97,7 +131,7 @@ void UDisplayEditorUI::ReTile()
 		Button->RemoveFromParent();
 	}
 	Buttons.Empty();
-	
+
 	auto Offset = 0;
 	for (int i = 0; i < Children.Num(); ++i)
 	{
@@ -124,7 +158,7 @@ void UDisplayEditorUI::Remove(ULaunchSegmentTile* Tile, UDisplayLaunchSegment* S
 UDisplayEditorUI* UDisplayEditorUI::NewEmpty(UPanelWidget* Parent)
 {
 	auto Editor = DFUI::AddWidget<UDisplayEditorUI>(Parent);
-	Editor->InitializeDFWidget(UDisplayData::New(Editor));
+	Editor->InitializeDFWidget(UDisplayManager::GetInstance()->GetDisplayInEditing());
 	return Editor;
 }
 
@@ -140,27 +174,31 @@ void UDisplayEditorUI::ScheduleDisplay()
 	auto Segments = Data->GetLaunchSegments();
 
 	UDFStatics::EFFECT_SPAWN_COORDINATOR->Reset();
-	for(int i = 0; i < Segments->Num(); i++)
+	for (int i = 0; i < Segments.Num(); i++)
 	{
-		auto LaunchSettings = *(*Segments)[i]->GetLaunchSettings();
 		Children[i]->ScheduleLaunch();
 	}
 }
 
 void UDisplayEditorUI::ScheduleLayout()
 {
-		ReTileIn = 20;
+	ReTileIn = 20;
+}
+
+void UDisplayEditorUI::SetTrackPath(FString Path)
+{
+	Data->SetTrackPath(Path);
 }
 
 void UDisplayEditorUI::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 {
-	if(ReTileIn == 0)
+	if (ReTileIn == 0)
 	{
 		ReTile();
 		ReTileIn--;
 	}
-	else 
+	else
 	{
 		ReTileIn--;
-	}	
+	}
 }

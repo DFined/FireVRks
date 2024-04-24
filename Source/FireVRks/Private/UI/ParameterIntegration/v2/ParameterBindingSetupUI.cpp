@@ -55,6 +55,7 @@ UPanelWidget* UParameterBindingSetupUI::MakeRootWidget()
 void UParameterBindingSetupUI::Setup(UEffectSystem* bSystem)
 {
 	this->System = bSystem;
+	this->SubsystemConfig->SetId(bSystem->GetId());
 	SystemDisplayTile->SetSystem(bSystem);
 	ParamsBox->ClearChildren();
 	HeaderBox->ClearChildren();

@@ -25,7 +25,7 @@ void UArraySelectorComboBox::DefaultStyle()
 
 void UArraySelectorComboBox::ReInitOptions(UGenericLauncherArray* Array)
 {
-	auto Names = UDFStatics::LAUNCHER_MANAGER->GetLauncherNames();
+	auto Names = ULauncherManager::GetInstance()->GetLauncherNames();
 	this->ClearOptions();
 	if (Names.IsEmpty())
 	{
@@ -63,7 +63,7 @@ UAbstractParameterValue* UArraySelectorComboBox::GetValue(UObject* Outer)
 	{
 		return UArraySelectorParameterValue::New(Outer, nullptr);
 	}
-	auto Array = UDFStatics::GetLauncherManager()->FindLauncherArray(this->GetSelectedOption());
+	auto Array = ULauncherManager::GetInstance()->FindLauncherArray(this->GetSelectedOption());
 	if(!Array)
 	{
 		ReInitOptions(nullptr);

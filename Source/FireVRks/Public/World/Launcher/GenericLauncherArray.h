@@ -1,6 +1,7 @@
 #pragma once
-#include "GenericFireworkLauncher.h"
 #include "GenericLauncherArray.generated.h"
+
+class ULauncherData;
 
 UCLASS(BlueprintType, Blueprintable)
 class FIREVRKS_API UGenericLauncherArray : public UObject
@@ -8,7 +9,7 @@ class FIREVRKS_API UGenericLauncherArray : public UObject
 	GENERATED_BODY()
 	FString ArrayName;
 	UPROPERTY()
-	TArray<AGenericFireworkLauncher*> Launchers;
+	TArray<ULauncherData*> Launchers;
 public:
 	UFUNCTION(BlueprintCallable)
 	FString GetArrayName() const;
@@ -16,13 +17,17 @@ public:
 	void SetArrayName(const FString& NewArrayName);
 
 	UFUNCTION(BlueprintCallable)
-	void AddLauncher(AGenericFireworkLauncher* Launcher);
+	void AddLauncher(ULauncherData* Launcher);
 
 	UFUNCTION(BlueprintCallable)
 	int GetSize();
 
-	TArray<AGenericFireworkLauncher*>* GetLaunchers()
+	TArray<ULauncherData*>& GetLaunchers()
 	{
-		return &Launchers;
+		return Launchers;
 	}
+
+	TSharedPtr<FJsonObject> ToJson();
+
+	static UGenericLauncherArray* FromJson(TSharedPtr<FJsonObject> Json, UObject* WCO);
 };

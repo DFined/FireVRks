@@ -6,6 +6,9 @@
 #include "FX/Niagara/v2/FormalParameter/IntFormalParameter.h"
 #include "FX/Niagara/v2/ParameterValue/IntParameterValue.h"
 #include "DFUI/DFUI.h"
+#include "FX/Niagara/v2/MapParameterValueContext.h"
+#include "FX/Niagara/v2/ParameterValue/ListParameterValue.h"
+#include "FX/Niagara/v2/ParameterValue/SystemInstantiationParameterValue.h"
 #include "UI/lib/ParameterBindingCheckbox.h"
 #include "UI/lib/ParameterBindingComboBox.h"
 #include "UI/lib/ValidatedTextBox/FColorTextBox.h"
@@ -76,19 +79,34 @@ UAbstractFormalParameter* UParamUtil::NewParam(UObject* Outer, FString Name, boo
 	}
 }
 
-UAbstractParameterValue* UParamUtil::ValueFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer)
+UAbstractParameterValue* UParamUtil::ValueFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*>& Outers)
 {
 	auto TypeName = Json->GetStringField("Type");
 	switch (TypeFromName(TypeName))
 	{
 	case INTEGER: return UIntParameterValue::New(Outer, Json->GetIntegerField("Value"));
-	case FLOAT: return UIntParameterValue::New(Outer, Json->GetNumberField("Value"));
+	case FLOAT: return UFloatParameterValue::New(Outer, Json->GetNumberField("Value"));
 	case COLOR: return UColorParameterValue::New(
 			Outer,
 			FLinearColor(Json->GetIntegerField("R"), Json->GetIntegerField("G"), Json->GetIntegerField("B"))
 		);
 	case BOOLEAN: return UBoolParameterValue::New(Outer, Json->GetBoolField("Value"));
+	case LIST:
+		{
+			auto Val = UListParameterValue::New(Outer);
+			for (auto ContextData : Json->GetArrayField("Value"))
+			{
+				//TODO check if its ok to always use a map context here
+				Val->AddValue(UParameterValueContext::FromJson(ContextData->AsObject(), Val, Outers));
+			}
+			return Val;
+		};
+	case SYSTEM_INSTANTIATION:
+		{
+			auto Val = USystemInstantiationParameterValue::New(
+				Outer, UParameterValueContext::FromJson(Json->GetObjectField("Context"), Outer, Outers), *FDFId::Named(Json->GetStringField("SystemId")));
+			return Val;
+		}
 	default: throw std::runtime_error("Attempting to deserialize forbidden type");
 	}
 }
-

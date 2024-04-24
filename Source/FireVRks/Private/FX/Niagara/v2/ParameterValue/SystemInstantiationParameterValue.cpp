@@ -23,3 +23,8 @@ UAbstractParameterValue* USystemInstantiationParameterValue::Clone(UAbstractForm
 {
 	return New(Param, Context->Clone(this), System);
 }
+
+bool USystemInstantiationParameterValue::IsSerializable()
+{
+	return true;
+}

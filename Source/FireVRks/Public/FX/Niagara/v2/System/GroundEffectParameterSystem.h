@@ -44,7 +44,7 @@ public:
 	UPROPERTY()
 	UIntFormalParameter* SPRITE_COUNT = UParamUtil::Global<UIntFormalParameter, int>("Star count", true, 1);
 	UPROPERTY()
-	UEnumFormalParameter* EFFECT_ROTATION_TYPE = UParamUtil::Global<UEnumFormalParameter, EnumLikeValue*>("Effect orientation", true, &EnumLikeValue::RANDOM);
+	UEnumFormalParameter* EFFECT_ROTATION_TYPE = UParamUtil::Global<UEnumFormalParameter, EnumLikeValue*>("Effect orientation", true, &EnumLikeValue::FROM_SHELL);
 	UPROPERTY()
 	UColorFormalParameter* NORMAL_VECTOR = UParamUtil::Global<UColorFormalParameter, FLinearColor>("Direction", true, FLinearColor(0, 0.5, 1));
 

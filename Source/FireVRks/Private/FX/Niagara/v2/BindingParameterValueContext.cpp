@@ -34,6 +34,7 @@ void UBindingParameterValueContext::SetValue(UAbstractFormalParameter* Parameter
 TSharedPtr<FJsonObject> UBindingParameterValueContext::ToJson()
 {
 	auto Obj = new FJsonObject();
+	Obj->SetStringField("ContextType", "BINDING");
 	Bindings->AddToJson(Obj);
 	return MakeShareable(Obj);
 }
@@ -46,5 +47,13 @@ UParameterValueContext* UBindingParameterValueContext::Clone(UObject* Parent)
 	DFU::CloneMap(this->Bindings->GetBindings(), bBindings->GetBindings());
 	DFU::CloneMap(this->Bindings->GetConstantValues(), bBindings->GetConstantValues());
 	Context->SetBindings(bBindings);
+	return Context;
+}
+
+UParameterValueContext* UBindingParameterValueContext::FromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*> Outers)
+{
+	auto Context = New(Outer);
+	Context->SetBindings(USubsystemParameterBindings::GetFromJson(Json, Outer, Outers));
+	
 	return Context;
 }

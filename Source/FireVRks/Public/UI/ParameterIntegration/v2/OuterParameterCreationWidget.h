@@ -6,7 +6,6 @@
 #include "ParameterBindingWidget.h"
 #include "ParameterControlWidget.h"
 #include "Components/Border.h"
-#include "Components/VerticalBox.h"
 #include "DFUI/Upgrade/DFVBoxEx.h"
 #include "FX/Niagara/v2/System/CustomEffectSystem.h"
 #include "OuterParameterCreationWidget.generated.h"

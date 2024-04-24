@@ -16,31 +16,23 @@ UIcons* const UDFStatics::ICONS = UIcons::StaticInstance();
 FDFId const UDFStatics::DEFAULT_SYSTEM_ID = *FDFId::Named("{BUILTIN}-DEFAULT_SYSTEM");
 FDFId const UDFStatics::GROUND_SYSTEM_ID = *FDFId::Named("{BUILTIN}-GROUND_SYSTEM");
 UStaticMesh* const UDFStatics::SPHERE_MESH = LoadObject<UStaticMesh>(ANCHOR, TEXT("/Engine/EngineMeshes/Sphere.Sphere"));
+UStaticMesh* const UDFStatics::LAUNCHER_MESH = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), ANCHOR, *FString("LaucncherStaticMesh"), TEXT("/Game/FireVRks/Meshes/LauncherMesh.LauncherMesh")));
 UNiagaraSystem* const UDFStatics::DEFAULT_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/FibonacciSphere.FibonacciSphere"));
 UNiagaraSystem* const UDFStatics::GROUND_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/GroundEffect.GroundEffect"));
 UNiagaraSystem* const UDFStatics::TRAIL_SYSTEM = LoadObject<UNiagaraSystem>(ANCHOR, TEXT("/Game/FireVRks/Effects/Systems/Trail.Trail"));
 USlateBrushAsset* const UDFStatics::EFFECT_TESTING_SLATE_BRUSH = LoadObject<USlateBrushAsset>(ANCHOR, TEXT("/Game/FireVRks/UI/EffectTestBrush.EffectTestBrush"));
-ULauncherManager* const UDFStatics::LAUNCHER_MANAGER = ULauncherManager::MakeInstance();
 UArrayLaunchPattern* const UDFStatics::ARRAY_LAUNCH_PATTERN = UArrayLaunchPattern::MakeInstance();
 UEffectSpawnCoordinator* const UDFStatics::EFFECT_SPAWN_COORDINATOR = UEffectSpawnCoordinator::New();
 AActor* UDFStatics::Player = nullptr;
 UCameraComponent* UDFStatics::PlayerCamera = nullptr;
-
-ULauncherManager* UDFStatics::GetLauncherManager()
-{
-	return LAUNCHER_MANAGER;
-}
 
 UArrayLaunchPattern* UDFStatics::GetArrayLaunchPattern()
 {
 	return ARRAY_LAUNCH_PATTERN;
 }
 
-
-
 void UDFStatics::Reset()
 {
-	LAUNCHER_MANAGER->Reset();
 	EFFECT_SPAWN_COORDINATOR->Reset();
 }
 
@@ -48,7 +40,7 @@ TArray<FString> UDFStatics::GetFiles(FString FileTypes)
 {
 	const void* ParentWindowWindowHandle = FSlateApplication::Get().FindBestParentWindowHandleForDialogs(nullptr);
 
-	
+
 	TArray<FString> OutFilenames = TArray<FString>();
 	IDesktopPlatform* DesktopPlatform = FDesktopPlatformModule::Get();
 	if (DesktopPlatform)
@@ -90,3 +82,4 @@ UCameraComponent* UDFStatics::GetPlayerCamera()
 {
 	return PlayerCamera;
 }
+

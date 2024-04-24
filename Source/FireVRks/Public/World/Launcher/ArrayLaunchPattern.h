@@ -13,6 +13,8 @@
 #include "ArrayLaunchPattern.generated.h"
 
 
+class AGenericFireworkLauncher;
+
 UCLASS()
 class FIREVRKS_API UArrayLaunchPattern : public UObject, public ParameterProvider
 {
@@ -37,9 +39,13 @@ public:
 	UPROPERTY()
 	UFloatFormalParameter* DELAY_BETWEEN_SHOTS = UParamUtil::Global<UFloatFormalParameter, float>("Delay between shots", true, 0.5f);
 	UPROPERTY()
-	UBlockFormalParameter* LAUNCHER_ARRAY_SETTING = UParamUtil::Global<UBlockFormalParameter, bool>("Array settings", true, true);
+	UFloatFormalParameter* ARRAY_DELAY_VARIANCE = UParamUtil::Global<UFloatFormalParameter, float>("Delay Variance", true, 0.15f);
 	UPROPERTY()
-	UListFormalParameter* SYSTEMS = UParamUtil::Global<UListFormalParameter, UAbstractFormalParameter*>("Systems", true, LAUNCHER_ARRAY_SETTING);
+	USystemInstantiationFormalParameter* SYSTEM_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, FDFId>(
+		"System", true, UDFStatics::DEFAULT_SYSTEM_ID
+	);
+	UPROPERTY()
+	UListFormalParameter* SYSTEMS = UParamUtil::Global<UListFormalParameter, UAbstractFormalParameter*>("Systems", true, SYSTEM_PICKER);
 	UPROPERTY()
 	UFloatFormalParameter* SHELL_LIFETIME = UParamUtil::Global<UFloatFormalParameter, float>("Shell Lifetime", true, 2.0f);
 	UPROPERTY()
@@ -58,19 +64,17 @@ public:
 	UPROPERTY()
 	UFloatFormalParameter* TIME_STEP = UParamUtil::Global<UFloatFormalParameter, float>("LauncherDelayBetweenShots", "Delay between shots", true, 0.5);
 	UPROPERTY()
+	UFloatFormalParameter* TIME_STEP_VARIANCE = UParamUtil::Global<UFloatFormalParameter, float>("DelayBetweenShotsVariance", "Delay Variance", true, 0.15f);
+	UPROPERTY()
 	UIntFormalParameter* ANGLE_STEP = UParamUtil::Global<UIntFormalParameter, int>("Angle between shots", true, 10);
 	UPROPERTY()
 	UIntFormalParameter* STARTING_ANGLE = UParamUtil::Global<UIntFormalParameter, int>("Starting angle", true, 0);
-	
-	UPROPERTY()
-	USystemInstantiationFormalParameter* SYSTEM_PICKER = UParamUtil::Global<USystemInstantiationFormalParameter, FDFId>(
-		"System", true, UDFStatics::DEFAULT_SYSTEM_ID
-	);
+
 
 	virtual TMap<FDFId, UAbstractFormalParameter*>* GetOuterParameters() override;
 
 	void Init();
-	void QueueNewSystem(float Delay, bool IsTest, UParameterValueContext* SystemContext, AGenericFireworkLauncher* Launcher,
+	void QueueNewSystem(float Delay, bool IsTest, UParameterValueContext* ArrayOuterContext, AGenericFireworkLauncher* Launcher,
 		USystemInstantiationParameterValue* SystemInstanceParams, float Roll) const;
 
 	void Launch(UParameterValueContext* Context, float Delay, bool IsTest) const;

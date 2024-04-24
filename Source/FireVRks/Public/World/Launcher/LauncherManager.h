@@ -1,5 +1,6 @@
 #pragma once
 #include "GenericLauncherArray.h"
+#include "Util/DFU.h"
 #include "World/Launcher/GenericFireworkLauncher.h"
 #include "LauncherManager.generated.h"
 
@@ -11,8 +12,8 @@ class FIREVRKS_API ULauncherManager : public UObject
 	UPROPERTY()
 	TArray<AGenericFireworkLauncher*> Launchers = TArray<AGenericFireworkLauncher*>();
 	UPROPERTY()
-	TMap<FString,UGenericLauncherArray*> Arrays = TMap<FString,UGenericLauncherArray*>();
-	
+	TMap<FString, UGenericLauncherArray*> Arrays = TMap<FString, UGenericLauncherArray*>();
+
 public:
 	UFUNCTION(BlueprintCallable)
 	TArray<FString> GetLauncherNames();
@@ -24,27 +25,37 @@ public:
 	UGenericLauncherArray* CreateLauncherArray(FString Name);
 
 	UFUNCTION(BlueprintCallable)
-	void AddLauncherToArray(AGenericFireworkLauncher* Launcher, FString ArrayName);
-
-	UFUNCTION(BlueprintCallable)
-	void AddLauncher(AGenericFireworkLauncher* Launcher);
+	ULauncherData* AddLauncher(FVector Location, FRotator Rotation, UObject* WorldContextObject, FString ArrayName);
+	
+	ULauncherData* MakeLauncher(FVector Location, FRotator Rotation, UObject* WorldContextObject);
 
 	UFUNCTION(BlueprintCallable)
 	UGenericLauncherArray* FindLauncherArray(FString Name);
 
-	// This is necessary due to statics not being reset on PIE restart, only on editor restart
 	UFUNCTION(BlueprintCallable)
-	void Reset()
+	void Materialize(UObject* WCO);
+
+	TMap<FString, UGenericLauncherArray*>& GetArrays();
+	void Reset();
+
+	// static ULauncherManager* MakeInstance()
+	// {
+	// 	auto Instance = NewObject<ULauncherManager>(GetTransientPackage());
+	// 	Instance->AddToRoot();
+	// 	return Instance;
+	// }
+
+	UFUNCTION(BlueprintCallable)
+	static ULauncherManager* GetInstance()
 	{
-		Arrays.Empty();
-		Launchers.Empty();
+		if (!SingleInstance.IsValid())
+		{
+			SingleInstance = NewObject<ULauncherManager>();
+			SingleInstance->AddToRoot();
+		}
+		return SingleInstance.Get();
 	}
 
-	static ULauncherManager* MakeInstance()
-	{
-		auto Instance = NewObject<ULauncherManager>(GetTransientPackage());
-		Instance->AddToRoot();
-		return Instance;
-	}
+private:
+	inline static TWeakObjectPtr<ULauncherManager> SingleInstance = nullptr;
 };
-

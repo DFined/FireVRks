@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DisplayData.h"
 #include "FX/Niagara/v2/ParameterValueContext.h"
 #include "UObject/Object.h"
 #include "DisplayLaunchSegment.generated.h"
@@ -32,6 +33,9 @@ public:
 	{
 		this->Time = fTime;
 	}
+
+	TSharedPtr<FJsonObject> ToJson();
+	static UDisplayLaunchSegment* FromJson(UObject* Outer, TSharedPtr<FJsonObject> Json);
 
 	static UDisplayLaunchSegment* New(UObject* Outer);
 };

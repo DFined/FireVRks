@@ -15,6 +15,7 @@ class FIREVRKS_API UFileHelper : public UObject
 	FString UserContentPath;
 	FString IconsContentPath;
 	FString SystemsContentPath;
+	FString DisplaysContentPath;
 
 public:
 	void Init()
@@ -23,6 +24,7 @@ public:
 		UserContentPath = FPaths::Combine(FPaths::ProjectContentDir(), "user_save");
 		IconsContentPath = FPaths::Combine(UserContentPath, "icons");
 		SystemsContentPath = FPaths::Combine(UserContentPath, "systems");
+		DisplaysContentPath = FPaths::Combine(UserContentPath, "displays");
 	}
 
 	FString GetUserContentPath() const
@@ -40,6 +42,8 @@ public:
 		return SystemsContentPath;
 	}
 
+	FString& GetDisplaysContentPath();
+
 	FString IconPath(FString& ChildPath)
 	{
 		return FPaths::Combine(GetIconsContentPath(), ChildPath);
@@ -48,6 +52,11 @@ public:
 	FString SystemPath(FString& ChildPath)
 	{
 		return FPaths::Combine(GetSystemsContentPath(), ChildPath);
+	}
+
+	FString DisplayPath(FString& ChildPath)
+	{
+		return FPaths::Combine(GetDisplaysContentPath(), ChildPath);
 	}
 
 	void ListFilesInDir(FString Path, TArray<FString>& Result);

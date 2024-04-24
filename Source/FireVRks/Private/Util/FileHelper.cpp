@@ -3,6 +3,11 @@
 
 #include "Util/FileHelper.h"
 
+FString& UFileHelper::GetDisplaysContentPath()
+{
+	return DisplaysContentPath;
+}
+
 void UFileHelper::ListFilesInDir(FString Path, TArray<FString>& Result)
 {
 	IFileManager::Get().FindFiles(Result, *Path);

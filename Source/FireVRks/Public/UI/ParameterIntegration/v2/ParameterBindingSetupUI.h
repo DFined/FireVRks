@@ -7,7 +7,6 @@
 #include "Components/Border.h"
 #include "Components/HorizontalBox.h"
 #include "Components/VerticalBox.h"
-#include "FX/Niagara/v2/System/CustomEffectSystem.h"
 #include "DFUI/DFUIBase.h"
 #include "ParameterBindingSetupUI.generated.h"
 

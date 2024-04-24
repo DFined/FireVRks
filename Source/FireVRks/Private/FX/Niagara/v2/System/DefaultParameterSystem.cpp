@@ -219,10 +219,11 @@ void UDefaultParameterSystem::Initialize()
 		DISTANCE_CORRECTION_SETTINGS->Add(DISTANCE_CORRECTION_SCALE);
 		DISTANCE_CORRECTION_SETTINGS->Add(DISTANCE_CORRECTION_EXPONENT);
 
-		MAIN_SETTINGS_BLOCK->Add(DRAG_SETTINGS);
-		DRAG_SETTINGS->Add(DRAG_EXPONENT);
-		DRAG_SETTINGS->Add(DRAG_LOW_SPEED_SCALE);
-		DRAG_SETTINGS->Add(DRAG_HIGH_SPEED_SCALE);
+		MAIN_SETTINGS_BLOCK->Add(PHYSICS_SETTINGS);
+		PHYSICS_SETTINGS->Add(GRAVITY_STRENGTH);
+		PHYSICS_SETTINGS->Add(DRAG_EXPONENT);
+		PHYSICS_SETTINGS->Add(DRAG_LOW_SPEED_SCALE);
+		PHYSICS_SETTINGS->Add(DRAG_HIGH_SPEED_SCALE);
 
 		IsInit = true;
 	}
@@ -396,6 +397,7 @@ void UDefaultParameterSystem::SpawnSystem(USystemSpawnData* Data)
 	Effect->SetFloatParameter("DistanceCorrectionExponent", DISTANCE_CORRECTION_EXPONENT->GetValue(Context));
 	Effect->SetFloatParameter("DistanceCorrectionLinearScale", DISTANCE_CORRECTION_SCALE->GetValue(Context));
 
+	Effect->SetFloatParameter("GravityStrength", GRAVITY_STRENGTH->GetValue(Context));
 	Effect->SetFloatParameter("DragExponent", DRAG_EXPONENT->GetValue(Context));
 	Effect->SetFloatParameter("LowSpeedDragScale", DRAG_LOW_SPEED_SCALE->GetValue(Context));
 	Effect->SetFloatParameter("HighSpeedDragScale", DRAG_HIGH_SPEED_SCALE->GetValue(Context));

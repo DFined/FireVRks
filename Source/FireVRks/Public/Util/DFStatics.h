@@ -2,6 +2,7 @@
 #include "DFAnchor.h"
 #include "DFStatics.generated.h"
 
+class UDisplayData;
 class UEffectSystem;
 class UIcons;
 class UFileHelper;
@@ -25,11 +26,11 @@ public:
 	static FDFId const DEFAULT_SYSTEM_ID;
 	static FDFId const GROUND_SYSTEM_ID;
 	static UStaticMesh* const SPHERE_MESH;
+	static UStaticMesh* const LAUNCHER_MESH;
 	static UNiagaraSystem* const DEFAULT_SYSTEM;
 	static UNiagaraSystem* const GROUND_SYSTEM;
 	static UNiagaraSystem* const TRAIL_SYSTEM;
 	static USlateBrushAsset* const EFFECT_TESTING_SLATE_BRUSH;
-	static ULauncherManager* const LAUNCHER_MANAGER;
 	static UArrayLaunchPattern* const ARRAY_LAUNCH_PATTERN;
 	static UEffectSpawnCoordinator* const EFFECT_SPAWN_COORDINATOR;
 	static AActor* Player;
@@ -37,8 +38,6 @@ public:
 	static UIcons* const ICONS;
 	static UFileHelper* const FILE_HELPER;
 
-	UFUNCTION(BlueprintCallable)
-	static ULauncherManager* GetLauncherManager();
 
 	UFUNCTION(BlueprintCallable)
 	static UArrayLaunchPattern* GetArrayLaunchPattern();

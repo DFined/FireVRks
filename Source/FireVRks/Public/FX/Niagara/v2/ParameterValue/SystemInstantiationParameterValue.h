@@ -45,4 +45,6 @@ public:
 	virtual TSharedPtr<FJsonObject> ToJson() override;
 
 	virtual UAbstractParameterValue* Clone(UAbstractFormalParameter* Param) override;
+
+	virtual bool IsSerializable() override;
 };

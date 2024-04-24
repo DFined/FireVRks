@@ -141,7 +141,9 @@ public:
 	UPROPERTY()
 	UFloatFormalParameter* DISTANCE_CORRECTION_EXPONENT = UParamUtil::Global<UFloatFormalParameter, float>("Correction exponent", true, 0.5f);
 	UPROPERTY()
-	UBlockFormalParameter* DRAG_SETTINGS = UParamUtil::Global<UBlockFormalParameter, bool>("Aerodynamic drag", false, true);
+	UBlockFormalParameter* PHYSICS_SETTINGS = UParamUtil::Global<UBlockFormalParameter, bool>("Physics settings", false, true);
+	UPROPERTY()
+	UFloatFormalParameter* GRAVITY_STRENGTH = UParamUtil::Global<UFloatFormalParameter, float>("Gravity strength", true, 1.0f);
 	UPROPERTY()
 	UFloatFormalParameter* DRAG_EXPONENT = UParamUtil::Global<UFloatFormalParameter, float>("Drag exponent", true, 0.2f);
 	UPROPERTY()
@@ -252,16 +254,16 @@ public:
 	UPROPERTY()
 	UBoolFormalParameter* USE_WILLOW_TRAIL = UParamUtil::Global<UBoolFormalParameter, bool>("Use willow trail", true, false);
 	UPROPERTY()
-	UFloatFormalParameter* WILLOW_TRAIL_SPREAD = UParamUtil::Global<UFloatFormalParameter, float>("Willow Trail Spread", false, 0.10f);
+	UFloatFormalParameter* WILLOW_TRAIL_SPREAD = UParamUtil::Global<UFloatFormalParameter, float>("Willow Trail Spread", false, 0.02f);
 	UPROPERTY()
 	UFloatFormalParameter* WILLOW_TRAIL_EJECTION_SPEED = UParamUtil::Global<UFloatFormalParameter, float>("Willow Trail Ejection Speed", true, 0.0f);
 	UPROPERTY()
 	UCompoundableFormalParameter* WILLOW_TRAIL_LIFETIME = UCompoundableFormalParameter::New<UFloatFormalParameter, float>(
 		UDFStatics::ANCHOR, "Willow trail lifetime", true, 3.0f, 4.0f);
 	UPROPERTY()
-	UFloatFormalParameter* WILLOW_TRAIL_SPRITE_SIZE = UParamUtil::Global<UFloatFormalParameter, float>("Willow Trail Sprite Size", false, 35.0f);
+	UFloatFormalParameter* WILLOW_TRAIL_SPRITE_SIZE = UParamUtil::Global<UFloatFormalParameter, float>("Willow Trail Sprite Size", false, 4.0f);
 	UPROPERTY()
-	UIntFormalParameter* WILLOW_TRAIL_SPAWN_RATE = UParamUtil::Global<UIntFormalParameter, int>("Willow Trail Spawn Rate", true, 150);
+	UIntFormalParameter* WILLOW_TRAIL_SPAWN_RATE = UParamUtil::Global<UIntFormalParameter, int>("Willow Trail Spawn Rate", true, 180);
 	UPROPERTY()
 	UFloatFormalParameter* WILLOW_TRAIL_EMISSION_DURATION = UParamUtil::Global<UFloatFormalParameter, float>("Willow Trail Emission Duration", true, 5.0f);
 

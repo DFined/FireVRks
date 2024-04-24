@@ -55,11 +55,13 @@ void UEffectSpawnCoordinator::SpawnEffect(ULaunchSettings* Data)
 		return;
 	}
 	FVector Location = FVector(0, 0, 0);
+	FVector Rotation = FVector(0, 0, 1);
 	if (Target)
 	{
 		Location = Target->GetActorLocation();
+		Rotation = Target->GetActorRotation().Vector();
 	}
-	Data->GetSystem()->SpawnSystem(USystemSpawnData::New(Data, Data->GetContext(), Location, FVector(1, 0, 0)));
+	Data->GetSystem()->SpawnSystem(USystemSpawnData::New(Data, Data->GetContext(), Location, Rotation));
 }
 
 void UEffectSpawnCoordinator::EnqueueDisplay(ULaunchSettings* Data)

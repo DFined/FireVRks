@@ -45,6 +45,7 @@ void UListParameterBindingWidget::NewItem()
 		PVContext = UMapParameterValueContext::Instance(Context);
 		ListVal->AddValue(PVContext);
 	}
+	Context->SetValue(Parameter, ListVal);
 	AddWidgetFromParam(PVContext, Cast<UListFormalParameter>(Parameter)->GetChildType());
 	this->OnChange();
 	this->LayoutChanged();

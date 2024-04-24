@@ -38,6 +38,14 @@ class FIREVRKS_API UDisplayEditorUI : public UDFUIBase
 	UDisplayData* Data;
 
 public:
+	UFUNCTION()
+	void OnSaveDisplay();
+	
+	UFUNCTION()
+	void OnLoadDisplay();
+
+	UFUNCTION()
+	void ReloadDisplay();
 	virtual UPanelWidget* MakeRootWidget() override;
 	virtual UPanelWidget* GetMountingPoint() override;
 
@@ -67,6 +75,9 @@ public:
 
 	UFUNCTION()
 	void ScheduleLayout();
+
+	UFUNCTION(BlueprintCallable)
+	void SetTrackPath(FString Path);
 
 protected:
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;

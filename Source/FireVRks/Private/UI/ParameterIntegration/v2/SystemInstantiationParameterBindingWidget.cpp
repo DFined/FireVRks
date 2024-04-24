@@ -52,11 +52,8 @@ void USystemInstantiationParameterBindingWidget::InitializeBindingWidget()
 	auto Value = Cast<USystemInstantiationParameterValue>(Context->Get(Parameter));
 	System = UEffectSystemManager::GetInstance()->Get(Value->GetSystem());
 
-	//TODO Figure out why I thought this bit was necessary and comment the result here. Might be related to the crash on creating a new subsystem in binding mode
-	// if (auto BindingContext = Cast<UBindingParameterValueContext>(Context))
-	// {
-	// 	BindingContext->GetBindings()->GetConstantValues().Add(Parameter->GetId(), Value);
-	// }
+	Context->SetValue(Parameter, Value);
+	
 	SetupSystem(System);
 }
 

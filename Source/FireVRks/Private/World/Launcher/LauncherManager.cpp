@@ -1,5 +1,7 @@
 #include "World/Launcher/LauncherManager.h"
 
+#include "World/Launcher/LauncherData.h"
+
 TArray<FString> ULauncherManager::GetLauncherNames()
 {
 	TArray<FString> Names = TArray<FString>();
@@ -18,15 +20,37 @@ TArray<UGenericLauncherArray*> ULauncherManager::GetLaunchers(TArray<UGenericLau
 	return Res;
 }
 
-void ULauncherManager::AddLauncher(AGenericFireworkLauncher* Launcher)
-{
-	Launchers.Add(Launcher);
-}
-
 UGenericLauncherArray* ULauncherManager::FindLauncherArray(FString Name)
 {
 	const auto Array = Arrays.Find(Name);
 	return Array ? *Array : nullptr;
+}
+
+void ULauncherManager::Materialize(UObject* WCO)
+{
+	for (auto Array : Arrays)
+	{
+		for (auto Launcher : Array.Value->GetLaunchers())
+		{
+			auto World = GEngine->GetWorldFromContextObject(WCO, EGetWorldErrorMode::LogAndReturnNull);
+			Launcher->Materialize(World);
+		}
+	}
+}
+
+TMap<FString, UGenericLauncherArray*>& ULauncherManager::GetArrays()
+{
+	return Arrays;
+}
+
+void ULauncherManager::Reset()
+{
+	Arrays.Empty();
+	for(auto Launcher : Launchers)
+	{
+		Launcher->Destroy();
+	}
+	Launchers.Empty();
 }
 
 UGenericLauncherArray* ULauncherManager::CreateLauncherArray(FString Name)
@@ -41,12 +65,19 @@ UGenericLauncherArray* ULauncherManager::CreateLauncherArray(FString Name)
 	return nullptr;
 }
 
-void ULauncherManager::AddLauncherToArray(AGenericFireworkLauncher* Launcher, FString ArrayName)
+
+ULauncherData* ULauncherManager::AddLauncher(FVector Location, FRotator Rotation, UObject* WorldContextObject, FString ArrayName)
 {
-	auto Arr = Arrays.Find(ArrayName);
-	if (Arr)
-	{
-		(*Arr)->AddLauncher(Launcher);
-		Launchers.Add(Launcher);
-	}
+	auto LauncherData = MakeLauncher(Location, Rotation, WorldContextObject);
+	auto Array = *Arrays.Find(ArrayName);
+	Array->AddLauncher(LauncherData);
+	return LauncherData;
+}
+
+ULauncherData* ULauncherManager::MakeLauncher(FVector Location, FRotator Rotation, UObject* WorldContextObject)
+{
+	auto LauncherData = ULauncherData::Instance(this, Location, Rotation);
+	auto World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull);
+	LauncherData->Materialize(World);
+	return LauncherData;
 }

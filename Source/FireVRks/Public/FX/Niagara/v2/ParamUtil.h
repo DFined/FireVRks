@@ -129,5 +129,5 @@ public:
 	}
 
 	static UAbstractFormalParameter* NewParam(UObject* Outer, FString Name, bool Required, ParameterType Type);
-	static UAbstractParameterValue* ValueFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer);
+	static UAbstractParameterValue* ValueFromJson(TSharedPtr<FJsonObject> Json, UObject* Outer, TMap<FDFId, UAbstractFormalParameter*>& Outers);
 };
